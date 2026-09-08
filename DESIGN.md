@@ -10,6 +10,8 @@ colors:
   primary-strong: "#1C4F42"
   primary-soft: "#DFEEE7"
   accent: "#B97745"
+  line: "#06C755"
+  line-strong: "#04A948"
   border: "#D8D1C4"
   focus: "#B97745"
 typography:
@@ -43,6 +45,10 @@ components:
     backgroundColor: "{colors.surface}"
     borderColor: "{colors.border}"
     rounded: "{rounded.md}"
+motion:
+  button-press: "jelly scale press, 0.44s"
+  card-hover: "lift 4px with soft shadow"
+  hero-detail: "slow floating utility icons and subtle shine"
 ---
 
 ## Overview
@@ -63,11 +69,15 @@ components:
 
 ## Components
 
-按鈕至少 44px 高，圖示使用 lucide-react。卡片只用於單一情境或地區項目；段落用 full-width band 或自然分隔，不做卡片包卡片。所有可操作元素需有明確 focus-visible 狀態。
+按鈕至少 44px 高，圖示使用 lucide-react。LINE CTA 使用文字與通用訊息圖示，不使用未授權的 LINE 官方標誌。卡片只用於單一情境或地區項目；段落用 full-width band 或自然分隔，不做卡片包卡片。所有可操作元素需有明確 focus-visible 狀態。
+
+## Motion
+
+互動要像居家服務的柔和回饋，不像遊戲或科技展示。按鈕使用短暫果凍按壓，情境卡片 hover 時輕浮起，Hero 只保留低強度的工具圖示漂浮與光感。所有動畫必須支援 `prefers-reduced-motion`。
 
 ## Do's and Don'ts
 
 - Do: 以照片、區域、需求範圍引導詢問。
 - Do: 未確認內容用保守文字說明。
 - Don't: 虛構價格、案例、評論、年資、認證或人物資料。
-- Don't: 使用假 LINE 連結或未授權客戶圖片。
+- Don't: 使用未授權客戶圖片或未確認的官方品牌素材。

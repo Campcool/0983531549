@@ -2,19 +2,31 @@ import React from 'react'
 import { createRoot } from 'react-dom/client'
 import {
   ArrowRight,
+  Bath,
+  BedDouble,
+  BrushCleaning,
   Camera,
   CheckCircle2,
   ClipboardCheck,
-  Home,
+  ClipboardList,
+  CookingPot,
+  CopyCheck,
+  Droplets,
   MapPin,
   MessageCircle,
   Phone,
+  PhoneCall,
+  Search,
   ShieldCheck,
+  Sofa,
   Sparkles,
+  SprayCan,
+  WashingMachine,
 } from 'lucide-react'
 import './style.css'
 
 const heroImage = '/og-home-cleaning.png'
+const lineUrl = 'https://line.me/R/ti/p/~chenli0775'
 
 const inquirySteps = [
   '傳送空間照片與想整理的區域',
@@ -27,30 +39,65 @@ const scenarios = [
   {
     title: '日常居家整理',
     copy: '客廳、臥室、廚房、浴室等常用區域，先依現況確認清潔範圍。',
+    icon: Sofa,
   },
   {
     title: '搬入搬出前後',
     copy: '空屋、租屋交接、入住前重整，可用照片先說明牆面、地面與櫃體狀況。',
+    icon: BedDouble,
   },
   {
     title: '年節或大掃除',
     copy: '需要較完整清潔時，先把優先順序排清楚，避免現場才臨時追加。',
+    icon: Sparkles,
   },
   {
     title: '廚房浴室重點',
     copy: '油垢、水垢、排水口、檯面與縫隙，建議先拍近照確認可處理程度。',
+    icon: CookingPot,
   },
   {
     title: '局部加強需求',
     copy: '單一房間、陽台、窗框、櫃內等小範圍，也可先用清單確認是否適合安排。',
+    icon: Bath,
   },
 ]
 
 const details = [
-  '現場物品移動與歸位方式先確認',
-  '特殊材質、陳年污垢與高處作業先說明',
-  '耗材、清潔劑與工具需求依現場條件討論',
-  '價格與工時不在未確認前寫死',
+  {
+    text: '現場物品移動與歸位方式先確認',
+    icon: ClipboardList,
+  },
+  {
+    text: '特殊材質、陳年污垢與高處作業先說明',
+    icon: Droplets,
+  },
+  {
+    text: '耗材、清潔劑與工具需求依現場條件討論',
+    icon: BrushCleaning,
+  },
+  {
+    text: '價格與工時不在未確認前寫死',
+    icon: ShieldCheck,
+  },
+]
+
+const contactMethods = [
+  {
+    label: 'LINE 搜尋',
+    value: '0983531549',
+    icon: Search,
+  },
+  {
+    label: 'LINE ID',
+    value: 'chenli0775',
+    icon: MessageCircle,
+  },
+  {
+    label: '電話',
+    value: '0983531549',
+    icon: PhoneCall,
+  },
 ]
 
 const faqs = [
@@ -101,9 +148,9 @@ export function App() {
           <a href="#details">清潔細節</a>
           <a href="#areas">服務地區</a>
         </nav>
-        <a className="header-action" href="tel:0983531549">
-          <Phone size={18} aria-hidden="true" />
-          <span>0983531549</span>
+        <a className="header-action line-action" href={lineUrl} target="_blank" rel="noreferrer">
+          <MessageCircle size={18} aria-hidden="true" />
+          <span>LINE 詢問</span>
         </a>
       </header>
 
@@ -116,14 +163,18 @@ export function App() {
               把家裡需要重整的地方，先整理成清楚的清潔需求。從照片、範圍到時間安排，都以可確認的資訊溝通。
             </p>
             <div className="hero-actions" aria-label="主要行動">
-              <a className="button primary" href="tel:0983531549">
-                <Phone size={19} aria-hidden="true" />
-                撥打詢問
-              </a>
-              <a className="button secondary" href="#inquiry">
+              <a className="button line-primary" href={lineUrl} target="_blank" rel="noreferrer">
                 <MessageCircle size={19} aria-hidden="true" />
-                LINE 詢問準備
+                加入 LINE 詢問
               </a>
+              <a className="button secondary" href="tel:0983531549">
+                <Phone size={19} aria-hidden="true" />
+                撥打電話
+              </a>
+            </div>
+            <div className="line-hint" aria-label="LINE 聯絡資訊">
+              <span><Search size={15} aria-hidden="true" />LINE 搜尋 0983531549</span>
+              <span><CopyCheck size={15} aria-hidden="true" />ID chenli0775</span>
             </div>
           </div>
           <figure className="hero-visual">
@@ -133,6 +184,11 @@ export function App() {
               width="1536"
               height="960"
             />
+            <div className="floating-tools" aria-hidden="true">
+              <span><SprayCan size={20} /></span>
+              <span><BrushCleaning size={20} /></span>
+              <span><WashingMachine size={20} /></span>
+            </div>
           </figure>
         </section>
 
@@ -156,13 +212,19 @@ export function App() {
             清潔需求通常不是一句「幫我打掃」就能說清楚。首頁先用情境幫使用者描述問題，再進入聯絡確認。
           </SectionIntro>
           <div className="scenario-grid">
-            {scenarios.map((item, index) => (
+            {scenarios.map((item, index) => {
+              const Icon = item.icon
+              return (
               <article className="scenario-card" key={item.title}>
-                <span>{String(index + 1).padStart(2, '0')}</span>
+                <div className="card-topline">
+                  <span>{String(index + 1).padStart(2, '0')}</span>
+                  <span className="icon-bubble"><Icon size={22} aria-hidden="true" /></span>
+                </div>
                 <h3>{item.title}</h3>
                 <p>{item.copy}</p>
               </article>
-            ))}
+              )
+            })}
           </div>
         </section>
 
@@ -184,10 +246,22 @@ export function App() {
             <Sparkles size={26} aria-hidden="true" />
             <h2>LINE 詢問時，先傳這些資訊</h2>
             <p>
-              空間照片、行政區、預計清潔區域、希望日期，以及特別在意的角落。LINE 官方帳號連結待業主提供後接上。
+              空間照片、行政區、預計清潔區域、希望日期，以及特別在意的角落。可用 LINE 搜尋電話，也可直接用 ID 加入。
             </p>
-            <a className="text-link" href="tel:0983531549">
-              先用電話確認 <ArrowRight size={17} aria-hidden="true" />
+            <div className="contact-mini-list" aria-label="LINE 與電話資訊">
+              {contactMethods.map((method) => {
+                const Icon = method.icon
+                return (
+                  <div key={method.label}>
+                    <Icon size={18} aria-hidden="true" />
+                    <span>{method.label}</span>
+                    <strong>{method.value}</strong>
+                  </div>
+                )
+              })}
+            </div>
+            <a className="text-link" href={lineUrl} target="_blank" rel="noreferrer">
+              開啟 LINE 詢問 <ArrowRight size={17} aria-hidden="true" />
             </a>
           </div>
         </section>
@@ -197,12 +271,15 @@ export function App() {
             這些不是包裝話術，而是到府清潔前最容易影響工時、費用與成果期待的資訊。
           </SectionIntro>
           <div className="detail-list">
-            {details.map((detail) => (
-              <div key={detail}>
-                <Home size={21} aria-hidden="true" />
-                <p>{detail}</p>
-              </div>
-            ))}
+            {details.map((detail) => {
+              const Icon = detail.icon
+              return (
+                <div key={detail.text}>
+                  <Icon size={21} aria-hidden="true" />
+                  <p>{detail.text}</p>
+                </div>
+              )
+            })}
           </div>
         </section>
 
@@ -237,11 +314,17 @@ export function App() {
         <section className="final-cta" aria-labelledby="contact-title">
           <p className="eyebrow">Contact</p>
           <h2 id="contact-title">先把家裡的狀況說清楚，再安排清潔。</h2>
-          <p>潔淨坊清潔工作室第一版網站先以電話與 LINE 詢問流程為主，後續可接上正式 LINE 連結與授權案例。</p>
-          <a className="button primary" href="tel:0983531549">
-            <Phone size={19} aria-hidden="true" />
-            撥打 0983531549
-          </a>
+          <p>潔淨坊清潔工作室可用 LINE 搜尋 0983531549，或直接加入 ID chenli0775 詢問。後續案例仍只會使用已授權素材。</p>
+          <div className="final-actions">
+            <a className="button line-primary" href={lineUrl} target="_blank" rel="noreferrer">
+              <MessageCircle size={19} aria-hidden="true" />
+              LINE 詢問 chenli0775
+            </a>
+            <a className="button dark-secondary" href="tel:0983531549">
+              <Phone size={19} aria-hidden="true" />
+              撥打 0983531549
+            </a>
+          </div>
         </section>
       </main>
 
