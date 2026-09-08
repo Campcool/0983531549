@@ -33,3 +33,11 @@ pnpm dev
 ```bash
 pnpm build
 ```
+
+## GitHub Pages
+
+此專案使用 GitHub Actions 部署。Repository 的 Pages 設定請選：
+
+- Source: `GitHub Actions`
+
+推送到 `main` 後，workflow 會安裝依賴、執行 `pnpm build`，並把 `dist/` 發布到 GitHub Pages。
