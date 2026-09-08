@@ -25,8 +25,35 @@ import {
 } from 'lucide-react'
 import './style.css'
 
-const heroImage = '/og-home-cleaning.png'
+const heroImage = '/cases/site-cleaning-hero.jpg'
 const lineUrl = 'https://line.me/R/ti/p/~chenli0775'
+
+const casePhotos = [
+  {
+    src: '/cases/high-cabinet-cleaning.jpg',
+    alt: '工作人員進行高處櫃體清潔',
+    title: '高處櫃體清潔',
+    copy: '櫃面、層板與不易碰到的位置，先確認高度與工具安全。',
+  },
+  {
+    src: '/cases/cabinet-detail-cleaning.jpg',
+    alt: '工作人員清潔木作櫃體內部',
+    title: '木作櫃內整理',
+    copy: '櫃內灰塵、抽屜縫隙與板材表面，依材質確認擦拭方式。',
+  },
+  {
+    src: '/cases/room-after-work-cleaning.jpg',
+    alt: '房間木作與地面清潔現場',
+    title: '房間與木作除塵',
+    copy: '裝修或搬動後的粉塵，分區處理地面、家具與平台。',
+  },
+  {
+    src: '/cases/vacuum-dust-cleaning.jpg',
+    alt: '工作人員使用吸塵設備清潔櫃體與牆面',
+    title: '吸塵設備輔助',
+    copy: '針對灰塵量較高的位置，搭配吸塵與局部擦拭。',
+  },
+]
 
 const inquirySteps = [
   '傳送空間照片與想整理的區域',
@@ -136,19 +163,28 @@ export function App() {
 
       <header className="site-header" aria-label="主選單">
         <a className="brand" href="#top" aria-label="潔淨坊清潔工作室首頁">
-          <span className="brand-mark" aria-hidden="true">潔</span>
-          <span>
-            <strong>潔淨坊</strong>
-            <small>清潔工作室</small>
-          </span>
+          <img
+            className="brand-logo"
+            src="/brand/logo-horizontal.png"
+            alt="潔淨坊清潔服務"
+            width="720"
+            height="356"
+          />
         </a>
         <nav className="desktop-nav" aria-label="頁面段落">
           <a href="#needs">需求情境</a>
+          <a href="#cases">案場紀錄</a>
           <a href="#process">服務流程</a>
           <a href="#details">清潔細節</a>
           <a href="#areas">服務地區</a>
         </nav>
-        <a className="header-action line-action" href={lineUrl} target="_blank" rel="noreferrer">
+        <a
+          className="header-action line-action"
+          href={lineUrl}
+          target="_blank"
+          rel="noreferrer"
+          aria-label="LINE 詢問"
+        >
           <MessageCircle size={18} aria-hidden="true" />
           <span>LINE 詢問</span>
         </a>
@@ -158,10 +194,15 @@ export function App() {
         <section className="hero" id="top" aria-labelledby="hero-title">
           <div className="hero-copy">
             <p className="eyebrow">質感居家服務</p>
-            <h1 id="hero-title">潔淨坊清潔工作室</h1>
-            <p className="hero-lede">
-              把家裡需要重整的地方，先整理成清楚的清潔需求。從照片、範圍到時間安排，都以可確認的資訊溝通。
-            </p>
+            <h1 id="hero-title" className="hero-title">
+              <span>潔淨坊</span>
+              <span>清潔服務</span>
+            </h1>
+            <p className="brand-slogan">專業・細心・值得信賴</p>
+            <div className="hero-lede">
+              <p>家裡需要重整，不必先整理成完整清單。</p>
+              <p>直接用 LINE 傳照片，我們再一起確認區域、時間與現場條件。</p>
+            </div>
             <div className="hero-actions" aria-label="主要行動">
               <a className="button line-primary" href={lineUrl} target="_blank" rel="noreferrer">
                 <MessageCircle size={19} aria-hidden="true" />
@@ -180,9 +221,9 @@ export function App() {
           <figure className="hero-visual">
             <img
               src={heroImage}
-              alt="明亮居家空間中的清潔用品與整理後檯面"
-              width="1536"
-              height="960"
+              alt="潔淨坊清潔工作室實際案場清潔照片"
+              width="1478"
+              height="1108"
             />
             <div className="floating-tools" aria-hidden="true">
               <span><SprayCan size={20} /></span>
@@ -199,7 +240,7 @@ export function App() {
           </div>
           <div>
             <Camera aria-hidden="true" />
-            <span>案例素材需授權</span>
+            <span>使用實拍案場</span>
           </div>
           <div>
             <ClipboardCheck aria-hidden="true" />
@@ -215,16 +256,49 @@ export function App() {
             {scenarios.map((item, index) => {
               const Icon = item.icon
               return (
-              <article className="scenario-card" key={item.title}>
-                <div className="card-topline">
-                  <span>{String(index + 1).padStart(2, '0')}</span>
-                  <span className="icon-bubble"><Icon size={22} aria-hidden="true" /></span>
-                </div>
-                <h3>{item.title}</h3>
-                <p>{item.copy}</p>
-              </article>
+                <article className="scenario-card" key={item.title}>
+                  <div className="card-topline">
+                    <span>{String(index + 1).padStart(2, '0')}</span>
+                    <span className="icon-bubble"><Icon size={22} aria-hidden="true" /></span>
+                  </div>
+                  <h3>{item.title}</h3>
+                  <p>{item.copy}</p>
+                </article>
               )
             })}
+          </div>
+        </section>
+
+        <section className="case-section" id="cases">
+          <SectionIntro eyebrow="Works" title="實際案場清潔紀錄">
+            使用已提供的案場照片，呈現櫃體、木作、裝修後粉塵與局部清潔情境；不加入未確認的客戶名稱或成果數字。
+          </SectionIntro>
+          <div className="case-grid">
+            <article className="case-feature">
+              <img
+                src="/cases/panel-wipe-cleaning.jpg"
+                alt="工作人員擦拭大型板面與牆面"
+                width="1108"
+                height="1477"
+                loading="lazy"
+              />
+              <div>
+                <p className="eyebrow">On Site</p>
+                <h3>從照片先判斷範圍，再安排工具與時間</h3>
+                <p>案場清潔會受材質、高度、粉塵量與物品狀態影響，適合先用 LINE 傳照片確認。</p>
+              </div>
+            </article>
+            <div className="case-photo-grid">
+              {casePhotos.map((photo) => (
+                <article className="case-photo-card" key={photo.title}>
+                  <img src={photo.src} alt={photo.alt} width="1108" height="1477" loading="lazy" />
+                  <div>
+                    <h3>{photo.title}</h3>
+                    <p>{photo.copy}</p>
+                  </div>
+                </article>
+              ))}
+            </div>
           </div>
         </section>
 
@@ -314,7 +388,7 @@ export function App() {
         <section className="final-cta" aria-labelledby="contact-title">
           <p className="eyebrow">Contact</p>
           <h2 id="contact-title">先把家裡的狀況說清楚，再安排清潔。</h2>
-          <p>潔淨坊清潔工作室可用 LINE 搜尋 0983531549，或直接加入 ID chenli0775 詢問。後續案例仍只會使用已授權素材。</p>
+          <p>潔淨坊清潔工作室可用 LINE 搜尋 0983531549，或直接加入 ID chenli0775 詢問。案場照片以已提供素材呈現，細節仍以實際需求確認。</p>
           <div className="final-actions">
             <a className="button line-primary" href={lineUrl} target="_blank" rel="noreferrer">
               <MessageCircle size={19} aria-hidden="true" />
