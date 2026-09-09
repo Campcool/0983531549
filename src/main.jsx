@@ -5,22 +5,30 @@ import {
   Bath,
   BedDouble,
   BrushCleaning,
+  Building2,
   Camera,
   ClipboardCheck,
   ClipboardList,
   CookingPot,
   CopyCheck,
   Droplets,
+  Flame,
+  Hammer,
   MapPin,
   MessageCircle,
+  PaintRoller,
   Phone,
   PhoneCall,
   Search,
   ShieldCheck,
+  ShieldAlert,
   Sofa,
   Sparkles,
   SprayCan,
+  Trash2,
+  Truck,
   WashingMachine,
+  Warehouse,
 } from 'lucide-react'
 import './style.css'
 
@@ -131,6 +139,33 @@ const servicePrinciples = [
   },
 ]
 
+const serviceGroups = [
+  {
+    title: '一般清潔',
+    copy: '退租入住、大掃除與清運需求，先用照片確認範圍與物品狀況。',
+    icon: Sparkles,
+    items: ['退租入住', '大掃除', '清運'],
+  },
+  {
+    title: '裝潢清潔',
+    copy: '裝潢細清與油漆後整理，會先看粉塵量、材質與施工後殘留。',
+    icon: Hammer,
+    items: ['裝潢細清', '油漆後整理'],
+  },
+  {
+    title: '重點清潔',
+    copy: '針對廚房重油汙、水垢與商業廚房，先確認油垢厚度與設備條件。',
+    icon: CookingPot,
+    items: ['廚房重油汙', '重水地區水垢處理', '商業廚房'],
+  },
+  {
+    title: '特殊清潔',
+    copy: '垃圾屋、火燒屋與燒炭案件處理復原，需先確認現場安全與可作業範圍。',
+    icon: ShieldAlert,
+    items: ['特殊清潔', '除霉', '垃圾屋', '火燒屋', '燒炭案件處理復原'],
+  },
+]
+
 const details = [
   {
     text: '現場物品移動與歸位方式先確認',
@@ -183,7 +218,7 @@ const faqs = [
   },
   {
     question: '服務地區是哪裡？',
-    answer: '首頁先以台北、新北、桃園作為主要詢問範圍，實際可到府地點仍以排程與交通確認為準。',
+    answer: '首頁先以台北、新北、桃園、基隆作為主要詢問範圍，實際可到府地點仍以排程與交通確認為準。',
   },
 ]
 
@@ -214,6 +249,7 @@ export function App() {
         </a>
         <nav className="desktop-nav" aria-label="頁面段落">
           <a href="#needs">需求情境</a>
+          <a href="#services">清潔項目</a>
           <a href="#cases">案場紀錄</a>
           <a href="#process">服務流程</a>
           <a href="#details">清潔細節</a>
@@ -305,6 +341,36 @@ export function App() {
                   </div>
                   <h3>{item.title}</h3>
                   <p>{item.copy}</p>
+                </article>
+              )
+            })}
+          </div>
+        </section>
+
+        <section className="section service-section" id="services">
+          <SectionIntro eyebrow="Services" title="主打清潔內容">
+            依一般、裝潢、重點與特殊清潔整理需求，先判斷現場條件，再回覆可安排方式。
+          </SectionIntro>
+          <div className="service-category-grid">
+            {serviceGroups.map((group) => {
+              const Icon = group.icon
+              return (
+                <article className="service-category-card" key={group.title}>
+                  <div className="service-motion-icon" aria-hidden="true">
+                    <Icon size={34} />
+                  </div>
+                  <div>
+                    <h3>{group.title}</h3>
+                    <p>{group.copy}</p>
+                  </div>
+                  <ul>
+                    {group.items.map((item) => (
+                      <li key={item}>
+                        <CheckIconForService item={item} />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </article>
               )
             })}
@@ -404,10 +470,10 @@ export function App() {
 
         <section className="area-section" id="areas">
           <SectionIntro eyebrow="Areas" title="主要詢問區域">
-            以雙北與桃園作為第一版服務地區入口，實際是否可安排仍以地址、日期與路程確認。
+            以台北、新北、桃園與基隆作為第一版服務地區入口，實際是否可安排仍以地址、日期與路程確認。
           </SectionIntro>
           <div className="area-grid" aria-label="服務地區">
-            {['台北市', '新北市', '桃園市'].map((area) => (
+            {['台北市', '新北市', '桃園市', '基隆市'].map((area) => (
               <div className="area-item" key={area}>
                 <MapPin size={20} aria-hidden="true" />
                 <span>{area}</span>
@@ -439,6 +505,10 @@ export function App() {
               <MessageCircle size={19} aria-hidden="true" />
               LINE 詢問 chenli0775
             </a>
+            <a className="button dark-secondary" href={`${import.meta.env.BASE_URL}cases/`}>
+              <Camera size={19} aria-hidden="true" />
+              查看案例相簿
+            </a>
             <a className="button dark-secondary" href="tel:0983531549">
               <Phone size={19} aria-hidden="true" />
               撥打 0983531549
@@ -449,10 +519,22 @@ export function App() {
 
       <footer className="site-footer">
         <span>潔淨坊清潔工作室</span>
-        <span>台北・新北・桃園詢問</span>
+        <span>台北・新北・桃園・基隆詢問</span>
       </footer>
     </div>
   )
+}
+
+function CheckIconForService({ item }) {
+  if (item.includes('清運')) return <Truck size={17} aria-hidden="true" />
+  if (item.includes('裝潢')) return <Building2 size={17} aria-hidden="true" />
+  if (item.includes('油漆')) return <PaintRoller size={17} aria-hidden="true" />
+  if (item.includes('垃圾') || item.includes('火燒') || item.includes('燒炭')) return <Flame size={17} aria-hidden="true" />
+  if (item.includes('商業')) return <Warehouse size={17} aria-hidden="true" />
+  if (item.includes('特殊') || item.includes('除霉')) return <ShieldAlert size={17} aria-hidden="true" />
+  if (item.includes('水垢')) return <Droplets size={17} aria-hidden="true" />
+  if (item.includes('退租') || item.includes('大掃除')) return <Trash2 size={17} aria-hidden="true" />
+  return <Sparkles size={17} aria-hidden="true" />
 }
 
 createRoot(document.getElementById('root')).render(
