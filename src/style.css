@@ -20,7 +20,7 @@
   --radius-md: 8px;
   --radius-lg: 18px;
   --site-padding: clamp(18px, 5vw, 64px);
-  --header-height: 144px;
+  --header-height: 224px;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", sans-serif;
   color: var(--color-ink);
   background: var(--color-bg);
@@ -107,7 +107,7 @@ img {
     "nav nav";
   align-items: center;
   gap: 8px 12px;
-  min-height: 104px;
+  min-height: var(--header-height);
   padding: 8px var(--site-padding) 10px;
   border-bottom: 1px solid rgba(167, 220, 200, .6);
   background:
@@ -135,16 +135,22 @@ img {
 
 .desktop-nav {
   grid-area: nav;
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   width: 100%;
-  gap: 7px;
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
-  padding: 6px 1px 8px;
+  gap: 8px;
+  overflow: visible;
+  overscroll-behavior: auto;
+  padding: 6px 0 8px;
   color: var(--color-muted);
-  font-size: 18px;
+  font-size: clamp(14px, 3.75vw, 17px);
   font-weight: 950;
-  scrollbar-width: thin;
+  scrollbar-width: none;
+  touch-action: manipulation;
+}
+
+.desktop-nav::-webkit-scrollbar {
+  display: none;
 }
 
 .desktop-nav a {
@@ -153,10 +159,9 @@ img {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  flex: 0 0 auto;
-  min-width: 118px;
-  min-height: 48px;
-  padding: 8px 14px;
+  min-width: 0;
+  min-height: 44px;
+  padding: 8px 6px;
   border: 1px solid color-mix(in srgb, var(--nav-color) 28%, white);
   border-radius: 999px;
   background:
@@ -166,7 +171,10 @@ img {
     inset 0 -9px 18px color-mix(in srgb, var(--nav-color) 12%, transparent),
     0 8px 20px rgba(31, 45, 39, .04);
   color: color-mix(in srgb, var(--nav-color) 78%, #12353e);
-  white-space: nowrap;
+  line-height: 1.1;
+  text-align: center;
+  white-space: normal;
+  word-break: keep-all;
   transition: transform .22s cubic-bezier(.34, 1.56, .64, 1), background-color .2s ease, border-color .2s ease, box-shadow .2s ease;
 }
 
@@ -2053,11 +2061,15 @@ select {
   }
 
   .desktop-nav {
+    display: flex;
     align-items: center;
     justify-content: flex-start;
     overflow-x: auto;
+    overscroll-behavior-x: contain;
     padding: 0;
     font-size: 17px;
+    scrollbar-width: thin;
+    touch-action: pan-x;
   }
 
   .desktop-nav a {
@@ -2066,6 +2078,7 @@ select {
     min-height: 48px;
     padding-right: 14px;
     padding-left: 14px;
+    white-space: nowrap;
   }
 
   .hero {
