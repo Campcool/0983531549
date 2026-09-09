@@ -108,8 +108,8 @@ export function CaseAdminApp() {
           <img src={`${import.meta.env.BASE_URL}brand/logo-mark-transparent.png`} alt="潔淨坊" width="220" height="220" />
           <div>
             <p className="eyebrow">Case Admin</p>
-            <h1>案例上傳管理</h1>
-            <p>輸入管理密碼後建立相簿。</p>
+            <h1>照片壓縮工具</h1>
+            <p>輸入管理密碼後使用內部工具。</p>
           </div>
           <label>
             <span>管理密碼</span>
@@ -124,7 +124,7 @@ export function CaseAdminApp() {
           {error && <p className="form-error">{error}</p>}
           <button className="button line-primary" type="submit">
             <LockKeyhole size={19} aria-hidden="true" />
-            進入管理
+            進入工具
           </button>
           <a className="text-admin-link" href={`${import.meta.env.BASE_URL}cases/`}>
             <ArrowLeft size={17} aria-hidden="true" />
@@ -140,9 +140,9 @@ export function CaseAdminApp() {
       <main className="admin-panel">
         <div className="admin-panel-heading">
           <div>
-            <p className="eyebrow">Upload</p>
-            <h1>建立案例相簿</h1>
-            <p>靜態頁暫存版本，正式發布需接儲存服務。</p>
+            <p className="eyebrow">Internal Tool</p>
+            <h1>照片壓縮下載工具</h1>
+            <p>目前只提供照片壓縮與下載，不會發布到案例頁。</p>
           </div>
           <a className="button secondary" href={`${import.meta.env.BASE_URL}cases/`}>
             <ArrowLeft size={19} aria-hidden="true" />
