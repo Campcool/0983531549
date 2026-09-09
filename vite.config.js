@@ -13,6 +13,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(rootDir, 'index.html'),
+        share: resolve(rootDir, 'share/index.html'),
         cases: resolve(rootDir, 'cases/index.html'),
         casesManage: resolve(rootDir, 'cases/manage/index.html'),
       },
