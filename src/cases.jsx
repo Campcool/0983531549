@@ -96,7 +96,7 @@ export function CasesApp() {
           </a>
           <a className="header-action line-action" href={lineUrl} target="_blank" rel="noreferrer">
             <MessageCircle size={18} aria-hidden="true" />
-            <span>LINE 詢問</span>
+            <span>LINE</span>
           </a>
         </div>
       </header>
@@ -193,7 +193,7 @@ export function CasesApp() {
         <section className="final-cta">
           <p className="eyebrow">Contact</p>
           <h2>有類似現場狀況，可以先傳照片確認。</h2>
-          <p>請用 LINE 搜尋 0983531549，或直接加入 ID chenli0775。</p>
+          <p>可先傳照片與所在行政區，確認需求後再安排到府時間。</p>
           <div className="final-actions">
             <a className="button line-primary" href={lineUrl} target="_blank" rel="noreferrer">
               <MessageCircle size={19} aria-hidden="true" />

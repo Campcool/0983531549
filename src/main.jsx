@@ -194,21 +194,21 @@ const details = [
   },
 ]
 
-const contactMethods = [
+const contactActions = [
   {
-    label: 'LINE 搜尋',
-    value: '0983531549',
-    icon: Search,
-  },
-  {
-    label: 'LINE ID',
-    value: 'chenli0775',
+    label: '加入 LINE 詢問',
+    value: 'ID chenli0775｜搜尋 0983531549',
     icon: MessageCircle,
+    href: lineUrl,
+    external: true,
+    type: 'line',
   },
   {
-    label: '電話',
+    label: '直接撥打電話',
     value: '0983531549',
     icon: PhoneCall,
+    href: 'tel:0983531549',
+    type: 'phone',
   },
 ]
 
@@ -219,7 +219,7 @@ const faqs = [
   },
   {
     question: '可以直接在網站上看固定價格嗎？',
-    answer: '第一版先不放固定價格。實際費用會受坪數、髒污程度、工具耗材、交通與時間影響，需確認需求後再說明。',
+    answer: '網站不放固定價格。實際費用會受坪數、髒污程度、工具耗材、交通與時間影響，需確認需求後再說明。',
   },
   {
     question: '有真實案例或評論嗎？',
@@ -272,7 +272,7 @@ export function App() {
           aria-label="LINE 詢問"
         >
           <MessageCircle size={18} aria-hidden="true" />
-          <span>LINE 詢問</span>
+          <span>LINE</span>
         </a>
       </header>
 
@@ -300,8 +300,14 @@ export function App() {
               </a>
             </div>
             <div className="line-hint" aria-label="LINE 聯絡資訊">
-              <span><Search size={15} aria-hidden="true" />LINE 搜尋 0983531549</span>
-              <span><CopyCheck size={15} aria-hidden="true" />ID chenli0775</span>
+              <a href={lineUrl} target="_blank" rel="noreferrer">
+                <Search size={15} aria-hidden="true" />
+                LINE 搜尋 0983531549
+              </a>
+              <a href={lineUrl} target="_blank" rel="noreferrer">
+                <CopyCheck size={15} aria-hidden="true" />
+                ID chenli0775
+              </a>
             </div>
           </div>
           <figure className="hero-visual">
@@ -459,25 +465,26 @@ export function App() {
             <p>
               先傳空間照片、行政區、預計清潔區域與希望日期。特別在意的角落，也可以另外拍近照。
             </p>
-            <div className="contact-mini-list" aria-label="LINE 與電話資訊">
-              {contactMethods.map((method) => {
+            <div className="contact-action-grid" aria-label="LINE 與電話資訊">
+              {contactActions.map((method) => {
                 const Icon = method.icon
                 return (
-                  <div key={method.label}>
+                  <a
+                    className={`contact-action-card ${method.type === 'line' ? 'line-contact-card' : 'phone-contact-card'}`}
+                    href={method.href}
+                    target={method.external ? '_blank' : undefined}
+                    rel={method.external ? 'noreferrer' : undefined}
+                    key={method.label}
+                  >
                     <Icon size={18} aria-hidden="true" />
-                    <span>{method.label}</span>
-                    <strong>{method.value}</strong>
-                  </div>
+                    <span>
+                      <strong>{method.label}</strong>
+                      <small>{method.value}</small>
+                    </span>
+                    <ArrowRight size={17} aria-hidden="true" />
+                  </a>
                 )
               })}
-            </div>
-            <div className="note-actions">
-              <a className="button line-primary" href={lineUrl} target="_blank" rel="noreferrer">
-                開啟 LINE 詢問 <ArrowRight size={17} aria-hidden="true" />
-              </a>
-              <a className="button dark-secondary" href="tel:0983531549">
-                撥打電話 <Phone size={17} aria-hidden="true" />
-              </a>
             </div>
           </div>
         </section>
@@ -501,7 +508,7 @@ export function App() {
 
         <section className="area-section" id="areas">
           <SectionIntro eyebrow="Areas" title="主要詢問區域">
-            以台北、新北、桃園與基隆作為第一版服務地區入口，實際是否可安排仍以地址、日期與路程確認。
+            目前主要服務地區為台北、新北、桃園與基隆，實際是否可安排仍以地址、日期與路程確認。
           </SectionIntro>
           <div className="area-grid" aria-label="服務地區">
             {['台北市', '新北市', '桃園市', '基隆市'].map((area) => (
@@ -530,7 +537,7 @@ export function App() {
         <section className="final-cta" aria-labelledby="contact-title">
           <p className="eyebrow">Contact</p>
           <h2 id="contact-title">先把家裡的狀況說清楚，再安排清潔。</h2>
-          <p>潔淨坊清潔工作室可用 LINE 搜尋 0983531549，或直接加入 ID chenli0775 詢問。案場照片以已提供素材呈現，細節仍以實際需求確認。</p>
+          <p>可先傳現場照片、地址行政區與希望清潔日期，潔淨坊清潔工作室再依實際需求確認安排方式。</p>
           <div className="final-actions">
             <a className="button line-primary" href={lineUrl} target="_blank" rel="noreferrer">
               <MessageCircle size={19} aria-hidden="true" />
