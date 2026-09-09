@@ -105,7 +105,7 @@ export function CaseAdminApp() {
     return (
       <div className="admin-shell">
         <form className="admin-login-card" onSubmit={unlock}>
-          <img src={`${import.meta.env.BASE_URL}brand/logo-mark.png`} alt="潔淨坊" width="220" height="220" />
+          <img src={`${import.meta.env.BASE_URL}brand/logo-mark-transparent.png`} alt="潔淨坊" width="220" height="220" />
           <div>
             <p className="eyebrow">Case Admin</p>
             <h1>案例上傳管理</h1>

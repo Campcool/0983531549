@@ -90,6 +90,7 @@ const scenarios = [
     icon: Sofa,
     tag: '常用空間',
     tone: 'living',
+    image: assetPath('cases/room-after-work-cleaning.jpg'),
   },
   {
     title: '搬入搬出前後',
@@ -97,6 +98,7 @@ const scenarios = [
     icon: BedDouble,
     tag: '搬家整理',
     tone: 'move',
+    image: assetPath('cases/rental-clearance/rental-clearance-01.jpg'),
   },
   {
     title: '年節或大掃除',
@@ -104,6 +106,7 @@ const scenarios = [
     icon: Sparkles,
     tag: '完整清潔',
     tone: 'season',
+    image: assetPath('cases/site-cleaning-hero.jpg'),
   },
   {
     title: '廚房浴室重點',
@@ -111,6 +114,7 @@ const scenarios = [
     icon: CookingPot,
     tag: '油垢水垢',
     tone: 'kitchen',
+    image: assetPath('cases/grease-kitchen/grease-kitchen-01.jpg'),
   },
   {
     title: '局部加強需求',
@@ -118,6 +122,7 @@ const scenarios = [
     icon: Bath,
     tag: '局部處理',
     tone: 'detail',
+    image: assetPath('cases/scale-removal/scale-removal-01.jpg'),
   },
 ]
 
@@ -245,7 +250,7 @@ export function App() {
         <a className="brand" href="#top" aria-label="潔淨坊清潔工作室首頁">
           <img
             className="brand-logo"
-            src={assetPath('brand/logo-horizontal.png')}
+            src={assetPath('brand/logo-horizontal-transparent.png')}
             alt="潔淨坊清潔服務"
             width="720"
             height="356"
@@ -276,8 +281,8 @@ export function App() {
           <div className="hero-copy">
             <p className="eyebrow">質感居家服務</p>
             <h1 id="hero-title" className="hero-title">
-              <span>潔淨坊</span>
-              <span>清潔服務</span>
+              <span className="hero-brand-name">潔淨坊</span>
+              <span className="hero-brand-service">清潔工作室</span>
             </h1>
             <p className="brand-slogan">專業・細心・值得信賴</p>
             <div className="hero-lede">
@@ -338,6 +343,7 @@ export function App() {
               const Icon = item.icon
               return (
                 <article className={`scenario-card scenario-${item.tone}`} key={item.title}>
+                  <span className="scenario-photo" style={{ '--scenario-image': `url(${item.image})` }} aria-hidden="true" />
                   <Icon className="scenario-watermark" size={138} aria-hidden="true" />
                   <div className="card-topline">
                     <span>{String(index + 1).padStart(2, '0')}</span>
@@ -436,6 +442,16 @@ export function App() {
                 </li>
               ))}
             </ol>
+            <div className="process-quick-actions" aria-label="快速預約">
+              <a className="button line-primary" href={lineUrl} target="_blank" rel="noreferrer">
+                <MessageCircle size={19} aria-hidden="true" />
+                LINE 傳照片詢問
+              </a>
+              <a className="button dark-secondary" href="tel:0983531549">
+                <PhoneCall size={19} aria-hidden="true" />
+                直接撥打 0983531549
+              </a>
+            </div>
           </div>
           <div className="note-panel" id="inquiry">
             <Sparkles size={26} aria-hidden="true" />
@@ -455,9 +471,14 @@ export function App() {
                 )
               })}
             </div>
-            <a className="text-link" href={lineUrl} target="_blank" rel="noreferrer">
-              開啟 LINE 詢問 <ArrowRight size={17} aria-hidden="true" />
-            </a>
+            <div className="note-actions">
+              <a className="button line-primary" href={lineUrl} target="_blank" rel="noreferrer">
+                開啟 LINE 詢問 <ArrowRight size={17} aria-hidden="true" />
+              </a>
+              <a className="button dark-secondary" href="tel:0983531549">
+                撥打電話 <Phone size={17} aria-hidden="true" />
+              </a>
+            </div>
           </div>
         </section>
 

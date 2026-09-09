@@ -78,7 +78,7 @@ export function CasesApp() {
         <a className="brand" href={import.meta.env.BASE_URL} aria-label="回到潔淨坊首頁">
           <img
             className="brand-logo"
-            src={assetPath('brand/logo-horizontal.png')}
+            src={assetPath('brand/logo-horizontal-transparent.png')}
             alt="潔淨坊清潔服務"
             width="720"
             height="356"
