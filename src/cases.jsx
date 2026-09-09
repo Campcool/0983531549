@@ -6,6 +6,7 @@ import {
   Droplets,
   Flame,
   ImagePlus,
+  LockKeyhole,
   MessageCircle,
   ShieldAlert,
   Sparkles,
@@ -88,10 +89,16 @@ export function CasesApp() {
             <a href={`#${album.slug}`} key={album.slug}>{album.title}</a>
           ))}
         </nav>
-        <a className="header-action line-action" href={lineUrl} target="_blank" rel="noreferrer">
-          <MessageCircle size={18} aria-hidden="true" />
-          <span>LINE 詢問</span>
-        </a>
+        <div className="header-actions">
+          <a className="header-action upload-action" href={`${import.meta.env.BASE_URL}cases/manage/`}>
+            <LockKeyhole size={18} aria-hidden="true" />
+            <span>新增相簿</span>
+          </a>
+          <a className="header-action line-action" href={lineUrl} target="_blank" rel="noreferrer">
+            <MessageCircle size={18} aria-hidden="true" />
+            <span>LINE 詢問</span>
+          </a>
+        </div>
       </header>
 
       <main>
@@ -179,7 +186,7 @@ export function CasesApp() {
             </a>
             <a className="button dark-secondary" href={`${import.meta.env.BASE_URL}cases/manage/`}>
               <ImagePlus size={19} aria-hidden="true" />
-              業主上傳入口
+              新增相簿
             </a>
           </div>
         </section>

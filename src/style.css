@@ -92,21 +92,26 @@ img {
   position: sticky;
   top: 0;
   z-index: 10;
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "brand actions"
+    "nav nav";
   align-items: center;
-  justify-content: space-between;
-  gap: 14px;
-  min-height: 92px;
-  padding: 10px var(--site-padding);
+  gap: 10px 14px;
+  min-height: 112px;
+  padding: 10px var(--site-padding) 12px;
   border-bottom: 1px solid rgba(167, 220, 200, .6);
   background: rgba(244, 250, 248, .92);
   backdrop-filter: blur(18px);
 }
 
 .brand {
+  grid-area: brand;
   display: inline-flex;
   align-items: center;
   min-height: 66px;
+  min-width: 0;
 }
 
 .brand-logo {
@@ -118,11 +123,45 @@ img {
 }
 
 .desktop-nav {
-  display: none;
+  grid-area: nav;
+  display: flex;
+  width: 100%;
+  gap: 8px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  padding: 6px 1px 8px;
+  color: var(--color-muted);
+  font-size: 14px;
+  font-weight: 850;
+  scrollbar-width: thin;
+}
+
+.desktop-nav a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1 0 104px;
+  min-height: 42px;
+  padding: 9px 12px;
+  border: 1px solid rgba(47, 143, 143, .16);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .68);
+  box-shadow: inset 0 -8px 18px rgba(47, 109, 93, .05);
+  color: var(--color-primary-strong);
+  white-space: nowrap;
+  transition: transform .22s cubic-bezier(.34, 1.56, .64, 1), background-color .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+
+.desktop-nav a:hover {
+  border-color: rgba(47, 143, 143, .32);
+  background: rgba(223, 243, 239, .9);
+  box-shadow: 0 10px 24px rgba(31, 45, 39, .08);
+  transform: translateY(-1px);
 }
 
 .header-action {
   display: inline-flex;
+  grid-area: actions;
   align-items: center;
   justify-content: center;
   min-height: 44px;
@@ -137,6 +176,13 @@ img {
   transition: transform .22s cubic-bezier(.34, 1.56, .64, 1), background-color .2s ease, border-color .2s ease;
 }
 
+.header-actions {
+  grid-area: actions;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
 .header-action:hover {
   transform: translateY(-1px) scale(1.02);
 }
@@ -149,6 +195,11 @@ img {
   border-color: rgba(6, 199, 85, .28);
   color: #057f3a;
   background: rgba(232, 250, 238, .82);
+}
+
+.upload-action {
+  border-color: rgba(47, 143, 143, .25);
+  background: rgba(223, 243, 239, .86);
 }
 
 .hero {
@@ -482,6 +533,13 @@ p {
 
 .section-intro p:last-child {
   margin-bottom: 0;
+}
+
+.section-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: -10px 0 22px;
 }
 
 .scenario-grid,
@@ -1465,6 +1523,10 @@ select {
     clip: rect(0 0 0 0);
     white-space: nowrap;
   }
+
+  .header-actions {
+    gap: 6px;
+  }
 }
 
 @media (min-width: 540px) {
@@ -1516,19 +1578,25 @@ select {
     font-size: 46px;
   }
 
+  .site-header {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas: "brand nav actions";
+    min-height: 92px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
   .desktop-nav {
-    display: flex;
     align-items: center;
-    gap: 22px;
-    color: var(--color-muted);
-    font-size: 14px;
-    font-weight: 800;
+    justify-content: center;
+    overflow: visible;
+    padding: 0;
   }
 
   .desktop-nav a {
-    display: inline-flex;
-    align-items: center;
+    flex: 1 1 0;
     min-height: 44px;
+    background: rgba(255, 255, 255, .78);
   }
 
   .hero {
@@ -1674,6 +1742,7 @@ select {
 
   .button:hover,
   .header-action:hover,
+  .desktop-nav a:hover,
   .trust-band article:hover,
   .scenario-card:hover,
   .service-category-card:hover,

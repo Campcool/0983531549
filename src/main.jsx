@@ -250,7 +250,7 @@ export function App() {
         <nav className="desktop-nav" aria-label="頁面段落">
           <a href="#needs">需求情境</a>
           <a href="#services">清潔項目</a>
-          <a href="#cases">案場紀錄</a>
+          <a href={`${import.meta.env.BASE_URL}cases/`}>案例相簿</a>
           <a href="#process">服務流程</a>
           <a href="#details">清潔細節</a>
           <a href="#areas">服務地區</a>
@@ -381,6 +381,12 @@ export function App() {
           <SectionIntro eyebrow="Works" title="實際案場清潔紀錄">
             使用已提供的案場照片，呈現櫃體、木作、裝修後粉塵與局部清潔情境；不加入未確認的客戶名稱或成果數字。
           </SectionIntro>
+          <div className="section-actions">
+            <a className="button secondary" href={`${import.meta.env.BASE_URL}cases/`}>
+              <Camera size={19} aria-hidden="true" />
+              前往完整案例相簿
+            </a>
+          </div>
           <div className="case-grid">
             <article className="case-feature">
               <img
