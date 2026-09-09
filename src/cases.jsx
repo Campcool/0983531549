@@ -85,8 +85,8 @@ export function CasesApp() {
           />
         </a>
         <nav className="desktop-nav" aria-label="案例分類">
-          {albums.map((album) => (
-            <a href={`#${album.slug}`} key={album.slug}>{album.title}</a>
+          {albums.map((album, index) => (
+            <a className={`nav-album-${index + 1}`} href={`#${album.slug}`} key={album.slug}>{album.title}</a>
           ))}
         </nav>
         <div className="header-actions">
@@ -104,10 +104,10 @@ export function CasesApp() {
       <main>
         <section className="cases-hero">
           <div>
-            <p className="eyebrow">Works</p>
-            <h1>實際案場案例</h1>
+            <p className="eyebrow">案場相簿</p>
+            <h1>實際案場照片</h1>
             <p>
-              使用已提供案場素材整理相簿，照片加上潔淨坊淡浮水印；不加入未確認的客戶名稱、評論或成果數字。
+              依照現場類型整理成相簿，方便客戶用照片對照自己的需求；不加入未確認的客戶名稱、評論或成果數字。
             </p>
             <div className="hero-actions">
               <a className="button secondary" href={import.meta.env.BASE_URL}>
@@ -128,13 +128,28 @@ export function CasesApp() {
         </section>
 
         <section className="section album-index" aria-label="案例相簿列表">
+          <div className="album-index-heading">
+            <p className="eyebrow">Album Index</p>
+            <h2>案場相簿索引</h2>
+            <p>選擇接近的現場類型，進入相簿查看照片。</p>
+          </div>
           {albums.map((album) => {
             const Icon = album.icon
+            const cover = album.photos[0]
             return (
               <a className="album-index-card" href={`#${album.slug}`} key={album.slug}>
-                <Icon size={24} aria-hidden="true" />
-                <span>{album.category}</span>
-                <strong>{album.title}</strong>
+                <figure>
+                  <img src={cover} alt={`${album.title}相簿封面`} width="1200" height="900" loading="eager" />
+                  <figcaption>
+                    <Icon size={19} aria-hidden="true" />
+                    {album.photos.length} 張
+                  </figcaption>
+                </figure>
+                <div>
+                  <span>{album.category}</span>
+                  <strong>{album.title}</strong>
+                  <small>查看相簿</small>
+                </div>
               </a>
             )
           })}

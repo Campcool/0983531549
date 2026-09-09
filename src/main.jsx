@@ -144,24 +144,28 @@ const serviceGroups = [
     title: '一般清潔',
     copy: '退租入住、大掃除與清運需求，先用照片確認範圍與物品狀況。',
     icon: Sparkles,
+    tone: 'general',
     items: ['退租入住', '大掃除', '清運'],
   },
   {
     title: '裝潢清潔',
     copy: '裝潢細清與油漆後整理，會先看粉塵量、材質與施工後殘留。',
     icon: Hammer,
+    tone: 'renovation',
     items: ['裝潢細清', '油漆後整理'],
   },
   {
     title: '重點清潔',
     copy: '針對廚房重油汙、水垢與商業廚房，先確認油垢厚度與設備條件。',
     icon: CookingPot,
+    tone: 'focus',
     items: ['廚房重油汙', '重水地區水垢處理', '商業廚房'],
   },
   {
     title: '特殊清潔',
     copy: '垃圾屋、火燒屋與燒炭案件處理復原，需先確認現場安全與可作業範圍。',
     icon: ShieldAlert,
+    tone: 'special',
     items: ['特殊清潔', '除霉', '垃圾屋', '火燒屋', '燒炭案件處理復原'],
   },
 ]
@@ -248,12 +252,12 @@ export function App() {
           />
         </a>
         <nav className="desktop-nav" aria-label="頁面段落">
-          <a href="#needs">需求情境</a>
-          <a href="#services">清潔項目</a>
-          <a href={`${import.meta.env.BASE_URL}cases/`}>案例相簿</a>
-          <a href="#process">服務流程</a>
-          <a href="#details">清潔細節</a>
-          <a href="#areas">服務地區</a>
+          <a className="nav-needs" href="#needs">需求情境</a>
+          <a className="nav-services" href="#services">清潔項目</a>
+          <a className="nav-cases" href={`${import.meta.env.BASE_URL}cases/`}>案例相簿</a>
+          <a className="nav-process" href="#process">服務流程</a>
+          <a className="nav-details" href="#details">清潔細節</a>
+          <a className="nav-areas" href="#areas">服務地區</a>
         </nav>
         <a
           className="header-action line-action"
@@ -277,8 +281,8 @@ export function App() {
             </h1>
             <p className="brand-slogan">專業・細心・值得信賴</p>
             <div className="hero-lede">
-              <p>家裡需要重整，不必先整理成完整清單。</p>
-              <p>直接用 LINE 傳照片，我們再一起確認區域、時間與現場條件。</p>
+              <p><strong>家裡需要重整</strong>，不必先整理成完整清單。</p>
+              <p>直接用 <strong>LINE 傳照片</strong>，我們再一起確認區域、時間與現場條件。</p>
             </div>
             <div className="hero-actions" aria-label="主要行動">
               <a className="button line-primary" href={lineUrl} target="_blank" rel="noreferrer">
@@ -327,7 +331,7 @@ export function App() {
 
         <section className="section" id="needs">
           <SectionIntro eyebrow="Needs" title="先從你遇到的狀況說起">
-            清潔需求通常不是一句「幫我打掃」就能說清楚。首頁先用情境幫使用者描述問題，再進入聯絡確認。
+            清潔需求通常不是一句「幫我打掃」就能說清楚。先把情境分清楚，再進入 LINE 聯絡確認。
           </SectionIntro>
           <div className="scenario-grid">
             {scenarios.map((item, index) => {
@@ -355,7 +359,7 @@ export function App() {
             {serviceGroups.map((group) => {
               const Icon = group.icon
               return (
-                <article className="service-category-card" key={group.title}>
+                <article className={`service-category-card service-${group.tone}`} key={group.title}>
                   <div className="service-motion-icon" aria-hidden="true">
                     <Icon size={34} />
                   </div>
