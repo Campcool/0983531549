@@ -6,7 +6,6 @@ import {
   BedDouble,
   BrushCleaning,
   Camera,
-  CheckCircle2,
   ClipboardCheck,
   ClipboardList,
   CookingPot,
@@ -25,30 +24,32 @@ import {
 } from 'lucide-react'
 import './style.css'
 
-const heroImage = '/cases/site-cleaning-hero.jpg'
+const assetPath = (path) => `${import.meta.env.BASE_URL}${path.replace(/^\/+/, '')}`
+
+const heroImage = assetPath('cases/site-cleaning-hero.jpg')
 const lineUrl = 'https://line.me/R/ti/p/~chenli0775'
 
 const casePhotos = [
   {
-    src: '/cases/high-cabinet-cleaning.jpg',
+    src: assetPath('cases/high-cabinet-cleaning.jpg'),
     alt: '工作人員進行高處櫃體清潔',
     title: '高處櫃體清潔',
     copy: '櫃面、層板與不易碰到的位置，先確認高度與工具安全。',
   },
   {
-    src: '/cases/cabinet-detail-cleaning.jpg',
+    src: assetPath('cases/cabinet-detail-cleaning.jpg'),
     alt: '工作人員清潔木作櫃體內部',
     title: '木作櫃內整理',
     copy: '櫃內灰塵、抽屜縫隙與板材表面，依材質確認擦拭方式。',
   },
   {
-    src: '/cases/room-after-work-cleaning.jpg',
+    src: assetPath('cases/room-after-work-cleaning.jpg'),
     alt: '房間木作與地面清潔現場',
     title: '房間與木作除塵',
     copy: '裝修或搬動後的粉塵，分區處理地面、家具與平台。',
   },
   {
-    src: '/cases/vacuum-dust-cleaning.jpg',
+    src: assetPath('cases/vacuum-dust-cleaning.jpg'),
     alt: '工作人員使用吸塵設備清潔櫃體與牆面',
     title: '吸塵設備輔助',
     copy: '針對灰塵量較高的位置，搭配吸塵與局部擦拭。',
@@ -56,10 +57,22 @@ const casePhotos = [
 ]
 
 const inquirySteps = [
-  '傳送空間照片與想整理的區域',
-  '確認坪數、髒污狀況與可施工時間',
-  '到府前再次確認注意事項',
-  '完成後現場一起檢查重點區域',
+  {
+    title: '先傳照片',
+    copy: '拍整體空間、櫃體或髒污近照，讓清潔範圍先清楚。',
+  },
+  {
+    title: '確認條件',
+    copy: '對齊行政區、坪數、材質、髒污狀況與可施工時間。',
+  },
+  {
+    title: '安排到府',
+    copy: '確認日期、地址與工具需求後，再排定現場服務。',
+  },
+  {
+    title: '現場檢查',
+    copy: '完成後一起看重點區域，需補強的位置當場確認。',
+  },
 ]
 
 const scenarios = [
@@ -67,26 +80,54 @@ const scenarios = [
     title: '日常居家整理',
     copy: '客廳、臥室、廚房、浴室等常用區域，先依現況確認清潔範圍。',
     icon: Sofa,
+    tag: '常用空間',
+    tone: 'living',
   },
   {
     title: '搬入搬出前後',
     copy: '空屋、租屋交接、入住前重整，可用照片先說明牆面、地面與櫃體狀況。',
     icon: BedDouble,
+    tag: '搬家整理',
+    tone: 'move',
   },
   {
     title: '年節或大掃除',
     copy: '需要較完整清潔時，先把優先順序排清楚，避免現場才臨時追加。',
     icon: Sparkles,
+    tag: '完整清潔',
+    tone: 'season',
   },
   {
     title: '廚房浴室重點',
     copy: '油垢、水垢、排水口、檯面與縫隙，建議先拍近照確認可處理程度。',
     icon: CookingPot,
+    tag: '油垢水垢',
+    tone: 'kitchen',
   },
   {
     title: '局部加強需求',
     copy: '單一房間、陽台、窗框、櫃內等小範圍，也可先用清單確認是否適合安排。',
     icon: Bath,
+    tag: '局部處理',
+    tone: 'detail',
+  },
+]
+
+const servicePrinciples = [
+  {
+    title: '價格先確認',
+    copy: '未看照片與現場條件前，不先寫死費用。',
+    icon: ShieldCheck,
+  },
+  {
+    title: '使用實拍案場',
+    copy: '照片只放已提供素材，不補假案例或評論。',
+    icon: Camera,
+  },
+  {
+    title: '需求再安排',
+    copy: '先確認區域、時間、材質與工具，再約到府。',
+    icon: ClipboardCheck,
   },
 ]
 
@@ -165,7 +206,7 @@ export function App() {
         <a className="brand" href="#top" aria-label="潔淨坊清潔工作室首頁">
           <img
             className="brand-logo"
-            src="/brand/logo-horizontal.png"
+            src={assetPath('brand/logo-horizontal.png')}
             alt="潔淨坊清潔服務"
             width="720"
             height="356"
@@ -234,18 +275,18 @@ export function App() {
         </section>
 
         <section className="trust-band" aria-label="服務原則">
-          <div>
-            <ShieldCheck aria-hidden="true" />
-            <span>不放未確認價格</span>
-          </div>
-          <div>
-            <Camera aria-hidden="true" />
-            <span>使用實拍案場</span>
-          </div>
-          <div>
-            <ClipboardCheck aria-hidden="true" />
-            <span>需求先確認再安排</span>
-          </div>
+          {servicePrinciples.map((principle) => {
+            const Icon = principle.icon
+            return (
+              <article key={principle.title}>
+                <Icon aria-hidden="true" />
+                <div>
+                  <strong>{principle.title}</strong>
+                  <small>{principle.copy}</small>
+                </div>
+              </article>
+            )
+          })}
         </section>
 
         <section className="section" id="needs">
@@ -256,10 +297,11 @@ export function App() {
             {scenarios.map((item, index) => {
               const Icon = item.icon
               return (
-                <article className="scenario-card" key={item.title}>
+                <article className={`scenario-card scenario-${item.tone}`} key={item.title}>
+                  <Icon className="scenario-watermark" size={138} aria-hidden="true" />
                   <div className="card-topline">
                     <span>{String(index + 1).padStart(2, '0')}</span>
-                    <span className="icon-bubble"><Icon size={22} aria-hidden="true" /></span>
+                    <span>{item.tag}</span>
                   </div>
                   <h3>{item.title}</h3>
                   <p>{item.copy}</p>
@@ -276,7 +318,7 @@ export function App() {
           <div className="case-grid">
             <article className="case-feature">
               <img
-                src="/cases/panel-wipe-cleaning.jpg"
+                src={assetPath('cases/panel-wipe-cleaning.jpg')}
                 alt="工作人員擦拭大型板面與牆面"
                 width="1108"
                 height="1477"
@@ -305,22 +347,25 @@ export function App() {
         <section className="split-section" id="process">
           <div className="process-panel">
             <SectionIntro eyebrow="Process" title="詢問到到府的流程">
-              先把照片、範圍與時間對齊，再安排現場服務，減少雙方理解落差。
+              建議照這個順序傳資訊，先把照片、範圍與時間對齊，再安排現場服務。
             </SectionIntro>
             <ol className="step-list">
-              {inquirySteps.map((step) => (
-                <li key={step}>
-                  <CheckCircle2 size={20} aria-hidden="true" />
-                  <span>{step}</span>
+              {inquirySteps.map((step, index) => (
+                <li key={step.title}>
+                  <span className="step-number">{String(index + 1).padStart(2, '0')}</span>
+                  <span>
+                    <strong>{step.title}</strong>
+                    <small>{step.copy}</small>
+                  </span>
                 </li>
               ))}
             </ol>
           </div>
           <div className="note-panel" id="inquiry">
             <Sparkles size={26} aria-hidden="true" />
-            <h2>LINE 詢問時，先傳這些資訊</h2>
+            <h2>LINE 詢問資料</h2>
             <p>
-              空間照片、行政區、預計清潔區域、希望日期，以及特別在意的角落。可用 LINE 搜尋電話，也可直接用 ID 加入。
+              先傳空間照片、行政區、預計清潔區域與希望日期。特別在意的角落，也可以另外拍近照。
             </p>
             <div className="contact-mini-list" aria-label="LINE 與電話資訊">
               {contactMethods.map((method) => {

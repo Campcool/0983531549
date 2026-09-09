@@ -96,8 +96,8 @@ img {
   align-items: center;
   justify-content: space-between;
   gap: 14px;
-  min-height: 84px;
-  padding: 8px var(--site-padding);
+  min-height: 92px;
+  padding: 10px var(--site-padding);
   border-bottom: 1px solid rgba(167, 220, 200, .6);
   background: rgba(244, 250, 248, .92);
   backdrop-filter: blur(18px);
@@ -106,12 +106,14 @@ img {
 .brand {
   display: inline-flex;
   align-items: center;
-  min-height: 60px;
+  min-height: 66px;
 }
 
 .brand-logo {
-  width: clamp(132px, 34vw, 230px);
+  width: clamp(178px, 34vw, 280px);
   height: auto;
+  max-height: 70px;
+  object-fit: contain;
   filter: drop-shadow(0 8px 18px rgba(35, 66, 76, .08));
 }
 
@@ -394,33 +396,75 @@ p {
 
 .trust-band {
   display: grid;
-  gap: 10px;
+  gap: 14px;
   margin: 0 var(--site-padding);
-  padding: 14px;
-  border: 1px solid var(--color-border);
+  padding: 0;
+}
+
+.trust-band article {
+  position: relative;
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  gap: 12px;
+  min-height: 112px;
+  padding: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(47, 143, 143, .18);
   border-radius: var(--radius-md);
-  background: rgba(255, 255, 255, .88);
-  box-shadow: 0 10px 34px rgba(31, 45, 39, .06);
-}
-
-.trust-band div {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-height: 44px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, .96), rgba(244, 250, 248, .86)),
+    var(--color-surface);
+  box-shadow: 0 12px 34px rgba(31, 45, 39, .07);
   color: var(--color-primary-strong);
-  font-weight: 850;
-  transition: transform .24s cubic-bezier(.34, 1.56, .64, 1), color .2s ease;
+  transition: transform .24s cubic-bezier(.34, 1.56, .64, 1), box-shadow .2s ease, border-color .2s ease;
 }
 
-.trust-band div:hover {
+.trust-band article::after {
+  content: "";
+  position: absolute;
+  right: -36px;
+  bottom: -48px;
+  width: 132px;
+  height: 132px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(167, 220, 200, .38), transparent 68%);
+  pointer-events: none;
+}
+
+.trust-band article:hover {
   transform: translateY(-2px);
-  color: var(--color-primary);
+  border-color: rgba(47, 143, 143, .3);
+  box-shadow: var(--shadow-lift);
 }
 
 .trust-band svg {
+  position: relative;
+  z-index: 1;
   flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
   color: var(--color-primary);
+}
+
+.trust-band strong,
+.trust-band small {
+  position: relative;
+  z-index: 1;
+  display: block;
+}
+
+.trust-band strong {
+  margin-bottom: 4px;
+  font-size: 18px;
+  font-weight: 950;
+  line-height: 1.3;
+}
+
+.trust-band small {
+  color: var(--color-muted);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.6;
 }
 
 .section,
@@ -451,23 +495,82 @@ p {
 .scenario-card {
   position: relative;
   overflow: hidden;
+  display: flex;
+  min-height: 236px;
+  flex-direction: column;
+  justify-content: space-between;
   padding: 22px;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  background: var(--color-surface);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, .96), rgba(255, 255, 255, .76)),
+    var(--color-surface);
   transition: transform .26s cubic-bezier(.34, 1.56, .64, 1), box-shadow .2s ease, border-color .2s ease;
 }
 
+.scenario-card::before,
 .scenario-card::after {
   content: "";
   position: absolute;
-  inset: auto -24px -44px auto;
-  width: 112px;
-  height: 112px;
+  pointer-events: none;
+}
+
+.scenario-card::before {
+  inset: auto 0 0;
+  height: 42%;
+  background: linear-gradient(180deg, transparent, rgba(167, 220, 200, .22));
+}
+
+.scenario-card::after {
+  right: -48px;
+  bottom: -64px;
+  width: 170px;
+  height: 170px;
   border-radius: 999px;
-  background: rgba(223, 238, 231, .66);
-  transform: scale(.86);
-  transition: transform .26s cubic-bezier(.34, 1.56, .64, 1);
+  background: rgba(223, 243, 239, .72);
+  transform: scale(.92);
+  transition: transform .26s cubic-bezier(.34, 1.56, .64, 1), opacity .2s ease;
+}
+
+.scenario-living {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, .96), rgba(229, 246, 241, .86)),
+    linear-gradient(160deg, rgba(167, 220, 200, .26), transparent 62%);
+}
+
+.scenario-move {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, .96), rgba(235, 248, 255, .86)),
+    linear-gradient(160deg, rgba(124, 196, 232, .24), transparent 62%);
+}
+
+.scenario-season {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, .96), rgba(246, 253, 248, .86)),
+    linear-gradient(160deg, rgba(165, 213, 128, .24), transparent 62%);
+}
+
+.scenario-kitchen {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, .97), rgba(255, 247, 236, .88)),
+    linear-gradient(160deg, rgba(244, 192, 138, .22), transparent 62%);
+}
+
+.scenario-detail {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, .97), rgba(239, 249, 247, .9)),
+    linear-gradient(160deg, rgba(47, 143, 143, .18), transparent 62%);
+}
+
+.scenario-watermark {
+  position: absolute;
+  right: -12px;
+  bottom: -6px;
+  z-index: 0;
+  color: rgba(23, 79, 93, .09);
+  stroke-width: 1.35;
+  transform: rotate(-6deg);
+  transition: transform .28s cubic-bezier(.34, 1.56, .64, 1), color .2s ease;
 }
 
 .scenario-card:hover {
@@ -480,6 +583,11 @@ p {
   transform: scale(1.08);
 }
 
+.scenario-card:hover .scenario-watermark {
+  color: rgba(47, 143, 143, .16);
+  transform: translateY(-5px) rotate(-3deg) scale(1.04);
+}
+
 .card-topline {
   position: relative;
   z-index: 1;
@@ -487,7 +595,7 @@ p {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-bottom: 30px;
+  margin-bottom: 22px;
 }
 
 .card-topline > span:first-child {
@@ -497,16 +605,18 @@ p {
   font-weight: 900;
 }
 
-.icon-bubble {
-  display: grid;
-  place-items: center;
-  width: 46px;
-  height: 46px;
-  border: 1px solid rgba(47, 109, 93, .14);
+.card-topline > span:last-child {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 5px 10px;
+  border: 1px solid rgba(47, 143, 143, .16);
   border-radius: 999px;
-  background: var(--color-primary-soft);
+  background: rgba(255, 255, 255, .72);
   color: var(--color-primary-strong);
-  box-shadow: inset 0 -8px 16px rgba(47, 109, 93, .08);
+  font-size: 12px;
+  font-weight: 900;
+  white-space: nowrap;
 }
 
 .scenario-card h3,
@@ -537,6 +647,11 @@ p {
   border-radius: var(--radius-md);
   background: var(--color-surface);
   box-shadow: 0 12px 36px rgba(31, 45, 39, .08);
+}
+
+.case-feature:hover,
+.case-photo-card:hover {
+  border-color: rgba(47, 143, 143, .28);
 }
 
 .case-feature {
@@ -631,6 +746,16 @@ p {
   color: #f4c08a;
 }
 
+.note-panel h2 {
+  max-width: 12em;
+  font-size: clamp(30px, 4vw, 44px);
+  line-height: 1.16;
+}
+
+.note-panel p {
+  max-width: 42rem;
+}
+
 .step-list {
   display: grid;
   gap: 14px;
@@ -641,17 +766,50 @@ p {
 
 .step-list li {
   display: grid;
-  grid-template-columns: 24px 1fr;
+  grid-template-columns: 44px 1fr;
   gap: 12px;
   align-items: start;
-  padding: 13px 0;
-  border-top: 1px solid rgba(255, 255, 255, .18);
+  padding: 14px;
+  border: 1px solid rgba(255, 255, 255, .16);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, .08);
   font-weight: 750;
   line-height: 1.55;
+  transition: transform .24s cubic-bezier(.34, 1.56, .64, 1), background-color .2s ease;
 }
 
-.step-list svg {
-  color: #f4c08a;
+.step-list li:hover {
+  transform: translateX(4px);
+  background: rgba(255, 255, 255, .12);
+}
+
+.step-number {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid rgba(244, 192, 138, .58);
+  border-radius: 999px;
+  color: #ffd6a8;
+  font-size: 13px;
+  font-weight: 950;
+}
+
+.step-list strong,
+.step-list small {
+  display: block;
+}
+
+.step-list strong {
+  margin-bottom: 2px;
+  color: white;
+  font-size: 17px;
+}
+
+.step-list small {
+  color: rgba(255, 255, 255, .72);
+  font-size: 14px;
+  font-weight: 650;
 }
 
 .text-link {
@@ -910,7 +1068,7 @@ details p {
   .hero {
     grid-template-columns: minmax(0, .9fr) minmax(420px, 1.1fr);
     align-items: center;
-    min-height: min(760px, calc(100vh - 84px));
+    min-height: min(760px, calc(100vh - 92px));
     padding-top: 40px;
     padding-bottom: 40px;
   }
@@ -967,7 +1125,7 @@ details p {
 
 @media (max-width: 359px) {
   .brand-logo {
-    width: 132px;
+    width: 150px;
   }
 }
 
@@ -1013,9 +1171,10 @@ details p {
 
   .button:hover,
   .header-action:hover,
-  .trust-band div:hover,
+  .trust-band article:hover,
   .scenario-card:hover,
   .case-photo-card:hover,
+  .step-list li:hover,
   .detail-list div:hover,
   .area-item:hover,
   .text-link:hover {
