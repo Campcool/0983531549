@@ -7,8 +7,8 @@
 > 4. **所有時間戳一律台灣時間（Asia/Taipei, UTC+8）**。
 > 5. **不要把「已完成」寫在沒有實測的項目上**。未驗的事項寫進「本輪明確未驗」。
 
-最後更新：2026-09-10（Claude）— 建立本檔案；完成首次轉換稽核，產出 10 項待辦，其中 4 項列為阻斷。**尚未動任何程式碼**。
-稽核於 `bbfde70` 執行，事後已對 Codex 的 `c2f7fbd` 逐項復驗：**10 項待辦全部仍然成立**。
+最後更新：2026-09-10（Codex）— 依 `D:\AI-Skill\ai-skills\SKILL.md` 路由讀取 `ai-collaboration-handoff`，確認本檔是本專案指定的 AI 協作交接文件；同步 GitHub main 至 `fc64ce8` 並校正現況紀錄。**本輪未動網站程式碼、未跑 build。**
+Claude 首次稽核於 `bbfde70` 執行，事後對 Codex 的 `c2f7fbd` 留下待複驗項目；截至 `fc64ce8`，本輪只做交接狀態校正，待辦清單未改狀態，下一輪施工仍需逐項複驗。
 
 ---
 
@@ -39,7 +39,7 @@ React runtime 已正確拆成共用 chunk（189 KB／gzip 59.7 KB），四個入
 
 ### 分支狀況（2026-09-10 實查）
 
-- `main` — 唯一有效分支，最新 `bbfde70`。
+- `main` — 唯一有效分支，最新已同步至 `fc64ce8`。
 - `codex/excel-handoff` — **落後 main 27 個 commit、領先 0**。沒有任何獨有內容，是被遺留的空殼。
   **不要以為那裡有未完成的工作**；確認後可直接刪除。
 - 此 repo 從未開過 PR（`gh pr list --state all` 為空），目前是**直推 main** 模式。
@@ -159,6 +159,23 @@ cp950 主控台跑 Python 輸出繁中會 `UnicodeEncodeError`，前面加 `PYTH
 ---
 
 ## 6. 進度紀錄（倒序）
+
+### 2026-09-10 AI Skills 交接規則確認（Codex，基準 `fc64ce8`）— 文件校正
+
+依使用者指定讀取 `D:\AI-Skill\ai-skills\SKILL.md`，並依路由選擇主技能
+`D:\AI-Skill\ai-collaboration-handoff\SKILL.md`。判斷結果：
+
+- `ai-skills` 本體內容完整，與使用者貼上的內容一致，暫不需要修正。
+- `ai-collaboration-handoff` 預設要求 `AI-HANDOFF.md`，但本專案 `AGENTS.md` 已明確指定
+  `AI-README.md` 為唯一 AI 協作交接文件，因此不另建 `AI-HANDOFF.md`，避免雙軌交接。
+- 本檔先前仍寫 `main` 最新為 `bbfde70`，但實際 GitHub main 已是 `fc64ce8`；
+  本輪已校正交接狀態與進度紀錄。
+
+**本輪明確未驗**：
+
+- 未修改網站功能、樣式或資產。
+- 未跑 `pnpm lint` / `pnpm build`。
+- 未重新實測 Claude 稽核列出的 10 項待辦是否仍成立；下一輪若施工需逐項複驗。
 
 ### 2026-09-10 14:30 案例相簿改為 lazy drawers（Codex，`c2f7fbd`）— ⚠️ 待複驗
 
