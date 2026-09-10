@@ -21,10 +21,25 @@ function U {
 }
 
 $albums = @(
+  @{
+    Folder = "."
+    Slug = "."
+    Prefix = "renovation-detail"
+    Label = (U 0x88dd, 0x6f62, 0x8207, 0x6ac3, 0x9ad4, 0x7d30, 0x6e05)
+    OutputNames = @(
+      "panel-wipe-cleaning.jpg",
+      "high-cabinet-cleaning.jpg",
+      "cabinet-detail-cleaning.jpg",
+      "room-after-work-cleaning.jpg",
+      "vacuum-dust-cleaning.jpg",
+      "site-cleaning-hero.jpg"
+    )
+  },
   @{ Folder = "20260909"; Slug = "rental-clearance"; Prefix = "rental-clearance"; Label = (U 0x9000, 0x79df, 0x6e05, 0x904b) },
   @{ Folder = (U 0x9664, 0x9709); Slug = "mold-removal"; Prefix = "mold-removal"; Label = (U 0x7279, 0x6b8a, 0x6e05, 0x6f54, 0x0020, 0x9664, 0x9709) },
   @{ Folder = (U 0x5eda, 0x623f, 0x91cd, 0x6cb9, 0x6c59); Slug = "grease-kitchen"; Prefix = "grease-kitchen"; Label = (U 0x5eda, 0x623f, 0x91cd, 0x6cb9, 0x6c59) },
-  @{ Folder = (U 0x6c34, 0x57a2, 0x8655, 0x7406); Slug = "scale-removal"; Prefix = "scale-removal"; Label = (U 0x91cd, 0x6c34, 0x5730, 0x5340, 0x6c34, 0x57a2, 0x8655, 0x7406) }
+  @{ Folder = (U 0x6c34, 0x57a2, 0x8655, 0x7406); Slug = "scale-removal"; Prefix = "scale-removal"; Label = (U 0x91cd, 0x6c34, 0x5730, 0x5340, 0x6c34, 0x57a2, 0x8655, 0x7406) },
+  @{ Folder = (U 0x5546, 0x696d, 0x5eda, 0x623f); Slug = "commercial-kitchen"; Prefix = "commercial-kitchen"; Label = (U 0x5546, 0x696d, 0x5eda, 0x623f, 0x6e05, 0x6f54); Recursive = $true }
 )
 
 $jpegCodec = [System.Drawing.Imaging.ImageCodecInfo]::GetImageEncoders() |
@@ -97,14 +112,19 @@ foreach ($album in $albums) {
     continue
   }
 
-  $targetPath = Join-Path $OutputRoot $album.Slug
+  $targetPath = if ($album.Slug -eq ".") { $OutputRoot } else { Join-Path $OutputRoot $album.Slug }
   New-Item -ItemType Directory -Force -Path $targetPath | Out-Null
 
   $index = 1
-  Get-ChildItem -LiteralPath $sourcePath -File |
+  $files = Get-ChildItem -LiteralPath $sourcePath -File -Recurse:([bool]$album.Recursive) |
     Where-Object { $_.Extension -match '^\.(jpg|jpeg|png)$' } |
-    Sort-Object Name |
-    ForEach-Object {
+    Sort-Object FullName
+
+  if ($album.OutputNames) {
+    $files = $files | Select-Object -First $album.OutputNames.Count
+  }
+
+  $files | ForEach-Object {
       $sourceFile = $_.FullName
       $image = [System.Drawing.Image]::FromFile($sourceFile)
       try {
@@ -123,7 +143,12 @@ foreach ($album in $albums) {
             $graphics.Dispose()
           }
 
-          $outputFile = Join-Path $targetPath ("{0}-{1:D2}.jpg" -f $album.Prefix, $index)
+          if ($album.OutputNames) {
+            $outputFile = Join-Path $targetPath $album.OutputNames[$index - 1]
+          }
+          else {
+            $outputFile = Join-Path $targetPath ("{0}-{1:D2}.jpg" -f $album.Prefix, $index)
+          }
           $bitmap.Save($outputFile, $jpegCodec, $encoderParams)
           Write-Output $outputFile
         }

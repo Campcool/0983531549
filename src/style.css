@@ -20,7 +20,7 @@
   --radius-md: 8px;
   --radius-lg: 18px;
   --site-padding: clamp(18px, 5vw, 64px);
-  --header-height: 172px;
+  --header-height: 104px;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", sans-serif;
   color: var(--color-ink);
   background: var(--color-bg);
@@ -92,6 +92,7 @@ img {
   min-height: 100vh;
   overflow-x: hidden;
   padding-top: var(--header-height);
+  padding-bottom: 92px;
 }
 
 .site-header {
@@ -101,14 +102,12 @@ img {
   left: 0;
   z-index: 10;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  grid-template-areas:
-    "brand actions"
-    "nav nav";
+  grid-template-columns: clamp(104px, 29vw, 132px) minmax(0, 1fr);
+  grid-template-areas: "brand nav";
   align-items: center;
-  gap: 4px 10px;
+  gap: 8px;
   min-height: var(--header-height);
-  padding: 6px var(--site-padding) 8px;
+  padding: 8px var(--site-padding);
   border-bottom: 1px solid rgba(167, 220, 200, .6);
   background:
     linear-gradient(90deg, rgba(244, 250, 248, .96), rgba(232, 246, 245, .94)),
@@ -126,9 +125,9 @@ img {
 }
 
 .brand-logo {
-  width: clamp(156px, 46vw, 204px);
+  width: clamp(104px, 28vw, 132px);
   height: auto;
-  max-height: 82px;
+  max-height: 64px;
   object-fit: contain;
   filter: drop-shadow(0 10px 18px rgba(35, 66, 76, .12));
 }
@@ -138,12 +137,12 @@ img {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   width: 100%;
-  gap: 6px;
+  gap: 5px;
   overflow: visible;
   overscroll-behavior: auto;
-  padding: 4px 0 5px;
+  padding: 0;
   color: var(--color-muted);
-  font-size: clamp(14px, 3.65vw, 16px);
+  font-size: clamp(12px, 3.15vw, 14px);
   font-weight: 950;
   scrollbar-width: none;
   touch-action: manipulation;
@@ -160,8 +159,8 @@ img {
   align-items: center;
   justify-content: center;
   min-width: 0;
-  min-height: 36px;
-  padding: 6px 5px;
+  min-height: 31px;
+  padding: 5px 4px;
   border: 1px solid color-mix(in srgb, var(--nav-color) 28%, white);
   border-radius: 999px;
   background:
@@ -223,6 +222,11 @@ img {
   --nav-bg: #f0edff;
 }
 
+.desktop-nav .nav-album-6 {
+  --nav-color: #3c8c8a;
+  --nav-bg: #e8f6f5;
+}
+
 .desktop-nav .nav-areas {
   --nav-color: #3c8c8a;
   --nav-bg: #e8f6f5;
@@ -247,7 +251,7 @@ img {
 
 .header-actions {
   grid-area: actions;
-  display: flex;
+  display: none;
   justify-content: flex-end;
   gap: 8px;
 }
@@ -266,9 +270,69 @@ img {
   background: rgba(232, 250, 238, .82);
 }
 
+.facebook-action {
+  border-color: rgba(47, 119, 161, .25);
+  color: #1f6288;
+  background: rgba(232, 245, 251, .84);
+}
+
 .upload-action {
   border-color: rgba(47, 143, 143, .25);
   background: rgba(223, 243, 239, .86);
+}
+
+.mobile-contact-dock {
+  position: fixed;
+  right: max(14px, env(safe-area-inset-right));
+  bottom: max(14px, env(safe-area-inset-bottom));
+  left: max(14px, env(safe-area-inset-left));
+  z-index: 14;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  max-width: 430px;
+  margin: 0 auto;
+  padding: 8px;
+  border: 1px solid rgba(167, 220, 200, .6);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .9);
+  box-shadow: 0 18px 48px rgba(23, 79, 93, .22);
+  backdrop-filter: blur(18px);
+}
+
+.mobile-contact-dock a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  gap: 6px;
+  border-radius: 999px;
+  color: var(--color-primary-strong);
+  font-size: 14px;
+  font-weight: 950;
+  transition: transform .22s cubic-bezier(.34, 1.56, .64, 1), box-shadow .2s ease;
+}
+
+.mobile-contact-dock a:active {
+  animation: jelly-press .42s cubic-bezier(.36, .07, .19, .97);
+}
+
+.mobile-contact-dock .dock-line {
+  background: linear-gradient(135deg, var(--color-line), var(--color-line-strong));
+  color: white;
+  box-shadow: 0 12px 28px rgba(6, 199, 85, .26);
+}
+
+.mobile-contact-dock .dock-phone {
+  border: 1px solid rgba(244, 192, 138, .45);
+  background: #fff3e5;
+  color: #8a4d13;
+}
+
+.mobile-contact-dock .dock-facebook {
+  border: 1px solid rgba(47, 119, 161, .3);
+  background: #e8f5fb;
+  color: #1f6288;
 }
 
 .hero {
@@ -676,7 +740,8 @@ body:has(#renovation-detail:target) .nav-album-1,
 body:has(#rental-clearance:target) .nav-album-2,
 body:has(#mold-removal:target) .nav-album-3,
 body:has(#grease-kitchen:target) .nav-album-4,
-body:has(#scale-removal:target) .nav-album-5 {
+body:has(#scale-removal:target) .nav-album-5,
+body:has(#commercial-kitchen:target) .nav-album-6 {
   border-color: color-mix(in srgb, var(--nav-color) 72%, white);
   background:
     linear-gradient(180deg, color-mix(in srgb, var(--nav-color) 18%, white), color-mix(in srgb, var(--nav-color) 9%, white)),
@@ -1689,6 +1754,11 @@ details p {
   --album-tint: #f0edff;
 }
 
+.album-index-card:nth-of-type(6) {
+  --album-accent: #3c8c8a;
+  --album-tint: #e8f6f5;
+}
+
 .album-index-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 18px 42px color-mix(in srgb, var(--album-accent) 15%, transparent);
@@ -1797,6 +1867,10 @@ details p {
   --section-color: #7a6dc8;
 }
 
+.case-album-section:nth-of-type(8) {
+  --section-color: #3c8c8a;
+}
+
 .case-album-heading {
   display: grid;
   grid-template-columns: 56px 1fr;
@@ -1839,11 +1913,20 @@ details p {
   box-shadow: var(--shadow-lift);
 }
 
-.album-photo-card img {
+.album-photo-card img,
+.album-photo-card video {
   width: 100%;
   height: clamp(230px, 62vw, 360px);
   object-fit: cover;
   background: var(--color-primary-soft);
+}
+
+.album-video-card {
+  grid-column: 1 / -1;
+}
+
+.album-video-card video {
+  height: clamp(260px, 66vw, 520px);
 }
 
 .album-photo-card figcaption {
@@ -2053,40 +2136,14 @@ select {
 }
 
 @media (max-width: 480px) {
-  .header-action {
-    min-height: 54px;
-    width: auto;
-    min-width: 78px;
-    gap: 6px;
-    padding-right: 12px;
-    padding-left: 12px;
+  .mobile-contact-dock {
+    right: 10px;
+    left: 10px;
   }
 
-  .header-action span {
-    position: static;
-    width: auto;
-    height: auto;
-    overflow: visible;
-    clip: auto;
-    white-space: nowrap;
-    font-size: 14px;
-  }
-
-  .header-actions {
-    gap: 6px;
-  }
-
-  .upload-action {
-    min-width: 54px;
-  }
-
-  .upload-action span {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    white-space: nowrap;
+  .mobile-contact-dock a {
+    min-height: 46px;
+    font-size: 13px;
   }
 }
 
@@ -2135,6 +2192,10 @@ select {
     --header-height: 92px;
   }
 
+  .site-shell {
+    padding-bottom: 0;
+  }
+
   .hero-brand-name {
     font-size: 104px;
   }
@@ -2157,6 +2218,19 @@ select {
     min-height: 92px;
     padding-top: 10px;
     padding-bottom: 10px;
+  }
+
+  .brand-logo {
+    width: clamp(156px, 16vw, 204px);
+    max-height: 82px;
+  }
+
+  .header-actions {
+    display: flex;
+  }
+
+  .mobile-contact-dock {
+    display: none;
   }
 
   .desktop-nav {
@@ -2264,7 +2338,7 @@ select {
 
 @media (max-width: 359px) {
   .brand-logo {
-    width: 150px;
+    width: 98px;
   }
 }
 

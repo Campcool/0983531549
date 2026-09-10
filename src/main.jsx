@@ -12,6 +12,7 @@ import {
   CookingPot,
   CopyCheck,
   Droplets,
+  ExternalLink,
   Flame,
   Hammer,
   MapPin,
@@ -36,6 +37,8 @@ const assetPath = (path) => `${import.meta.env.BASE_URL}${path.replace(/^\/+/, '
 
 const heroImage = assetPath('cases/site-cleaning-hero.jpg')
 const lineUrl = 'https://line.me/R/ti/p/~chenli0775'
+const phoneUrl = 'tel:0983531549'
+const facebookPageUrl = 'https://www.facebook.com/share/1GMwVQdp7J/?mibextid=wwXIfr'
 
 const casePhotos = [
   {
@@ -61,6 +64,12 @@ const casePhotos = [
     alt: '工作人員使用吸塵設備清潔櫃體與牆面',
     title: '吸塵設備輔助',
     copy: '針對灰塵量較高的位置，搭配吸塵與局部擦拭。',
+  },
+  {
+    src: assetPath('cases/commercial-kitchen/commercial-kitchen-01.jpg'),
+    alt: '商業廚房與店面清潔現場',
+    title: '商業廚房清潔',
+    copy: '營業空間、設備周邊與地面油汙，先確認動線與可施工時間。',
   },
 ]
 
@@ -161,10 +170,10 @@ const serviceGroups = [
   },
   {
     title: '重點清潔',
-    copy: '針對廚房重油汙、水垢與商業廚房，先確認油垢厚度與設備條件。',
+    copy: '針對廚房重油汙、水垢與商業廚房清潔，先確認油垢厚度、設備條件與營業動線。',
     icon: CookingPot,
     tone: 'focus',
-    items: ['廚房重油汙', '重水地區水垢處理', '商業廚房'],
+    items: ['廚房重油汙', '商業廚房清潔', '重水地區水垢處理'],
   },
   {
     title: '特殊清潔',
@@ -207,7 +216,7 @@ const contactActions = [
     label: '直接撥打電話',
     value: '0983531549',
     icon: PhoneCall,
-    href: 'tel:0983531549',
+    href: phoneUrl,
     type: 'phone',
   },
 ]
@@ -264,16 +273,28 @@ export function App() {
           <a className="nav-details" href="#details">清潔細節</a>
           <a className="nav-areas" href="#areas">服務地區</a>
         </nav>
-        <a
-          className="header-action line-action"
-          href={lineUrl}
-          target="_blank"
-          rel="noreferrer"
-          aria-label="LINE 詢問"
-        >
-          <MessageCircle size={18} aria-hidden="true" />
-          <span>LINE</span>
-        </a>
+        <div className="header-actions">
+          <a
+            className="header-action line-action"
+            href={lineUrl}
+            target="_blank"
+            rel="noreferrer"
+            aria-label="LINE 詢問"
+          >
+            <MessageCircle size={18} aria-hidden="true" />
+            <span>LINE</span>
+          </a>
+          <a
+            className="header-action facebook-action"
+            href={facebookPageUrl}
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Facebook 粉專"
+          >
+            <ExternalLink size={17} aria-hidden="true" />
+            <span>粉專</span>
+          </a>
+        </div>
       </header>
 
       <main id="main-content">
@@ -294,7 +315,7 @@ export function App() {
                 <MessageCircle size={19} aria-hidden="true" />
                 加入 LINE 詢問
               </a>
-              <a className="button secondary" href="tel:0983531549">
+              <a className="button secondary" href={phoneUrl}>
                 <Phone size={19} aria-hidden="true" />
                 撥打電話
               </a>
@@ -453,7 +474,7 @@ export function App() {
                 <MessageCircle size={19} aria-hidden="true" />
                 LINE 傳照片詢問
               </a>
-              <a className="button dark-secondary" href="tel:0983531549">
+              <a className="button dark-secondary" href={phoneUrl}>
                 <PhoneCall size={19} aria-hidden="true" />
                 直接撥打 0983531549
               </a>
@@ -547,7 +568,7 @@ export function App() {
               <Camera size={19} aria-hidden="true" />
               查看案例相簿
             </a>
-            <a className="button dark-secondary" href="tel:0983531549">
+            <a className="button dark-secondary" href={phoneUrl}>
               <Phone size={19} aria-hidden="true" />
               撥打 0983531549
             </a>
@@ -555,11 +576,32 @@ export function App() {
         </section>
       </main>
 
+      <MobileContactDock />
+
       <footer className="site-footer">
         <span>潔淨坊清潔工作室</span>
         <span>台北・新北・桃園・基隆詢問</span>
       </footer>
     </div>
+  )
+}
+
+function MobileContactDock() {
+  return (
+    <nav className="mobile-contact-dock" aria-label="快速聯絡">
+      <a className="dock-line" href={lineUrl} target="_blank" rel="noreferrer">
+        <MessageCircle size={18} aria-hidden="true" />
+        <span>LINE</span>
+      </a>
+      <a className="dock-phone" href={phoneUrl}>
+        <Phone size={18} aria-hidden="true" />
+        <span>電話</span>
+      </a>
+      <a className="dock-facebook" href={facebookPageUrl} target="_blank" rel="noreferrer">
+        <ExternalLink size={17} aria-hidden="true" />
+        <span>粉專</span>
+      </a>
+    </nav>
   )
 }
 

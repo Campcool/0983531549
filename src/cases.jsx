@@ -4,17 +4,22 @@ import {
   ArrowLeft,
   Camera,
   Droplets,
+  ExternalLink,
   Flame,
   ImagePlus,
   MessageCircle,
+  Phone,
   ShieldAlert,
   Sparkles,
   Utensils,
+  Warehouse,
 } from 'lucide-react'
 import './style.css'
 
 const assetPath = (path) => `${import.meta.env.BASE_URL}${path.replace(/^\/+/, '')}`
 const lineUrl = 'https://line.me/R/ti/p/~chenli0775'
+const phoneUrl = 'tel:0983531549'
+const facebookPageUrl = 'https://www.facebook.com/share/1GMwVQdp7J/?mibextid=wwXIfr'
 
 const generatedPhotos = (folder, prefix, count) =>
   Array.from({ length: count }, (_, index) =>
@@ -68,6 +73,17 @@ const albums = [
     copy: '浴廁、玻璃、五金與檯面水垢，依材質與水垢程度確認處理期待。',
     photos: generatedPhotos('scale-removal', 'scale-removal', 4),
   },
+  {
+    slug: 'commercial-kitchen',
+    title: '商業廚房清潔',
+    category: '重點清潔',
+    icon: Warehouse,
+    copy: '營業空間、設備周邊、地面油汙與清潔動線，先確認可施工時間與現場安全。',
+    photos: generatedPhotos('commercial-kitchen', 'commercial-kitchen', 16),
+    videos: [
+      assetPath('cases/commercial-kitchen/commercial-kitchen-video.mp4'),
+    ],
+  },
 ]
 
 export function CasesApp() {
@@ -92,6 +108,10 @@ export function CasesApp() {
           <a className="header-action line-action" href={lineUrl} target="_blank" rel="noreferrer">
             <MessageCircle size={18} aria-hidden="true" />
             <span>LINE</span>
+          </a>
+          <a className="header-action facebook-action" href={facebookPageUrl} target="_blank" rel="noreferrer">
+            <ExternalLink size={17} aria-hidden="true" />
+            <span>粉專</span>
           </a>
         </div>
       </header>
@@ -118,7 +138,7 @@ export function CasesApp() {
           <div className="case-cover-stack" aria-hidden="true">
             <img src={albums[1].photos[0]} alt="" />
             <img src={albums[2].photos[0]} alt="" />
-            <img src={albums[3].photos[0]} alt="" />
+            <img src={albums[5].photos[0]} alt="" />
           </div>
         </section>
 
@@ -165,6 +185,21 @@ export function CasesApp() {
                 </div>
               </div>
               <div className="album-photo-grid">
+                {album.videos?.map((video, index) => (
+                  <figure className="album-photo-card album-video-card" key={video}>
+                    <video
+                      src={video}
+                      controls
+                      preload="metadata"
+                      playsInline
+                      poster={album.photos[0]}
+                    />
+                    <figcaption>
+                      <Camera size={16} aria-hidden="true" />
+                      案場影片 {String(index + 1).padStart(2, '0')}
+                    </figcaption>
+                  </figure>
+                ))}
                 {album.photos.map((photo, index) => (
                   <figure className="album-photo-card" key={photo}>
                     <img
@@ -198,11 +233,32 @@ export function CasesApp() {
         </section>
       </main>
 
+      <MobileContactDock />
+
       <footer className="site-footer">
         <span>潔淨坊清潔工作室</span>
         <span>案例相簿</span>
       </footer>
     </div>
+  )
+}
+
+function MobileContactDock() {
+  return (
+    <nav className="mobile-contact-dock" aria-label="快速聯絡">
+      <a className="dock-line" href={lineUrl} target="_blank" rel="noreferrer">
+        <MessageCircle size={18} aria-hidden="true" />
+        <span>LINE</span>
+      </a>
+      <a className="dock-phone" href={phoneUrl}>
+        <Phone size={18} aria-hidden="true" />
+        <span>電話</span>
+      </a>
+      <a className="dock-facebook" href={facebookPageUrl} target="_blank" rel="noreferrer">
+        <ExternalLink size={17} aria-hidden="true" />
+        <span>粉專</span>
+      </a>
+    </nav>
   )
 }
 
