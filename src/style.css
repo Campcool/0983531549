@@ -230,7 +230,6 @@ img {
 
 .header-action {
   display: inline-flex;
-  grid-area: actions;
   align-items: center;
   justify-content: center;
   min-width: 62px;
@@ -260,40 +259,53 @@ img {
    2026-09-10 移除，原本是 9 個等重膠囊排 3×3，配色借自首頁區塊導覽、
    與相簿內容無關，且在 375px 下文字重疊溢出。 */
 .cases-page {
-  --header-height: 72px;
+  --header-height: 64px;
 }
 
 .cases-page .site-header {
-  grid-template-columns: minmax(92px, 1fr) auto;
+  grid-template-columns: minmax(104px, 1fr) auto;
   grid-template-areas: "brand actions";
-  min-height: 72px;
+  min-height: 64px;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 
 .cases-page .header-actions {
   display: grid;
-  grid-template-columns: repeat(3, 56px);
-  gap: 6px;
+  grid-template-columns: repeat(3, 46px);
+  gap: 5px;
 }
 
 .cases-page .header-action {
+  width: 46px;
   min-width: 0;
-  min-height: 54px;
-  padding: 5px 4px;
-  font-size: 12px;
+  min-height: 46px;
+  gap: 1px;
+  padding: 4px 3px;
+  font-size: 10px;
 }
 
 .cases-page .header-action .brand-social-icon {
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
 }
 
 .cases-page .phone-action svg {
-  width: 23px;
-  height: 23px;
+  width: 21px;
+  height: 21px;
 }
 
 .cases-page .mobile-contact-dock {
   display: none;
+}
+
+.cases-page .brand {
+  min-height: 46px;
+}
+
+.cases-page .brand-logo {
+  width: clamp(112px, 33vw, 132px);
+  max-height: 52px;
 }
 
 .header-action:hover {
@@ -1693,8 +1705,8 @@ details p {
 
 .cases-hero {
   display: grid;
-  gap: 28px;
-  padding: 48px var(--site-padding) 42px;
+  gap: 18px;
+  padding: 24px var(--site-padding) 22px;
   background:
     linear-gradient(135deg, rgba(223, 243, 239, .88), rgba(244, 250, 248, .96)),
     var(--color-bg-soft);
@@ -1704,26 +1716,36 @@ details p {
 .admin-login-card h1,
 .admin-panel h1 {
   margin-bottom: 14px;
-  font-size: clamp(42px, 8vw, 76px);
-  line-height: 1.02;
+  font-size: clamp(34px, 9vw, 42px);
+  line-height: 1.06;
   letter-spacing: 0;
 }
 
 .cases-hero p {
   max-width: 640px;
+  font-size: clamp(17px, 4.5vw, 20px);
+  line-height: 1.6;
+}
+
+.cases-hero .hero-actions {
+  margin-top: 18px;
+}
+
+.cases-hero .hero-actions .secondary {
+  display: none;
 }
 
 .case-cover-stack {
   position: relative;
-  min-height: 360px;
+  min-height: auto;
 }
 
 .case-category-stack {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  align-content: center;
-  gap: 14px;
-  min-height: 300px;
+  align-content: start;
+  gap: 10px;
+  min-height: 0;
   /* 語意上是清單（ul/li），要清掉瀏覽器預設的縮排與項目符號 */
   margin: 0;
   padding: 0;
@@ -1733,7 +1755,7 @@ details p {
 .hero-category-card {
   display: grid;
   gap: 8px;
-  min-height: 132px;
+  min-height: 114px;
   padding: 0;
   border: 1px solid rgba(47, 143, 143, .2);
   border-radius: var(--radius-md);
@@ -1751,9 +1773,9 @@ details p {
   display: grid;
   align-content: start;
   width: 100%;
-  min-height: 132px;
-  gap: 8px;
-  padding: 18px;
+  min-height: 114px;
+  gap: 6px;
+  padding: 14px;
   border-radius: inherit;
   cursor: pointer;
 }
@@ -1769,7 +1791,6 @@ details p {
 }
 
 .hero-category-card:nth-child(2) {
-  transform: translateY(18px);
   background:
     radial-gradient(circle at 88% 12%, rgba(197, 123, 44, .18), transparent 36%),
     linear-gradient(145deg, rgba(255, 255, 255, .9), rgba(255, 243, 229, .78));
@@ -1782,7 +1803,6 @@ details p {
 }
 
 .hero-category-card:nth-child(4) {
-  transform: translateY(18px);
   background:
     radial-gradient(circle at 88% 12%, rgba(47, 119, 161, .18), transparent 36%),
     linear-gradient(145deg, rgba(255, 255, 255, .9), rgba(232, 245, 251, .78));
@@ -1790,8 +1810,9 @@ details p {
 
 .hero-category-card strong {
   color: var(--color-ink);
-  font-size: clamp(22px, 3vw, 30px);
+  font-size: clamp(23px, 6.5vw, 30px);
   line-height: 1.15;
+  word-break: keep-all;
 }
 
 .hero-category-card span {
@@ -2053,7 +2074,10 @@ details p {
 }
 
 .album-drawer .case-album-heading {
-  grid-template-columns: 54px minmax(0, 1fr) auto 32px;
+  grid-template-columns: 46px minmax(0, 1fr) 28px;
+  grid-template-areas:
+    "icon title chevron"
+    "meta title chevron";
   align-items: center;
   max-width: none;
   margin-bottom: 0;
@@ -2082,30 +2106,42 @@ details p {
 }
 
 .case-album-title {
+  grid-area: title;
   display: grid;
-  gap: 8px;
+  min-width: 0;
+  gap: 7px;
 }
 
 .case-album-title h2 {
-  font-size: clamp(30px, 5vw, 44px);
+  font-size: clamp(26px, 7.2vw, 34px);
+  line-height: 1.15;
+  word-break: keep-all;
+  overflow-wrap: normal;
+}
+
+.case-album-title p {
+  font-size: clamp(16px, 4.45vw, 18px);
+  line-height: 1.62;
 }
 
 .album-drawer-meta {
+  grid-area: meta;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 36px;
-  padding: 7px 12px;
+  min-height: 30px;
+  padding: 5px 8px;
   border: 1px solid color-mix(in srgb, var(--section-color, var(--color-primary)) 28%, white);
   border-radius: 999px;
   background: color-mix(in srgb, var(--section-color, var(--color-primary)) 9%, white);
   color: color-mix(in srgb, var(--section-color, var(--color-primary)) 82%, #12353e);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 950;
   white-space: nowrap;
 }
 
 .album-drawer-chevron {
+  grid-area: chevron;
   color: color-mix(in srgb, var(--section-color, var(--color-primary)) 78%, #12353e);
   transition: transform .22s ease;
 }
@@ -2115,17 +2151,18 @@ details p {
 }
 
 .album-drawer-hint {
-  margin: 10px 0 0 74px;
+  margin: 8px 0 0;
   color: color-mix(in srgb, var(--section-color, var(--color-primary)) 62%, var(--color-muted));
   font-size: 14px;
   font-weight: 850;
 }
 
 .album-icon {
+  grid-area: icon;
   display: grid;
   place-items: center;
-  width: 54px;
-  height: 54px;
+  width: 46px;
+  height: 46px;
   border: 1px solid color-mix(in srgb, var(--section-color, var(--color-primary)) 26%, white);
   border-radius: 999px;
   background: color-mix(in srgb, var(--section-color, var(--color-primary)) 14%, white);
@@ -2635,6 +2672,73 @@ select {
   .cases-hero {
     grid-template-columns: minmax(0, .9fr) minmax(360px, 1.1fr);
     align-items: center;
+    gap: 28px;
+    padding-top: 48px;
+    padding-bottom: 42px;
+  }
+
+  .cases-hero h1,
+  .admin-login-card h1,
+  .admin-panel h1 {
+    font-size: clamp(42px, 8vw, 76px);
+    line-height: 1.02;
+  }
+
+  .cases-hero .hero-actions .secondary {
+    display: inline-flex;
+  }
+
+  .case-category-stack {
+    align-content: center;
+    gap: 14px;
+    min-height: 300px;
+  }
+
+  .hero-category-card,
+  .hero-category-card > button {
+    min-height: 132px;
+  }
+
+  .hero-category-card > button {
+    gap: 8px;
+    padding: 18px;
+  }
+
+  .hero-category-card:nth-child(2),
+  .hero-category-card:nth-child(4) {
+    transform: translateY(18px);
+  }
+
+  .hero-category-card strong {
+    font-size: clamp(22px, 3vw, 30px);
+  }
+
+  .album-drawer .case-album-heading {
+    grid-template-columns: 54px minmax(0, 1fr) auto 32px;
+    grid-template-areas: "icon title meta chevron";
+  }
+
+  .case-album-title h2 {
+    font-size: clamp(30px, 5vw, 44px);
+  }
+
+  .case-album-title p {
+    font-size: inherit;
+  }
+
+  .album-drawer-meta {
+    min-height: 36px;
+    padding: 7px 12px;
+    font-size: 14px;
+  }
+
+  .album-drawer-hint {
+    margin: 10px 0 0 74px;
+  }
+
+  .album-icon {
+    width: 54px;
+    height: 54px;
   }
 
   .album-photo-grid {

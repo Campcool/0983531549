@@ -2,10 +2,10 @@ import React from 'react'
 import { createRoot } from 'react-dom/client'
 import {
   ArrowLeft,
+  BrushCleaning,
   Camera,
   ChevronDown,
   Droplets,
-  Flame,
   ImagePlus,
   Phone,
   ShieldAlert,
@@ -23,8 +23,8 @@ const lineIcon = assetPath('brand/icon-line.svg')
 const facebookIcon = assetPath('brand/icon-facebook.svg')
 
 const featuredCategories = [
-  { title: '一般清潔', count: '15 張', icon: Sparkles, target: 'general-cleaning' },
-  { title: '重點清潔', count: '14 張', icon: Droplets, target: 'grease-kitchen' },
+  { title: '裝潢細清', count: '15 張', icon: Sparkles, target: 'general-cleaning' },
+  { title: '重點清潔', count: '14 張', icon: Droplets, target: 'floor-waxing' },
   { title: '特殊清潔', count: '13 張', icon: ShieldAlert, target: 'mold-removal' },
   { title: '商業廚房', count: '16 張＋影片', icon: Warehouse, target: 'commercial-kitchen' },
 ]
@@ -46,18 +46,18 @@ const getAlbumFromHash = () => {
 const albums = [
   {
     slug: 'general-cleaning',
-    title: '一般清潔',
-    category: '一般清潔',
+    title: '裝潢細清',
+    category: '裝潢細清',
     icon: Sparkles,
-    copy: '居家空間、家具表面與日常髒污，依現場照片確認清潔範圍與優先順序。',
+    copy: '裝修後粉塵、櫃體表面與細節收尾，依現場照片確認清潔範圍與優先順序。',
     photos: generatedPhotos('general-cleaning', 'general-cleaning', 10),
   },
   {
     slug: 'case-20260909',
     title: '20260909 案場紀錄',
-    category: '一般清潔',
+    category: '裝潢細清',
     icon: ImagePlus,
-    copy: '依實際案場日期整理，作為退租、搬入或空屋整理需求的照片參考。',
+    copy: '依實際案場日期整理，作為裝潢後細清與空屋整理需求的照片參考。',
     photos: generatedPhotos('case-20260909', 'case-20260909', 5),
   },
   {
@@ -118,12 +118,12 @@ const albums = [
     ],
   },
   {
-    slug: 'parking-floor-cleaning',
-    title: '停車位與地板清潔',
+    slug: 'floor-waxing',
+    title: '洗地打蠟',
     category: '重點清潔',
-    icon: Warehouse,
-    copy: '停車位、公共區域與地面髒污，先以照片確認面積、材質與排水條件。',
-    photos: generatedPhotos('parking-floor-cleaning', 'parking-floor-cleaning', 5),
+    icon: BrushCleaning,
+    copy: '停車位、磁磚與地面清洗打蠟需求，先確認材質、面積、設備動線與可施工時間。',
+    photos: generatedPhotos('floor-waxing', 'floor-waxing', 5),
   },
   {
     slug: 'commercial-kitchen',
@@ -187,15 +187,15 @@ export function CasesApp() {
           />
         </a>
         <div className="header-actions">
-          <a className="header-action line-action" href={lineUrl} target="_blank" rel="noreferrer">
+          <a className="header-action line-action" href={lineUrl} target="_blank" rel="noreferrer" aria-label="用 LINE 詢問潔淨坊">
             <SocialBrandIcon type="line" size={20} />
             <span>LINE</span>
           </a>
-          <a className="header-action phone-action" href={phoneUrl}>
+          <a className="header-action phone-action" href={phoneUrl} aria-label="撥打潔淨坊電話">
             <Phone size={22} aria-hidden="true" />
             <span>電話</span>
           </a>
-          <a className="header-action facebook-action" href={facebookPageUrl} target="_blank" rel="noreferrer">
+          <a className="header-action facebook-action" href={facebookPageUrl} target="_blank" rel="noreferrer" aria-label="開啟潔淨坊 Facebook 粉專">
             <SocialBrandIcon type="facebook" size={19} />
             <span>粉專</span>
           </a>
@@ -208,7 +208,7 @@ export function CasesApp() {
             <p className="eyebrow">案場相簿</p>
             <h1>實際案場照片</h1>
             <p>
-              依照現場類型整理成相簿，方便客戶用照片對照自己的需求；不加入未確認的客戶名稱、評論或成果數字。
+              依類型整理實拍相簿，先看接近的現場，再用 LINE 傳照片確認。
             </p>
             <div className="hero-actions">
               <a className="button secondary" href={import.meta.env.BASE_URL}>
@@ -387,25 +387,6 @@ export function CasesApp() {
         <span>案例相簿</span>
       </footer>
     </div>
-  )
-}
-
-function MobileContactDock() {
-  return (
-    <nav className="mobile-contact-dock" aria-label="快速聯絡">
-      <a className="dock-line" href={lineUrl} target="_blank" rel="noreferrer">
-        <SocialBrandIcon type="line" size={20} />
-        <span>LINE</span>
-      </a>
-      <a className="dock-phone" href={phoneUrl}>
-        <Phone size={18} aria-hidden="true" />
-        <span>電話</span>
-      </a>
-      <a className="dock-facebook" href={facebookPageUrl} target="_blank" rel="noreferrer">
-        <SocialBrandIcon type="facebook" size={20} />
-        <span>粉專</span>
-      </a>
-    </nav>
   )
 }
 

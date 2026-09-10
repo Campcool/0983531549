@@ -176,10 +176,10 @@ const serviceGroups = [
   },
   {
     title: '重點清潔',
-    copy: '針對廚房重油汙、水垢、雨棚與地板清潔，先確認油垢厚度、材質與施工動線。',
+    copy: '針對廚房重油汙、水垢、雨棚與洗地打蠟，先確認油垢厚度、材質與施工動線。',
     icon: CookingPot,
     tone: 'focus',
-    items: ['廚房重油汙', '商業廚房清潔', '重水地區水垢處理', '洗雨棚', '停車位與地板清潔'],
+    items: ['廚房重油汙', '商業廚房清潔', '重水地區水垢處理', '洗雨棚', '洗地打蠟'],
   },
   {
     title: '特殊清潔',
@@ -635,7 +635,7 @@ function CheckIconForService({ item }) {
   if (item.includes('商業')) return <Warehouse size={17} aria-hidden="true" />
   if (item.includes('特殊') || item.includes('除霉') || item.includes('除膠')) return <ShieldAlert size={17} aria-hidden="true" />
   if (item.includes('水垢')) return <Droplets size={17} aria-hidden="true" />
-  if (item.includes('雨棚') || item.includes('地板')) return <BrushCleaning size={17} aria-hidden="true" />
+  if (item.includes('雨棚') || item.includes('地板') || item.includes('洗地') || item.includes('打蠟')) return <BrushCleaning size={17} aria-hidden="true" />
   if (item.includes('退租') || item.includes('大掃除')) return <Trash2 size={17} aria-hidden="true" />
   return <Sparkles size={17} aria-hidden="true" />
 }
