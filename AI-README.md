@@ -7,8 +7,8 @@
 > 4. **所有時間戳一律台灣時間（Asia/Taipei, UTC+8）**。
 > 5. **不要把「已完成」寫在沒有實測的項目上**。未驗的事項寫進「本輪明確未驗」。
 
-最後更新：2026-09-10（Codex）— 依 `D:\AI-Skill\ai-skills\SKILL.md` 路由讀取 `ai-collaboration-handoff`，確認本檔是本專案指定的 AI 協作交接文件；同步 GitHub main 至 `fc64ce8` 並校正現況紀錄。**本輪未動網站程式碼、未跑 build。**
-Claude 首次稽核於 `bbfde70` 執行，事後對 Codex 的 `c2f7fbd` 留下待複驗項目；截至 `fc64ce8`，本輪只做交接狀態校正，待辦清單未改狀態，下一輪施工仍需逐項複驗。
+最後更新：2026-09-10（Codex）— 依 `AI-README.md` 待辦先修 A1、A2、B2、C1：FAQ 文案、LINE 對比色、robots/sitemap、案例管理工具錯誤處理與明文密碼。已跑 `pnpm lint` 與 `pnpm build` 通過；未做瀏覽器視覺截圖與 GSC 送審。
+Claude 首次稽核於 `bbfde70` 執行，事後對 Codex 的 `c2f7fbd` 留下待複驗項目；截至本輪，A1/A2/C1 已完成，B2 已補檔但 Google Search Console 尚未接。
 
 ---
 
@@ -60,12 +60,10 @@ React runtime 已正確拆成共用 chunk（189 KB／gzip 59.7 KB），四個入
 > 例如不是編一個價格，而是說明「怎麼計價」；不是補評論，而是把既有的
 > 58 張實拍照拉成可查證的數字錨點。
 
-### ⚠️ 目前有一處文案與這條邊界自相矛盾
+### FAQ 與案例頁一致性
 
-`src/main.jsx` FAQ 第 3 題目前寫「未取得客戶授權前不放案例照片、評論或前後對比」，
-但案例頁此刻就有 9 相簿／58 張實拍照／2 組「清潔前‧清潔後」對比。
-FAQ 寫於第一版 `7873e58`，前後對比加於最新 commit `bbfde70`，**文案沒跟上內容**。
-見待辦 A1，請優先處理。
+已改寫 `src/main.jsx` FAQ 第 3 題：承認案例頁有自家案場實拍相簿，同時維持內容邊界，
+不放未確認客戶名稱、評論或成果數字；前後對比只使用已確認可公開的素材。
 
 ---
 
@@ -79,7 +77,7 @@ FAQ 寫於第一版 `7873e58`，前後對比加於最新 commit `bbfde70`，**�
 | FB 粉專 | `https://www.facebook.com/share/1GMwVQdp7J/?mibextid=wwXIfr` | `main.jsx`、`cases.jsx` |
 | Vite base | `/0983531549/` | `vite.config.js` |
 | 品牌主色 | `--color-primary: #2f8f8f` | `src/style.css:8` |
-| 管理密碼 | `1549` | `src/caseAdmin.jsx:6` — **見陷阱 4** |
+| 管理入口 | access code hash | `src/caseAdmin.jsx` — 靜態前端只能降低明文暴露，不能當成真正權限控管 |
 
 資產路徑一律走 `assetPath()`（內含 `import.meta.env.BASE_URL`），**不要寫死 `/0983531549/`**。
 
@@ -107,9 +105,10 @@ FAQ 寫於第一版 `7873e58`，前後對比加於最新 commit `bbfde70`，**�
 
 DESIGN.md 指名的三個檔案剛好全是**沒有任何引用的死檔**。
 
-**4. `caseAdmin.jsx` 的密碼是假的安全感。**
-`const password = '1549'` 會原封不動打包進公開 JS，view-source 即可見，而且是電話末四碼。
-該工具只做瀏覽器內 canvas 壓縮、不碰後端，所以**不是資料外洩**，但不要把它當成保護。
+**4. `caseAdmin.jsx` 仍不是正式權限系統。**
+目前已移除 `1549` 明文比對，改用 SHA-256 hash 檢查 access code，並補上照片壓縮失敗時的
+`try/finally` UI 復原。這只能避免明文密碼直接出現在 bundle；靜態前端仍無真正上傳權限控管。
+該工具只做瀏覽器內 canvas 壓縮、不碰後端，所以**不是資料外洩**，但不要把它當成正式後台。
 
 **5. 圖片是這個站唯一的效能問題。**
 首屏傳輸 1,563 KB 中有 1,486 KB（95%）是圖片，JS+CSS 合計僅 78 KB。
@@ -126,30 +125,29 @@ cp950 主控台跑 Python 輸出繁中會 `UnicodeEncodeError`，前面加 `PYTH
 
 | # | 優先 | 項目 | 位置 | 預估 | 狀態 |
 |---|---|---|---|---|---|
-| A1 | 🔴 阻斷 | 改寫 FAQ 第 3 題，讓它與案例頁現況一致 | `src/main.jsx:241` | 10 分 | ⬜ |
-| A2 | 🔴 阻斷 | LINE 按鈕改 `#017A35`、hover `#006B2E`（現況白字對比僅 2.26:1，AA 不過） | `src/style.css:13` | 10 分 | ⬜ |
+| A1 | 🔴 阻斷 | 改寫 FAQ 第 3 題，讓它與案例頁現況一致 | `src/main.jsx:241` | 10 分 | ✅ |
+| A2 | 🔴 阻斷 | LINE 按鈕改 `#017A35`、hover `#006B2E`（原白字對比僅 2.26:1，AA 不過） | `src/style.css:13` | 10 分 | ✅ |
 | B1 | 🟠 高 | scenario 背景圖改 `<img loading="lazy">`＋`object-fit:cover`，首屏 1.56 MB → 約 0.8 MB | `src/main.jsx:390`、`style.css` | 1 小時 | ⬜ |
-| B2 | 🔴 阻斷 | 補 `public/robots.txt` 與 `public/sitemap.xml`，接 GSC | 新檔 | 1 小時 | ⬜ |
+| B2 | 🔴 阻斷 | 補 `public/robots.txt` 與 `public/sitemap.xml`，接 GSC | 新檔 | 1 小時 | 🟨 |
 | B3 | 🟠 高 | 加數字錨點帶（58 張實拍／9 類相簿／4 區到府）＋風險逆轉三句 | `src/main.jsx` | 2 小時 | ⬜ |
 | B4 | 🟠 高 | 首屏位階對調：品牌名縮至 32–40px，價值主張升至 60px＋；加一行計價說明 | `src/style.css`、`main.jsx` | 3 小時 | ⬜ |
-| C1 | 🟠 高 | `handleFiles` 補 `try/finally`；移除硬編碼密碼 | `src/caseAdmin.jsx:88`、`:6` | 30 分 | ⬜ |
+| C1 | 🟠 高 | `handleFiles` 補 `try/finally`；移除硬編碼密碼 | `src/caseAdmin.jsx:88`、`:6` | 30 分 | ✅ |
 | C2 | 🟡 待決策 | LINE 標誌換官方素材（現為自繪，違反自家 DESIGN.md） | `public/brand/icon-line.svg` | 待業主 | ⬜ |
 | C3 | 🟢 中 | 圖片轉 WebP、刪 4.63 MB 死資產、同步 DESIGN.md、CI 加 `pnpm lint` | 多處 | 半天 | ⬜ |
 | D1 | 🟡 待討論 | 設計回流機制（定期清潔提醒、老客推薦）— 五段檢查第 5 段完全空白 | — | 需先討論 | ⬜ |
 
 ### 待辦細節（施工時展開看）
 
-**A1 建議改法**（守住內容邊界，同時說實話）：
-> 「有，案例頁有 9 個相簿共 58 張實拍照與前後對比。所有照片都是自家案場實拍，
-> 不使用未經授權的客戶資訊，也不放未經證實的評論或成效數字。」
+**A1 完成說明**（守住內容邊界，同時說實話）：
+FAQ 已改成「案例頁已整理自家案場實拍相簿」，並明確不放未確認客戶名稱、評論或成果數字。
 
-**A2 色值依據**（白字對比實測）：
-`#06C755` = 2.26:1（不過）／`#04A948` = 3.10:1（大字剛好過）／`#017A35` = 5.47:1（AA 全過）。
-註：`--color-line-strong: #04a948` 已存在，等於目前 **hover 狀態比常態還合格**。
+**A2 完成說明**（白字對比實測）：
+`--color-line` 已改 `#017A35`，`--color-line-strong` 已改 `#006B2E`；主 LINE CTA 白字對比達 AA。
 
 **B2 注意**：依可信度設計規則，**自家網站不得對自家服務加 `Review` 或 `AggregateRating` 結構化資料**
 （self-serving markup，Google 會取消 rich result 甚至人工處罰）。要放數字請標「服務件數」。
-目前 JSON-LD 未誤用這兩者，維持現狀即可。
+目前 JSON-LD 未誤用這兩者，維持現狀即可。`public/robots.txt` 與 `public/sitemap.xml` 已新增；
+Google Search Console 送審仍需有權限的人手動處理。
 
 **C3 死資產清單**（SHA-256 去重＋雙向引用比對確認，皆無任何頁面引用）：
 - `public/cases/rental-clearance/` 5 張（1.90 MB）— 是 `case-20260909/` 的逐位元組副本
@@ -159,6 +157,28 @@ cp950 主控台跑 Python 輸出繁中會 `UnicodeEncodeError`，前面加 `PYTH
 ---
 
 ## 6. 進度紀錄（倒序）
+
+### 2026-09-10 修正首批阻斷項（Codex，基準 `aeabee6`）— 已驗 lint/build
+
+依本檔待辦先修 A1、A2、B2、C1：
+
+- A1：改寫首頁 FAQ 第 3 題，讓案例頁實拍相簿與內容邊界一致。
+- A2：LINE CTA 色票改為 `#017A35` / `#006B2E`，避免白字對比不足。
+- B2：新增 `public/robots.txt` 與 `public/sitemap.xml`；管理工具路徑列為 disallow，sitemap 只列公開首頁與案例頁。
+- C1：`caseAdmin.jsx` 移除明文 `1549` 比對，改 hash 檢查；`handleFiles` 改 `Promise.allSettled` 與 `try/finally`，避免單張照片失敗後 UI 卡住。
+
+**驗證**：
+
+- `pnpm lint` 通過。
+- `pnpm build` 通過。第一次在受限沙箱內 build 被 Windows 權限擋住，已用外部執行重跑成功。
+- `rg` 檢查未再看到 `const password`、`code === password`、舊 LINE 色值或舊 FAQ 文案。
+
+**本輪明確未驗**：
+
+- 未開瀏覽器做 375／768／桌面截圖。
+- 未實測 LINE/電話點擊。
+- 未送 Google Search Console；B2 仍標 🟨。
+- 未處理 B1/B3/B4/C2/C3/D1。
 
 ### 2026-09-10 AI Skills 交接規則確認（Codex，基準 `fc64ce8`）— 文件校正
 

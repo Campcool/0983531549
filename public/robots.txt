@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /0983531549/cases/manage/
+
+Sitemap: https://campcool.github.io/0983531549/sitemap.xml

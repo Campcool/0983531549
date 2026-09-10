@@ -3,7 +3,15 @@ import { createRoot } from 'react-dom/client'
 import { ArrowLeft, Download, ImagePlus, LockKeyhole, RotateCcw, ShieldCheck, Upload } from 'lucide-react'
 import './style.css'
 
-const password = '1549'
+const accessCodeHash = '75abf1771c0d9038e45203aa603758410f2418fd29b3fe0c25534009c579bb8e'
+
+async function hashAccessCode(value) {
+  const data = new TextEncoder().encode(value)
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data)
+  return Array.from(new Uint8Array(hashBuffer))
+    .map((byte) => byte.toString(16).padStart(2, '0'))
+    .join('')
+}
 
 function compressImage(file) {
   return new Promise((resolve, reject) => {
@@ -71,9 +79,10 @@ export function CaseAdminApp() {
     [photos],
   )
 
-  function unlock(event) {
+  async function unlock(event) {
     event.preventDefault()
-    if (code === password) {
+    const codeHash = await hashAccessCode(code.trim())
+    if (codeHash === accessCodeHash) {
       setUnlocked(true)
       setError('')
       return
@@ -86,13 +95,27 @@ export function CaseAdminApp() {
     if (!files.length) return
 
     setIsProcessing(true)
-    const nextPhotos = []
-    for (const file of files) {
-      nextPhotos.push(await compressImage(file))
+    setError('')
+    try {
+      const settledPhotos = await Promise.allSettled(files.map((file) => compressImage(file)))
+      const nextPhotos = settledPhotos
+        .filter((result) => result.status === 'fulfilled')
+        .map((result) => result.value)
+
+      if (nextPhotos.length) {
+        setPhotos((current) => [...current, ...nextPhotos])
+      }
+
+      const failedCount = settledPhotos.length - nextPhotos.length
+      if (failedCount > 0) {
+        setError(`${failedCount} 張照片讀取或壓縮失敗，請重新選擇。`)
+      }
+    } catch {
+      setError('照片處理失敗，請重新選擇。')
+    } finally {
+      setIsProcessing(false)
+      event.target.value = ''
     }
-    setPhotos((current) => [...current, ...nextPhotos])
-    setIsProcessing(false)
-    event.target.value = ''
   }
 
   function clearAlbum() {
@@ -176,6 +199,7 @@ export function CaseAdminApp() {
           <span>手機可一次選多張，系統會轉成網站用 JPG。</span>
           <input type="file" accept="image/*" multiple onChange={handleFiles} disabled={isProcessing} />
         </label>
+        {error && <p className="form-error">{error}</p>}
 
         <section className="upload-summary" aria-label="相簿狀態">
           <div>
