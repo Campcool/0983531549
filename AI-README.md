@@ -7,9 +7,9 @@
 > 4. **所有時間戳一律台灣時間（Asia/Taipei, UTC+8）**。
 > 5. **不要把「已完成」寫在沒有實測的項目上**。未驗的事項寫進「本輪明確未驗」。
 
-最後更新：2026-09-10（Codex）— **調整桌面 header 視覺密度：導覽膠囊減少留白、右上聯絡鈕改為大圖示小文字**。
+最後更新：2026-09-10（Codex）— **更新 OG 分享圖：加入服務地區與服務內容，並改用新圖檔 URL 降低快取殘留**。
 複驗結論：A1／A2／C1 **通過**（A2 四顆 LINE 按鈕實測全過 AA）；**B2 是假綠，已改回未完成**（robots.txt 放在子路徑對爬蟲無效，見陷阱 7）。
-本輪狀態：Claude 已移除案例頁 header 相簿導覽、合併 `handoff-fixes.css`；Codex 已修正 `820–1279px` 首頁固定聯絡入口，並依業主截圖回饋壓縮桌面導覽與右上聯絡鈕。
+本輪狀態：Claude 已移除案例頁 header 相簿導覽、合併 `handoff-fixes.css`；Codex 已修正 `820–1279px` 首頁固定聯絡入口、壓縮桌面導覽與右上聯絡鈕，並改版 OG 分享圖。
 
 ---
 
@@ -101,7 +101,7 @@ React runtime 已正確拆成共用 chunk（189 KB／gzip 59.7 KB），四個入
 |---|---|
 | `logo-horizontal.png` | `logo-horizontal-transparent.png` |
 | `favicon.png` | `favicon-transparent.png` |
-| `og-image.png` | `og-line-square-20260909.png` |
+| `og-image.png` | `og-cleaning-area-services-20260910.jpg` |
 | 大標「潔淨坊／清潔服務」 | 「潔淨坊／清潔工作室」 |
 
 DESIGN.md 指名的三個檔案剛好全是**沒有任何引用的死檔**。
@@ -180,6 +180,23 @@ Google Search Console 送審仍需有權限的人手動處理。
 ---
 
 ## 6. 進度紀錄（倒序）
+
+### 2026-09-10 Codex 更新 OG 分享圖
+
+**業主回饋**：LINE 分享預覽圖仍缺少記憶點，圖片本體沒有明確呈現服務地區與服務內容；同時詢問正式網址不帶 `?v=` 是否會連不到或顯示舊版。
+
+**說明**：
+
+- `?v=<commit>` 只是 cache busting 參數，用來讓瀏覽器或聊天軟體把同一頁視為新 URL；正式網址仍是 `https://campcool.github.io/0983531549/`。
+- LINE／FB 會快取 OG 預覽。一般客戶不用帶 `?v=` 也能連到網站，但聊天預覽可能沿用舊圖一段時間；要立刻測新版預覽時才加 `?v=`。
+
+**修正**：
+
+1. 新增 `scripts/generate-og.ps1`，用既有 Logo 與實拍照產出 1200×1200 JPG，避免手工改圖無法重現。
+2. 新增 `public/og-cleaning-area-services-20260910.jpg`：圖面大字包含「基隆｜台北｜新北｜桃園」，並列出「居家清潔、裝潢細清、退租入住、重油汙、特殊清潔」；檔案約 199KB。
+3. `index.html`、`cases/index.html`、`share/index.html` 的 `og:image`、`og:image:secure_url`、`twitter:image` 全部改指向新版圖檔，`og:image:alt` 同步更新。
+
+**注意**：若 LINE 對正式首頁 URL 已快取舊 OG，即使換圖檔也可能暫時不重抓。測試新版預覽請先用 `?v=<最新 commit>`；正式對外仍可給乾淨網址。
 
 ### 2026-09-10 Codex 調整桌面 header 視覺密度
 
