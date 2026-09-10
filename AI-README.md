@@ -7,10 +7,9 @@
 > 4. **所有時間戳一律台灣時間（Asia/Taipei, UTC+8）**。
 > 5. **不要把「已完成」寫在沒有實測的項目上**。未驗的事項寫進「本輪明確未驗」。
 
-最後更新：2026-09-10（Claude）— **複驗 Codex 三批、修正三處，另依業主指示移除案例頁 header 相簿導覽。請 Codex 覆審**。
+最後更新：2026-09-10（Codex）— **覆審 Claude header 修正後，補上 820–1279px 首頁固定聯絡入口，並修正斷點交接文字**。
 複驗結論：A1／A2／C1 **通過**（A2 四顆 LINE 按鈕實測全過 AA）；**B2 是假綠，已改回未完成**（robots.txt 放在子路徑對爬蟲無效，見陷阱 7）。
-本輪 Claude 另修：`handoff-fixes.css` 併回 `style.css`、`c2f7fbd` 的兩個無障礙迴歸。已跑 lint／build／瀏覽器實測。
-**給 Codex 的覆審重點見第 6 節本輪紀錄末段。**
+本輪狀態：Claude 已移除案例頁 header 相簿導覽、合併 `handoff-fixes.css`；Codex 已修正 `820–1279px` 首頁 header 聯絡鈕收起時，底部 dock 同步被關閉的轉換缺口。
 
 ---
 
@@ -41,7 +40,7 @@ React runtime 已正確拆成共用 chunk（189 KB／gzip 59.7 KB），四個入
 
 ### 分支狀況（2026-09-10 實查）
 
-- `main` — 唯一有效分支，最新已同步至 `fc64ce8`。
+- `main` — 唯一有效分支，最新狀態以 `git log -1 --oneline` 為準；目前採直推 main 模式。
 - `codex/excel-handoff` — **落後 main 27 個 commit、領先 0**。沒有任何獨有內容，是被遺留的空殼。
   **不要以為那裡有未完成的工作**；確認後可直接刪除。
 - 此 repo 從未開過 PR（`gh pr list --state all` 為空），目前是**直推 main** 模式。
@@ -166,7 +165,7 @@ cp950 主控台跑 Python 輸出繁中會 `UnicodeEncodeError`，前面加 `PYTH
 FAQ 已改成「案例頁已整理自家案場實拍相簿」，並明確不放未確認客戶名稱、評論或成果數字。
 
 **A2 完成說明**（白字對比實測）：
-`src/handoff-fixes.css` 已覆寫 `--color-line: #017A35`、`--color-line-strong: #006B2E`，並由首頁、案例頁、管理頁三個 React 入口匯入；主 LINE CTA 白字對比達 AA。
+`src/style.css` 已覆寫 `--color-line: #017A35`、`--color-line-strong: #006B2E`；`handoff-fixes.css` 已併回並刪除，不要再新增獨立補丁 CSS。主 LINE CTA 白字對比達 AA。
 
 **B2 注意**：依可信度設計規則，**自家網站不得對自家服務加 `Review` 或 `AggregateRating` 結構化資料**
 （self-serving markup，Google 會取消 rich result 甚至人工處罰）。要放數字請標「服務件數」。
@@ -181,6 +180,25 @@ Google Search Console 送審仍需有權限的人手動處理。
 ---
 
 ## 6. 進度紀錄（倒序）
+
+### 2026-09-10 Codex 覆審並修正 820–1279px 固定聯絡入口
+
+**覆審發現**：Claude 的 `@media (min-width: 820px)` 先把 `.mobile-contact-dock` 設為 `display:none`，後面的
+`@media (min-width: 820px) and (max-width: 1279px)` 又把 `.header-actions` 收起。結果首頁在 820–1279px
+沒有右上 LINE／粉專，也沒有底部 LINE／電話／粉專 dock，與本檔原寫的「底部 dock 已提供聯絡動線」相反。
+
+**修正**：
+
+1. `.mobile-contact-dock` 與 `.site-shell` 的桌面規則改到 `@media (min-width: 1280px)` 才套用。
+2. `820–1279px` 首頁維持底部 dock，承接固定聯絡動線。
+3. `820–1279px` 案例頁保留右上聯絡鈕，並隱藏底部 dock，避免同一段寬度出現重複固定聯絡入口。
+4. `style.css` 的斷點註解改為 820–1279，不再保留「取 1400 為界」的舊說法。
+
+**驗證**：
+
+- `pnpm lint` 通過。
+- `pnpm build` 通過（sandbox 內首次因 Windows/esbuild 權限失敗，改用已授權方式重跑成功）。
+- `git status --short` 乾淨後才進行 commit。
 
 ### 2026-09-10 修首頁 header 導覽與聯絡鈕重疊（Claude）— ⚠️ 請 Codex 覆審
 
@@ -206,7 +224,7 @@ Google Search Console 送審仍需有權限的人手動處理。
    比內文的 `--site-padding`（上限 64px）窄，1280px 時左右各省約 26px。
    header 因此不與內文切齊，這是業主同意的取捨。
 4. 新增 `@media (min-width: 820px) and (max-width: 1279px)`：header 改回兩欄
-   `"brand nav"`，`.header-actions` 收起。底部 dock 已提供 LINE／電話／粉專，聯絡動線不受影響。
+   `"brand nav"`，`.header-actions` 收起。Codex 覆審後已補正：底部 dock 必須在此區間保留，1280px 起才隱藏。
 
 **斷點怎麼收斂到 1280 的**（過程留著，避免下次又猜）：
 
@@ -340,7 +358,7 @@ gap 與頁緣。第一輪只改膠囊時，實測 1280px 重疊 39px、1360px �
 依本檔待辦先修 A1、A2、B2、C1：
 
 - A1：改寫首頁 FAQ 第 3 題，讓案例頁實拍相簿與內容邊界一致。
-- A2：LINE CTA 色票以 `src/handoff-fixes.css` 覆寫為 `#017A35` / `#006B2E`，避免白字對比不足。
+- A2：LINE CTA 色票已併回 `src/style.css`，使用 `#017A35` / `#006B2E`，避免白字對比不足；不要再恢復 `handoff-fixes.css`。
 - B2：新增 `public/robots.txt` 與 `public/sitemap.xml`；管理工具路徑列為 disallow，sitemap 只列公開首頁與案例頁。
 - C1：`caseAdmin.jsx` 移除明文 `1549` 比對，改 hash 檢查；`handleFiles` 改 `Promise.allSettled` 與 `try/finally`，避免單張照片失敗後 UI 卡住。
 
