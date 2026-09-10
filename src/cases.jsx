@@ -4,10 +4,8 @@ import {
   ArrowLeft,
   Camera,
   Droplets,
-  ExternalLink,
   Flame,
   ImagePlus,
-  MessageCircle,
   Phone,
   ShieldAlert,
   Sparkles,
@@ -20,6 +18,8 @@ const assetPath = (path) => `${import.meta.env.BASE_URL}${path.replace(/^\/+/, '
 const lineUrl = 'https://line.me/R/ti/p/~chenli0775'
 const phoneUrl = 'tel:0983531549'
 const facebookPageUrl = 'https://www.facebook.com/share/1GMwVQdp7J/?mibextid=wwXIfr'
+const lineIcon = assetPath('brand/icon-line.svg')
+const facebookIcon = assetPath('brand/icon-facebook.svg')
 
 const generatedPhotos = (folder, prefix, count) =>
   Array.from({ length: count }, (_, index) =>
@@ -106,11 +106,11 @@ export function CasesApp() {
         </nav>
         <div className="header-actions">
           <a className="header-action line-action" href={lineUrl} target="_blank" rel="noreferrer">
-            <MessageCircle size={18} aria-hidden="true" />
+            <SocialBrandIcon type="line" size={20} />
             <span>LINE</span>
           </a>
           <a className="header-action facebook-action" href={facebookPageUrl} target="_blank" rel="noreferrer">
-            <ExternalLink size={17} aria-hidden="true" />
+            <SocialBrandIcon type="facebook" size={19} />
             <span>粉專</span>
           </a>
         </div>
@@ -130,7 +130,7 @@ export function CasesApp() {
                 回首頁
               </a>
               <a className="button line-primary" href={lineUrl} target="_blank" rel="noreferrer">
-                <MessageCircle size={19} aria-hidden="true" />
+                <SocialBrandIcon type="line" size={21} />
                 LINE 詢問
               </a>
             </div>
@@ -226,7 +226,7 @@ export function CasesApp() {
           <p>可先傳照片與所在行政區，確認需求後再安排到府時間。</p>
           <div className="final-actions">
             <a className="button line-primary" href={lineUrl} target="_blank" rel="noreferrer">
-              <MessageCircle size={19} aria-hidden="true" />
+              <SocialBrandIcon type="line" size={21} />
               LINE 詢問 chenli0775
             </a>
           </div>
@@ -247,7 +247,7 @@ function MobileContactDock() {
   return (
     <nav className="mobile-contact-dock" aria-label="快速聯絡">
       <a className="dock-line" href={lineUrl} target="_blank" rel="noreferrer">
-        <MessageCircle size={18} aria-hidden="true" />
+        <SocialBrandIcon type="line" size={20} />
         <span>LINE</span>
       </a>
       <a className="dock-phone" href={phoneUrl}>
@@ -255,10 +255,26 @@ function MobileContactDock() {
         <span>電話</span>
       </a>
       <a className="dock-facebook" href={facebookPageUrl} target="_blank" rel="noreferrer">
-        <ExternalLink size={17} aria-hidden="true" />
+        <SocialBrandIcon type="facebook" size={20} />
         <span>粉專</span>
       </a>
     </nav>
+  )
+}
+
+function SocialBrandIcon({ type, size = 20 }) {
+  const src = type === 'facebook' ? facebookIcon : lineIcon
+
+  return (
+    <img
+      className={`brand-social-icon brand-social-icon-${type}`}
+      src={src}
+      alt=""
+      width={size}
+      height={size}
+      aria-hidden="true"
+      loading="lazy"
+    />
   )
 }
 

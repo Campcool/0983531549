@@ -276,6 +276,23 @@ img {
   background: rgba(232, 245, 251, .84);
 }
 
+.brand-social-icon {
+  flex: 0 0 auto;
+  width: 1.25em;
+  height: 1.25em;
+  object-fit: contain;
+  vertical-align: -0.16em;
+}
+
+.line-primary .brand-social-icon-line,
+.line-contact-card .brand-social-icon-line,
+.dock-line .brand-social-icon-line {
+  padding: 2px;
+  border-radius: 7px;
+  background: white;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, .08);
+}
+
 .upload-action {
   border-color: rgba(47, 143, 143, .25);
   background: rgba(223, 243, 239, .86);

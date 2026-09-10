@@ -12,11 +12,9 @@ import {
   CookingPot,
   CopyCheck,
   Droplets,
-  ExternalLink,
   Flame,
   Hammer,
   MapPin,
-  MessageCircle,
   PaintRoller,
   Phone,
   PhoneCall,
@@ -39,6 +37,8 @@ const heroImage = assetPath('cases/site-cleaning-hero.jpg')
 const lineUrl = 'https://line.me/R/ti/p/~chenli0775'
 const phoneUrl = 'tel:0983531549'
 const facebookPageUrl = 'https://www.facebook.com/share/1GMwVQdp7J/?mibextid=wwXIfr'
+const lineIcon = assetPath('brand/icon-line.svg')
+const facebookIcon = assetPath('brand/icon-facebook.svg')
 
 const casePhotos = [
   {
@@ -207,7 +207,7 @@ const contactActions = [
   {
     label: '加入 LINE 詢問',
     value: 'ID chenli0775｜搜尋 0983531549',
-    icon: MessageCircle,
+    brand: 'line',
     href: lineUrl,
     external: true,
     type: 'line',
@@ -281,7 +281,7 @@ export function App() {
             rel="noreferrer"
             aria-label="LINE 詢問"
           >
-            <MessageCircle size={18} aria-hidden="true" />
+            <SocialBrandIcon type="line" size={20} />
             <span>LINE</span>
           </a>
           <a
@@ -291,7 +291,7 @@ export function App() {
             rel="noreferrer"
             aria-label="Facebook 粉專"
           >
-            <ExternalLink size={17} aria-hidden="true" />
+            <SocialBrandIcon type="facebook" size={19} />
             <span>粉專</span>
           </a>
         </div>
@@ -312,7 +312,7 @@ export function App() {
             </div>
             <div className="hero-actions" aria-label="主要行動">
               <a className="button line-primary" href={lineUrl} target="_blank" rel="noreferrer">
-                <MessageCircle size={19} aria-hidden="true" />
+                <SocialBrandIcon type="line" size={21} />
                 加入 LINE 詢問
               </a>
               <a className="button secondary" href={phoneUrl}>
@@ -471,7 +471,7 @@ export function App() {
             </ol>
             <div className="process-quick-actions" aria-label="快速預約">
               <a className="button line-primary" href={lineUrl} target="_blank" rel="noreferrer">
-                <MessageCircle size={19} aria-hidden="true" />
+                <SocialBrandIcon type="line" size={21} />
                 LINE 傳照片詢問
               </a>
               <a className="button dark-secondary" href={phoneUrl}>
@@ -497,7 +497,7 @@ export function App() {
                     rel={method.external ? 'noreferrer' : undefined}
                     key={method.label}
                   >
-                    <Icon size={18} aria-hidden="true" />
+                    {method.brand ? <SocialBrandIcon type={method.brand} size={22} /> : <Icon size={18} aria-hidden="true" />}
                     <span>
                       <strong>{method.label}</strong>
                       <small>{method.value}</small>
@@ -561,7 +561,7 @@ export function App() {
           <p>可先傳現場照片、地址行政區與希望清潔日期，潔淨坊清潔工作室再依實際需求確認安排方式。</p>
           <div className="final-actions">
             <a className="button line-primary" href={lineUrl} target="_blank" rel="noreferrer">
-              <MessageCircle size={19} aria-hidden="true" />
+              <SocialBrandIcon type="line" size={21} />
               LINE 詢問 chenli0775
             </a>
             <a className="button dark-secondary" href={`${import.meta.env.BASE_URL}cases/`}>
@@ -590,7 +590,7 @@ function MobileContactDock() {
   return (
     <nav className="mobile-contact-dock" aria-label="快速聯絡">
       <a className="dock-line" href={lineUrl} target="_blank" rel="noreferrer">
-        <MessageCircle size={18} aria-hidden="true" />
+        <SocialBrandIcon type="line" size={20} />
         <span>LINE</span>
       </a>
       <a className="dock-phone" href={phoneUrl}>
@@ -598,10 +598,26 @@ function MobileContactDock() {
         <span>電話</span>
       </a>
       <a className="dock-facebook" href={facebookPageUrl} target="_blank" rel="noreferrer">
-        <ExternalLink size={17} aria-hidden="true" />
+        <SocialBrandIcon type="facebook" size={20} />
         <span>粉專</span>
       </a>
     </nav>
+  )
+}
+
+function SocialBrandIcon({ type, size = 20 }) {
+  const src = type === 'facebook' ? facebookIcon : lineIcon
+
+  return (
+    <img
+      className={`brand-social-icon brand-social-icon-${type}`}
+      src={src}
+      alt=""
+      width={size}
+      height={size}
+      aria-hidden="true"
+      loading="lazy"
+    />
   )
 }
 
