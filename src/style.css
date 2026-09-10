@@ -210,6 +210,11 @@ img {
   --nav-bg: #edf8e8;
 }
 
+.desktop-nav .nav-album-3 {
+  --nav-color: #7a6dc8;
+  --nav-bg: #f0edff;
+}
+
 .desktop-nav .nav-process,
 .desktop-nav .nav-album-4 {
   --nav-color: #c57b2c;
@@ -222,9 +227,25 @@ img {
   --nav-bg: #f0edff;
 }
 
-.desktop-nav .nav-album-6 {
+.desktop-nav .nav-album-5,
+.desktop-nav .nav-album-9 {
   --nav-color: #3c8c8a;
   --nav-bg: #e8f6f5;
+}
+
+.desktop-nav .nav-album-6 {
+  --nav-color: #2f77a1;
+  --nav-bg: #e8f5fb;
+}
+
+.desktop-nav .nav-album-7 {
+  --nav-color: #7a6dc8;
+  --nav-bg: #f0edff;
+}
+
+.desktop-nav .nav-album-8 {
+  --nav-color: #6a9f47;
+  --nav-bg: #edf8e8;
 }
 
 .desktop-nav .nav-areas {
@@ -753,12 +774,15 @@ body:has(#services:target) .nav-services,
 body:has(#process:target) .nav-process,
 body:has(#details:target) .nav-details,
 body:has(#areas:target) .nav-areas,
-body:has(#renovation-detail:target) .nav-album-1,
-body:has(#rental-clearance:target) .nav-album-2,
+body:has(#general-cleaning:target) .nav-album-1,
+body:has(#case-20260909:target) .nav-album-2,
 body:has(#mold-removal:target) .nav-album-3,
 body:has(#grease-kitchen:target) .nav-album-4,
 body:has(#scale-removal:target) .nav-album-5,
-body:has(#commercial-kitchen:target) .nav-album-6 {
+body:has(#awning-cleaning:target) .nav-album-6,
+body:has(#floor-adhesive-removal:target) .nav-album-7,
+body:has(#parking-floor-cleaning:target) .nav-album-8,
+body:has(#commercial-kitchen:target) .nav-album-9 {
   border-color: color-mix(in srgb, var(--nav-color) 72%, white);
   background:
     linear-gradient(180deg, color-mix(in srgb, var(--nav-color) 18%, white), color-mix(in srgb, var(--nav-color) 9%, white)),
@@ -1757,8 +1781,8 @@ details p {
 }
 
 .album-index-card:nth-of-type(3) {
-  --album-accent: #6a9f47;
-  --album-tint: #edf8e8;
+  --album-accent: #7a6dc8;
+  --album-tint: #f0edff;
 }
 
 .album-index-card:nth-of-type(4) {
@@ -1767,11 +1791,26 @@ details p {
 }
 
 .album-index-card:nth-of-type(5) {
+  --album-accent: #3c8c8a;
+  --album-tint: #e8f6f5;
+}
+
+.album-index-card:nth-of-type(6) {
+  --album-accent: #2f77a1;
+  --album-tint: #e8f5fb;
+}
+
+.album-index-card:nth-of-type(7) {
   --album-accent: #7a6dc8;
   --album-tint: #f0edff;
 }
 
-.album-index-card:nth-of-type(6) {
+.album-index-card:nth-of-type(8) {
+  --album-accent: #6a9f47;
+  --album-tint: #edf8e8;
+}
+
+.album-index-card:nth-of-type(9) {
   --album-accent: #3c8c8a;
   --album-tint: #e8f6f5;
 }
@@ -1873,7 +1912,7 @@ details p {
 }
 
 .case-album-section:nth-of-type(5) {
-  --section-color: #6a9f47;
+  --section-color: #7a6dc8;
 }
 
 .case-album-section:nth-of-type(6) {
@@ -1881,10 +1920,22 @@ details p {
 }
 
 .case-album-section:nth-of-type(7) {
-  --section-color: #7a6dc8;
+  --section-color: #3c8c8a;
 }
 
 .case-album-section:nth-of-type(8) {
+  --section-color: #2f77a1;
+}
+
+.case-album-section:nth-of-type(9) {
+  --section-color: #7a6dc8;
+}
+
+.case-album-section:nth-of-type(10) {
+  --section-color: #6a9f47;
+}
+
+.case-album-section:nth-of-type(11) {
   --section-color: #3c8c8a;
 }
 
@@ -1944,6 +1995,48 @@ details p {
 
 .album-video-card video {
   height: clamp(260px, 66vw, 520px);
+}
+
+.before-after-card {
+  grid-column: span 2;
+}
+
+.before-after-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
+  background: color-mix(in srgb, var(--section-color, var(--color-primary)) 14%, white);
+}
+
+.before-after-panel {
+  position: relative;
+  min-width: 0;
+}
+
+.before-after-panel + .before-after-panel {
+  border-left: 1px solid rgba(255, 255, 255, .72);
+}
+
+.before-after-panel img {
+  height: clamp(230px, 42vw, 420px);
+}
+
+.before-after-panel span {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 6px 11px;
+  border: 1px solid rgba(255, 255, 255, .58);
+  border-radius: 999px;
+  background: rgba(18, 53, 62, .72);
+  color: white;
+  font-size: 14px;
+  font-weight: 950;
+  letter-spacing: 0;
+  box-shadow: 0 10px 22px rgba(18, 53, 62, .18);
 }
 
 .album-photo-card figcaption {

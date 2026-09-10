@@ -26,28 +26,24 @@ const generatedPhotos = (folder, prefix, count) =>
     assetPath(`cases/${folder}/${prefix}-${String(index + 1).padStart(2, '0')}.jpg`),
   )
 
+const floorAdhesivePhotos = generatedPhotos('floor-adhesive-removal', 'floor-adhesive-removal', 7)
+
 const albums = [
   {
-    slug: 'renovation-detail',
-    title: '裝潢與櫃體細清',
-    category: '裝潢清潔',
+    slug: 'general-cleaning',
+    title: '一般清潔',
+    category: '一般清潔',
     icon: Sparkles,
-    copy: '裝修後粉塵、木作櫃體與高處表面，依現場材質確認擦拭方式。',
-    photos: [
-      assetPath('cases/panel-wipe-cleaning.jpg'),
-      assetPath('cases/high-cabinet-cleaning.jpg'),
-      assetPath('cases/cabinet-detail-cleaning.jpg'),
-      assetPath('cases/room-after-work-cleaning.jpg'),
-      assetPath('cases/vacuum-dust-cleaning.jpg'),
-    ],
+    copy: '居家空間、家具表面與日常髒污，依現場照片確認清潔範圍與優先順序。',
+    photos: generatedPhotos('general-cleaning', 'general-cleaning', 10),
   },
   {
-    slug: 'rental-clearance',
-    title: '退租清運',
+    slug: 'case-20260909',
+    title: '20260909 案場紀錄',
     category: '一般清潔',
     icon: ImagePlus,
-    copy: '退租、入住前後與清運需求，先以照片確認物品、動線與可處理範圍。',
-    photos: generatedPhotos('rental-clearance', 'rental-clearance', 5),
+    copy: '依實際案場日期整理，作為退租、搬入或空屋整理需求的照片參考。',
+    photos: generatedPhotos('case-20260909', 'case-20260909', 5),
   },
   {
     slug: 'mold-removal',
@@ -72,6 +68,47 @@ const albums = [
     icon: Droplets,
     copy: '浴廁、玻璃、五金與檯面水垢，依材質與水垢程度確認處理期待。',
     photos: generatedPhotos('scale-removal', 'scale-removal', 4),
+  },
+  {
+    slug: 'awning-cleaning',
+    title: '洗雨棚',
+    category: '重點清潔',
+    icon: Droplets,
+    copy: '雨棚、採光罩與戶外覆蓋面，先確認高度、材質與可安全施工的位置。',
+    photos: generatedPhotos('awning-cleaning', 'awning-cleaning', 2),
+  },
+  {
+    slug: 'floor-adhesive-removal',
+    title: '特殊清潔 地板除膠',
+    category: '特殊清潔',
+    icon: ShieldAlert,
+    copy: '地板殘膠、施工痕跡與局部髒污，依材質判斷處理方式，前後照片放在同一組查看。',
+    photos: floorAdhesivePhotos,
+    beforeAfter: [
+      {
+        label: '木紋地板殘膠處理',
+        before: floorAdhesivePhotos[0],
+        after: floorAdhesivePhotos[1],
+      },
+      {
+        label: '地磚殘膠與髒污整理',
+        before: floorAdhesivePhotos[3],
+        after: floorAdhesivePhotos[4],
+      },
+    ],
+    detailPhotos: [
+      floorAdhesivePhotos[2],
+      floorAdhesivePhotos[5],
+      floorAdhesivePhotos[6],
+    ],
+  },
+  {
+    slug: 'parking-floor-cleaning',
+    title: '停車位與地板清潔',
+    category: '重點清潔',
+    icon: Warehouse,
+    copy: '停車位、公共區域與地面髒污，先以照片確認面積、材質與排水條件。',
+    photos: generatedPhotos('parking-floor-cleaning', 'parking-floor-cleaning', 5),
   },
   {
     slug: 'commercial-kitchen',
@@ -138,7 +175,7 @@ export function CasesApp() {
           <div className="case-cover-stack" aria-hidden="true">
             <img src={albums[1].photos[0]} alt="" />
             <img src={albums[2].photos[0]} alt="" />
-            <img src={albums[5].photos[0]} alt="" />
+            <img src={albums[8].photos[0]} alt="" />
           </div>
         </section>
 
@@ -200,7 +237,37 @@ export function CasesApp() {
                     </figcaption>
                   </figure>
                 ))}
-                {album.photos.map((photo, index) => (
+                {album.beforeAfter?.map((pair, index) => (
+                  <figure className="album-photo-card before-after-card" key={`${pair.label}-${index}`}>
+                    <div className="before-after-grid">
+                      <div className="before-after-panel">
+                        <img
+                          src={pair.before}
+                          alt={`${album.title}${pair.label}清潔前`}
+                          width="900"
+                          height="1200"
+                          loading="lazy"
+                        />
+                        <span>清潔前</span>
+                      </div>
+                      <div className="before-after-panel">
+                        <img
+                          src={pair.after}
+                          alt={`${album.title}${pair.label}清潔後`}
+                          width="900"
+                          height="1200"
+                          loading="lazy"
+                        />
+                        <span>清潔後</span>
+                      </div>
+                    </div>
+                    <figcaption>
+                      <Camera size={16} aria-hidden="true" />
+                      {pair.label}
+                    </figcaption>
+                  </figure>
+                ))}
+                {(album.detailPhotos ?? album.photos).map((photo, index) => (
                   <figure className="album-photo-card" key={photo}>
                     <img
                       src={photo}

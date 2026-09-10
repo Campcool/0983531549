@@ -71,6 +71,12 @@ const casePhotos = [
     title: '商業廚房清潔',
     copy: '營業空間、設備周邊與地面油汙，先確認動線與可施工時間。',
   },
+  {
+    src: assetPath('cases/floor-adhesive-removal/floor-adhesive-removal-01.jpg'),
+    alt: '地板殘膠特殊清潔現場',
+    title: '地板除膠',
+    copy: '地板殘膠與施工痕跡，先看材質與殘膠範圍再確認處理方式。',
+  },
 ]
 
 const inquirySteps = [
@@ -107,7 +113,7 @@ const scenarios = [
     icon: BedDouble,
     tag: '搬家整理',
     tone: 'move',
-    image: assetPath('cases/rental-clearance/rental-clearance-01.jpg'),
+    image: assetPath('cases/case-20260909/case-20260909-01.jpg'),
   },
   {
     title: '年節或大掃除',
@@ -159,7 +165,7 @@ const serviceGroups = [
     copy: '退租入住、大掃除與清運需求，先用照片確認範圍與物品狀況。',
     icon: Sparkles,
     tone: 'general',
-    items: ['退租入住', '大掃除', '清運'],
+    items: ['一般清潔', '退租入住', '大掃除', '清運'],
   },
   {
     title: '裝潢清潔',
@@ -170,17 +176,17 @@ const serviceGroups = [
   },
   {
     title: '重點清潔',
-    copy: '針對廚房重油汙、水垢與商業廚房清潔，先確認油垢厚度、設備條件與營業動線。',
+    copy: '針對廚房重油汙、水垢、雨棚與地板清潔，先確認油垢厚度、材質與施工動線。',
     icon: CookingPot,
     tone: 'focus',
-    items: ['廚房重油汙', '商業廚房清潔', '重水地區水垢處理'],
+    items: ['廚房重油汙', '商業廚房清潔', '重水地區水垢處理', '洗雨棚', '停車位與地板清潔'],
   },
   {
     title: '特殊清潔',
-    copy: '垃圾屋、火燒屋與燒炭案件處理復原，需先確認現場安全與可作業範圍。',
+    copy: '除霉、地板除膠、垃圾屋與火燒屋等狀況，需先確認現場安全與可作業範圍。',
     icon: ShieldAlert,
     tone: 'special',
-    items: ['特殊清潔', '除霉', '垃圾屋', '火燒屋', '燒炭案件處理復原'],
+    items: ['特殊清潔', '除霉', '地板除膠', '垃圾屋', '火燒屋', '燒炭案件處理復原'],
   },
 ]
 
@@ -627,8 +633,9 @@ function CheckIconForService({ item }) {
   if (item.includes('油漆')) return <PaintRoller size={17} aria-hidden="true" />
   if (item.includes('垃圾') || item.includes('火燒') || item.includes('燒炭')) return <Flame size={17} aria-hidden="true" />
   if (item.includes('商業')) return <Warehouse size={17} aria-hidden="true" />
-  if (item.includes('特殊') || item.includes('除霉')) return <ShieldAlert size={17} aria-hidden="true" />
+  if (item.includes('特殊') || item.includes('除霉') || item.includes('除膠')) return <ShieldAlert size={17} aria-hidden="true" />
   if (item.includes('水垢')) return <Droplets size={17} aria-hidden="true" />
+  if (item.includes('雨棚') || item.includes('地板')) return <BrushCleaning size={17} aria-hidden="true" />
   if (item.includes('退租') || item.includes('大掃除')) return <Trash2 size={17} aria-hidden="true" />
   return <Sparkles size={17} aria-hidden="true" />
 }
