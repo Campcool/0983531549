@@ -22,7 +22,7 @@
   --radius-md: 8px;
   --radius-lg: 18px;
   --site-padding: clamp(18px, 5vw, 64px);
-  --header-height: 104px;
+  --header-height: 96px;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", sans-serif;
   color: var(--color-ink);
   background: var(--color-bg);
@@ -104,12 +104,12 @@ img {
   left: 0;
   z-index: 10;
   display: grid;
-  grid-template-columns: clamp(104px, 29vw, 132px) minmax(0, 1fr);
+  grid-template-columns: clamp(96px, 27vw, 118px) minmax(0, 1fr);
   grid-template-areas: "brand nav";
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   min-height: var(--header-height);
-  padding: 8px var(--site-padding);
+  padding: 6px var(--site-padding);
   border-bottom: 1px solid rgba(167, 220, 200, .6);
   background:
     linear-gradient(90deg, rgba(244, 250, 248, .96), rgba(232, 246, 245, .94)),
@@ -122,14 +122,14 @@ img {
   grid-area: brand;
   display: inline-flex;
   align-items: center;
-  min-height: 58px;
+  min-height: 52px;
   min-width: 0;
 }
 
 .brand-logo {
-  width: clamp(104px, 28vw, 132px);
+  width: clamp(96px, 26vw, 118px);
   height: auto;
-  max-height: 64px;
+  max-height: 58px;
   object-fit: contain;
   filter: drop-shadow(0 10px 18px rgba(35, 66, 76, .12));
 }
@@ -139,12 +139,13 @@ img {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   width: 100%;
-  gap: 5px;
+  grid-auto-rows: 32px;
+  gap: 4px;
   overflow: visible;
   overscroll-behavior: auto;
   padding: 0;
   color: var(--color-muted);
-  font-size: clamp(12px, 3.15vw, 14px);
+  font-size: clamp(11px, 2.85vw, 13px);
   font-weight: 950;
   scrollbar-width: none;
   touch-action: manipulation;
@@ -161,8 +162,9 @@ img {
   align-items: center;
   justify-content: center;
   min-width: 0;
-  min-height: 31px;
-  padding: 5px 4px;
+  height: 32px;
+  min-height: 0;
+  padding: 0 3px;
   border: 1px solid color-mix(in srgb, var(--nav-color) 28%, white);
   border-radius: 999px;
   background:
@@ -172,9 +174,11 @@ img {
     inset 0 -9px 18px color-mix(in srgb, var(--nav-color) 12%, transparent),
     0 8px 20px rgba(31, 45, 39, .04);
   color: color-mix(in srgb, var(--nav-color) 78%, #12353e);
-  line-height: 1.1;
+  overflow: hidden;
+  line-height: 1;
   text-align: center;
-  white-space: normal;
+  white-space: nowrap;
+  text-overflow: clip;
   word-break: keep-all;
   transition: transform .22s cubic-bezier(.34, 1.56, .64, 1), background-color .2s ease, border-color .2s ease, box-shadow .2s ease;
 }
@@ -260,13 +264,36 @@ img {
 }
 
 .cases-page .site-header {
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(92px, 1fr) auto;
   grid-template-areas: "brand actions";
   min-height: 72px;
 }
 
 .cases-page .header-actions {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, 56px);
+  gap: 6px;
+}
+
+.cases-page .header-action {
+  min-width: 0;
+  min-height: 54px;
+  padding: 5px 4px;
+  font-size: 12px;
+}
+
+.cases-page .header-action .brand-social-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.cases-page .phone-action svg {
+  width: 23px;
+  height: 23px;
+}
+
+.cases-page .mobile-contact-dock {
+  display: none;
 }
 
 .header-action:hover {
@@ -287,6 +314,12 @@ img {
   border-color: rgba(47, 119, 161, .25);
   color: #1f6288;
   background: rgba(232, 245, 251, .84);
+}
+
+.phone-action {
+  border-color: rgba(197, 123, 44, .28);
+  color: #8a4d13;
+  background: rgba(255, 243, 229, .86);
 }
 
 .brand-social-icon {
@@ -1701,7 +1734,7 @@ details p {
   display: grid;
   gap: 8px;
   min-height: 132px;
-  padding: 18px;
+  padding: 0;
   border: 1px solid rgba(47, 143, 143, .2);
   border-radius: var(--radius-md);
   background:
@@ -1709,6 +1742,30 @@ details p {
     linear-gradient(145deg, rgba(255, 255, 255, .9), rgba(223, 243, 239, .78));
   color: var(--color-primary-strong);
   box-shadow: 0 18px 42px rgba(31, 45, 39, .08);
+  transition: transform .24s cubic-bezier(.34, 1.56, .64, 1), box-shadow .2s ease, border-color .2s ease;
+}
+
+.hero-category-card > button {
+  all: unset;
+  box-sizing: border-box;
+  display: grid;
+  align-content: start;
+  width: 100%;
+  min-height: 132px;
+  gap: 8px;
+  padding: 18px;
+  border-radius: inherit;
+  cursor: pointer;
+}
+
+.hero-category-card:hover {
+  border-color: rgba(47, 143, 143, .36);
+  box-shadow: 0 22px 48px rgba(31, 45, 39, .12);
+}
+
+.hero-category-card > button:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 4px;
 }
 
 .hero-category-card:nth-child(2) {
@@ -1741,6 +1798,12 @@ details p {
   color: var(--color-muted);
   font-size: 15px;
   font-weight: 900;
+}
+
+.hero-category-card small {
+  color: color-mix(in srgb, var(--color-primary) 74%, #12353e);
+  font-size: 13px;
+  font-weight: 950;
 }
 
 .case-cover-stack img {

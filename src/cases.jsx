@@ -22,6 +22,13 @@ const facebookPageUrl = 'https://www.facebook.com/share/1GMwVQdp7J/?mibextid=wwX
 const lineIcon = assetPath('brand/icon-line.svg')
 const facebookIcon = assetPath('brand/icon-facebook.svg')
 
+const featuredCategories = [
+  { title: '一般清潔', count: '15 張', icon: Sparkles, target: 'general-cleaning' },
+  { title: '重點清潔', count: '14 張', icon: Droplets, target: 'grease-kitchen' },
+  { title: '特殊清潔', count: '13 張', icon: ShieldAlert, target: 'mold-removal' },
+  { title: '商業廚房', count: '16 張＋影片', icon: Warehouse, target: 'commercial-kitchen' },
+]
+
 const generatedPhotos = (folder, prefix, count) =>
   Array.from({ length: count }, (_, index) =>
     assetPath(`cases/${folder}/${prefix}-${String(index + 1).padStart(2, '0')}.jpg`),
@@ -142,12 +149,25 @@ export function CasesApp() {
     return () => window.removeEventListener('hashchange', syncAlbumFromHash)
   }, [])
 
+  const scrollAlbumIntoView = (slug) => {
+    window.setTimeout(() => {
+      document.getElementById(slug)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 0)
+  }
+
+  const openAlbumSection = (slug) => {
+    setOpenAlbum(slug)
+    window.history.replaceState(null, '', `#${slug}`)
+    scrollAlbumIntoView(slug)
+  }
+
   const toggleAlbum = (slug) => {
     const nextAlbum = openAlbum === slug ? '' : slug
     setOpenAlbum(nextAlbum)
 
     if (nextAlbum) {
       window.history.replaceState(null, '', `#${nextAlbum}`)
+      scrollAlbumIntoView(nextAlbum)
       return
     }
 
@@ -170,6 +190,10 @@ export function CasesApp() {
           <a className="header-action line-action" href={lineUrl} target="_blank" rel="noreferrer">
             <SocialBrandIcon type="line" size={20} />
             <span>LINE</span>
+          </a>
+          <a className="header-action phone-action" href={phoneUrl}>
+            <Phone size={22} aria-hidden="true" />
+            <span>電話</span>
           </a>
           <a className="header-action facebook-action" href={facebookPageUrl} target="_blank" rel="noreferrer">
             <SocialBrandIcon type="facebook" size={19} />
@@ -198,18 +222,16 @@ export function CasesApp() {
             </div>
           </div>
           <ul className="case-cover-stack case-category-stack" aria-label="案場照片分類與張數">
-            {[
-              { title: '一般清潔', count: '15 張', icon: Sparkles },
-              { title: '重點清潔', count: '14 張', icon: Droplets },
-              { title: '特殊清潔', count: '13 張', icon: ShieldAlert },
-              { title: '商業廚房', count: '16 張＋影片', icon: Warehouse },
-            ].map((item) => {
+            {featuredCategories.map((item) => {
               const Icon = item.icon
               return (
                 <li className="hero-category-card" key={item.title}>
-                  <Icon size={28} aria-hidden="true" />
-                  <strong>{item.title}</strong>
-                  <span>{item.count}</span>
+                  <button type="button" onClick={() => openAlbumSection(item.target)}>
+                    <Icon size={28} aria-hidden="true" />
+                    <strong>{item.title}</strong>
+                    <span>{item.count}</span>
+                    <small>點開相簿</small>
+                  </button>
                 </li>
               )
             })}
@@ -229,7 +251,10 @@ export function CasesApp() {
                 className="album-index-card"
                 href={`#${album.slug}`}
                 key={album.slug}
-                onClick={() => setOpenAlbum(album.slug)}
+                onClick={(event) => {
+                  event.preventDefault()
+                  openAlbumSection(album.slug)
+                }}
               >
                 <div className="album-index-icon-panel">
                   <Icon size={30} aria-hidden="true" />
@@ -356,8 +381,6 @@ export function CasesApp() {
           </div>
         </section>
       </main>
-
-      <MobileContactDock />
 
       <footer className="site-footer">
         <span>潔淨坊清潔工作室</span>
