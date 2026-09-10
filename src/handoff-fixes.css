@@ -1,0 +1,12 @@
+:root {
+  --color-line: #017a35;
+  --color-line-strong: #006b2e;
+}
+
+.line-contact-card {
+  background:
+    linear-gradient(135deg, rgba(1, 122, 53, .96), rgba(0, 107, 46, .92)),
+    rgba(255, 255, 255, .12);
+  border-color: rgba(156, 240, 182, .58);
+  box-shadow: 0 18px 40px rgba(0, 107, 46, .24);
+}

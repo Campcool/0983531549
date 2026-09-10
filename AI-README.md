@@ -126,7 +126,7 @@ cp950 主控台跑 Python 輸出繁中會 `UnicodeEncodeError`，前面加 `PYTH
 | # | 優先 | 項目 | 位置 | 預估 | 狀態 |
 |---|---|---|---|---|---|
 | A1 | 🔴 阻斷 | 改寫 FAQ 第 3 題，讓它與案例頁現況一致 | `src/main.jsx:241` | 10 分 | ✅ |
-| A2 | 🔴 阻斷 | LINE 按鈕改 `#017A35`、hover `#006B2E`（原白字對比僅 2.26:1，AA 不過） | `src/style.css:13` | 10 分 | ✅ |
+| A2 | 🔴 阻斷 | LINE 按鈕改 `#017A35`、hover `#006B2E`（原白字對比僅 2.26:1，AA 不過） | `src/handoff-fixes.css` | 10 分 | ✅ |
 | B1 | 🟠 高 | scenario 背景圖改 `<img loading="lazy">`＋`object-fit:cover`，首屏 1.56 MB → 約 0.8 MB | `src/main.jsx:390`、`style.css` | 1 小時 | ⬜ |
 | B2 | 🔴 阻斷 | 補 `public/robots.txt` 與 `public/sitemap.xml`，接 GSC | 新檔 | 1 小時 | 🟨 |
 | B3 | 🟠 高 | 加數字錨點帶（58 張實拍／9 類相簿／4 區到府）＋風險逆轉三句 | `src/main.jsx` | 2 小時 | ⬜ |
@@ -142,7 +142,7 @@ cp950 主控台跑 Python 輸出繁中會 `UnicodeEncodeError`，前面加 `PYTH
 FAQ 已改成「案例頁已整理自家案場實拍相簿」，並明確不放未確認客戶名稱、評論或成果數字。
 
 **A2 完成說明**（白字對比實測）：
-`--color-line` 已改 `#017A35`，`--color-line-strong` 已改 `#006B2E`；主 LINE CTA 白字對比達 AA。
+`src/handoff-fixes.css` 已覆寫 `--color-line: #017A35`、`--color-line-strong: #006B2E`，並由首頁、案例頁、管理頁三個 React 入口匯入；主 LINE CTA 白字對比達 AA。
 
 **B2 注意**：依可信度設計規則，**自家網站不得對自家服務加 `Review` 或 `AggregateRating` 結構化資料**
 （self-serving markup，Google 會取消 rich result 甚至人工處罰）。要放數字請標「服務件數」。
@@ -163,7 +163,7 @@ Google Search Console 送審仍需有權限的人手動處理。
 依本檔待辦先修 A1、A2、B2、C1：
 
 - A1：改寫首頁 FAQ 第 3 題，讓案例頁實拍相簿與內容邊界一致。
-- A2：LINE CTA 色票改為 `#017A35` / `#006B2E`，避免白字對比不足。
+- A2：LINE CTA 色票以 `src/handoff-fixes.css` 覆寫為 `#017A35` / `#006B2E`，避免白字對比不足。
 - B2：新增 `public/robots.txt` 與 `public/sitemap.xml`；管理工具路徑列為 disallow，sitemap 只列公開首頁與案例頁。
 - C1：`caseAdmin.jsx` 移除明文 `1549` 比對，改 hash 檢查；`handleFiles` 改 `Promise.allSettled` 與 `try/finally`，避免單張照片失敗後 UI 卡住。
 

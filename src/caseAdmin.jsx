@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import { ArrowLeft, Download, ImagePlus, LockKeyhole, RotateCcw, ShieldCheck, Upload } from 'lucide-react'
 import './style.css'
+import './handoff-fixes.css'
 
 const accessCodeHash = '75abf1771c0d9038e45203aa603758410f2418fd29b3fe0c25534009c579bb8e'
 

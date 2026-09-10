@@ -14,6 +14,7 @@ import {
   Warehouse,
 } from 'lucide-react'
 import './style.css'
+import './handoff-fixes.css'
 
 const assetPath = (path) => `${import.meta.env.BASE_URL}${path.replace(/^\/+/, '')}`
 const lineUrl = 'https://line.me/R/ti/p/~chenli0775'
