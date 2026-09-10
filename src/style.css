@@ -2437,11 +2437,19 @@ select {
     min-height: 92px;
     padding-top: 10px;
     padding-bottom: 10px;
+    /* header 的頁緣比內文窄（內文用 --site-padding，最大 64px）。
+       業主同意 logo 靠左一點以換取導覽空間：1280px 時左右各省約 26px，
+       是讓聯絡鈕在 1280 仍與導覽同列顯示的最後一塊。 */
+    padding-right: clamp(24px, 3vw, 48px);
+    padding-left: clamp(24px, 3vw, 48px);
   }
 
   .brand-logo {
-    width: clamp(156px, 16vw, 204px);
-    max-height: 82px;
+    /* 業主同意縮小以換取導覽空間：原 clamp(156px, 16vw, 204px)。
+       1280px 時省下約 38px，足以讓聯絡鈕在 1280／1366 這類常見筆電
+       仍與導覽同列顯示（見下方 820–1279px 的 media query）。 */
+    width: clamp(140px, 12vw, 176px);
+    max-height: 74px;
   }
 
   .header-actions {
@@ -2593,7 +2601,7 @@ select {
    收起聯絡鈕可讓導覽多拿 201px，此區間足夠。底部 dock 已提供
    LINE／電話／粉專，收起 header 聯絡鈕不影響聯絡動線。
    案例頁不受影響：`.cases-page` 的規則 specificity 較高，且該頁沒有導覽。 */
-@media (min-width: 820px) and (max-width: 1399px) {
+@media (min-width: 820px) and (max-width: 1279px) {
   .site-header {
     grid-template-columns: auto minmax(0, 1fr);
     grid-template-areas: "brand nav";
