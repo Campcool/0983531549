@@ -166,18 +166,6 @@ export function CasesApp() {
             height="356"
           />
         </a>
-        <nav className="desktop-nav" aria-label="案例分類">
-          {albums.map((album, index) => (
-            <a
-              className={`nav-album-${index + 1}`}
-              href={`#${album.slug}`}
-              key={album.slug}
-              onClick={() => setOpenAlbum(album.slug)}
-            >
-              {album.title}
-            </a>
-          ))}
-        </nav>
         <div className="header-actions">
           <a className="header-action line-action" href={lineUrl} target="_blank" rel="noreferrer">
             <SocialBrandIcon type="line" size={20} />

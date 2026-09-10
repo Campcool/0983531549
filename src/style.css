@@ -194,60 +194,29 @@ img {
   animation: jelly-press .38s cubic-bezier(.36, .07, .19, .97);
 }
 
-.desktop-nav .nav-needs,
-.desktop-nav .nav-album-1 {
+.desktop-nav .nav-needs {
   --nav-color: #2f8f8f;
   --nav-bg: #e6f7f2;
 }
 
-.desktop-nav .nav-services,
-.desktop-nav .nav-album-2 {
+.desktop-nav .nav-services {
   --nav-color: #2f77a1;
   --nav-bg: #e8f5fb;
 }
 
-.desktop-nav .nav-cases,
-.desktop-nav .nav-album-3 {
+.desktop-nav .nav-cases {
   --nav-color: #6a9f47;
   --nav-bg: #edf8e8;
 }
 
-.desktop-nav .nav-album-3 {
-  --nav-color: #7a6dc8;
-  --nav-bg: #f0edff;
-}
-
-.desktop-nav .nav-process,
-.desktop-nav .nav-album-4 {
+.desktop-nav .nav-process {
   --nav-color: #c57b2c;
   --nav-bg: #fff3e5;
 }
 
-.desktop-nav .nav-details,
-.desktop-nav .nav-album-5 {
+.desktop-nav .nav-details {
   --nav-color: #7a6dc8;
   --nav-bg: #f0edff;
-}
-
-.desktop-nav .nav-album-5,
-.desktop-nav .nav-album-9 {
-  --nav-color: #3c8c8a;
-  --nav-bg: #e8f6f5;
-}
-
-.desktop-nav .nav-album-6 {
-  --nav-color: #2f77a1;
-  --nav-bg: #e8f5fb;
-}
-
-.desktop-nav .nav-album-7 {
-  --nav-color: #7a6dc8;
-  --nav-bg: #f0edff;
-}
-
-.desktop-nav .nav-album-8 {
-  --nav-color: #6a9f47;
-  --nav-bg: #edf8e8;
 }
 
 .desktop-nav .nav-areas {
@@ -277,6 +246,24 @@ img {
   display: none;
   justify-content: flex-end;
   gap: 8px;
+}
+
+/* 案例頁不放相簿導覽：下方「案場相簿索引」已經負責導覽，而且資訊更完整
+   （分類＋張數＋圖示）。header 收成單列 logo + 聯絡入口，各斷點一致。
+   2026-09-10 移除，原本是 9 個等重膠囊排 3×3，配色借自首頁區塊導覽、
+   與相簿內容無關，且在 375px 下文字重疊溢出。 */
+.cases-page {
+  --header-height: 72px;
+}
+
+.cases-page .site-header {
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: "brand actions";
+  min-height: 72px;
+}
+
+.cases-page .header-actions {
+  display: flex;
 }
 
 .header-action:hover {
@@ -775,16 +762,7 @@ body:has(#needs:target) .nav-needs,
 body:has(#services:target) .nav-services,
 body:has(#process:target) .nav-process,
 body:has(#details:target) .nav-details,
-body:has(#areas:target) .nav-areas,
-body:has(#general-cleaning:target) .nav-album-1,
-body:has(#case-20260909:target) .nav-album-2,
-body:has(#mold-removal:target) .nav-album-3,
-body:has(#grease-kitchen:target) .nav-album-4,
-body:has(#scale-removal:target) .nav-album-5,
-body:has(#awning-cleaning:target) .nav-album-6,
-body:has(#floor-adhesive-removal:target) .nav-album-7,
-body:has(#parking-floor-cleaning:target) .nav-album-8,
-body:has(#commercial-kitchen:target) .nav-album-9 {
+body:has(#areas:target) .nav-areas {
   border-color: color-mix(in srgb, var(--nav-color) 72%, white);
   background:
     linear-gradient(180deg, color-mix(in srgb, var(--nav-color) 18%, white), color-mix(in srgb, var(--nav-color) 9%, white)),
@@ -2496,16 +2474,11 @@ select {
   }
 
   .cases-page {
-    --header-height: 132px;
+    --header-height: 84px;
   }
 
   .cases-page .site-header {
-    grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-areas:
-      "brand actions"
-      "nav nav";
-    row-gap: 8px;
-    min-height: 132px;
+    min-height: 84px;
     padding-top: 8px;
     padding-bottom: 8px;
   }
@@ -2524,22 +2497,6 @@ select {
   .cases-page .header-actions {
     align-self: center;
     justify-self: end;
-  }
-
-  .cases-page .desktop-nav {
-    align-self: stretch;
-    box-sizing: border-box;
-    width: 100%;
-    padding: 0 2px 2px;
-    gap: 7px;
-    font-size: 15px;
-  }
-
-  .cases-page .desktop-nav a {
-    min-width: auto;
-    min-height: 40px;
-    padding-right: 16px;
-    padding-left: 16px;
   }
 
   .hero {

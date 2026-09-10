@@ -7,7 +7,7 @@
 > 4. **所有時間戳一律台灣時間（Asia/Taipei, UTC+8）**。
 > 5. **不要把「已完成」寫在沒有實測的項目上**。未驗的事項寫進「本輪明確未驗」。
 
-最後更新：2026-09-10（Claude）— **複驗 Codex 三批並修正三處，請 Codex 覆審**。
+最後更新：2026-09-10（Claude）— **複驗 Codex 三批、修正三處，另依業主指示移除案例頁 header 相簿導覽。請 Codex 覆審**。
 複驗結論：A1／A2／C1 **通過**（A2 四顆 LINE 按鈕實測全過 AA）；**B2 是假綠，已改回未完成**（robots.txt 放在子路徑對爬蟲無效，見陷阱 7）。
 本輪 Claude 另修：`handoff-fixes.css` 併回 `style.css`、`c2f7fbd` 的兩個無障礙迴歸。已跑 lint／build／瀏覽器實測。
 **給 Codex 的覆審重點見第 6 節本輪紀錄末段。**
@@ -152,7 +152,7 @@ cp950 主控台跑 Python 輸出繁中會 `UnicodeEncodeError`，前面加 `PYTH
 | A3 | 🔴 阻斷 | 修 `c2f7fbd` 兩個無障礙迴歸：`aria-controls` 指向不存在元素（9/9）、`aria-hidden` 藏掉分類卡與索引卡張數 | `src/cases.jsx`、`style.css` | 30 分 | ✅ **待 Codex 覆審** |
 | B1 | 🟠 高 | scenario 背景圖改 `<img loading="lazy">`＋`object-fit:cover`，首屏 1.56 MB → 約 0.8 MB | `src/main.jsx:390`、`style.css` | 1 小時 | ⬜ |
 | B2 | 🔴 阻斷 | ~~補 robots.txt~~ ＋ `sitemap.xml`，接 GSC。**robots.txt 這半做不到**（見陷阱 7），剩下的是去 GSC 手動提交 sitemap | GSC 後台 | 30 分 | ⬜ **需業主帳號** |
-| B5 | 🟢 中 | 案例頁 375px 下 header 導覽 9 個膠囊文字重疊溢出（既有問題，非 `c2f7fbd` 造成） | `src/style.css` `.desktop-nav` | 1 小時 | ⬜ |
+| B5 | 🟢 中 | 案例頁 header 相簿導覽（9 膠囊 3×3）**已移除**，導覽職責交給下方「案場相簿索引」 | `src/cases.jsx`、`style.css` | 1 小時 | ✅ **待 Codex 覆審** |
 | B3 | 🟠 高 | 加數字錨點帶（58 張實拍／9 類相簿／4 區到府）＋風險逆轉三句 | `src/main.jsx` | 2 小時 | ⬜ |
 | B4 | 🟠 高 | 首屏位階對調：品牌名縮至 32–40px，價值主張升至 60px＋；加一行計價說明 | `src/style.css`、`main.jsx` | 3 小時 | ⬜ |
 | C1 | 🟠 高 | `handleFiles` 補 `try/finally`；移除硬編碼密碼 | `src/caseAdmin.jsx:88`、`:6` | 30 分 | ✅ |
@@ -181,6 +181,54 @@ Google Search Console 送審仍需有權限的人手動處理。
 ---
 
 ## 6. 進度紀錄（倒序）
+
+### 2026-09-10 移除案例頁 header 相簿導覽（Claude，業主指定）— ⚠️ 請 Codex 覆審
+
+**業主回報**：案例頁上方那排導覽「蠻不喜歡但不知道怎麼改」。診斷後由業主選定「直接移除」。
+
+**移除的理由**（三個問題疊在一起）：
+
+1. **配色是借來的，與內容無關**。`.nav-album-1~9` 直接沿用首頁區塊導覽的色票
+   （`.nav-needs` / `.nav-services` / …），所以「特殊清潔 除霉」是綠的、「廚房重油汙」是橘的，
+   純粹因為排第幾個。顏色不攜帶資訊，眼睛卻一直想找規律——這是視覺雜亂的主因。
+   附帶：`.nav-album-3` 與 `.nav-album-5` 各被定義了兩次。
+2. **標題長度 3～13 字**（「洗雨棚」vs「20260909 案場紀錄」），硬排 3×3 網格必然參差，
+   375px 下文字重疊溢出。
+3. **與下方「案場相簿索引」做同一件事，而且做得比較差**。索引卡有分類、張數、圖示，
+   上面這排只有裸標題。同一頁用兩個區塊做同一個導覽。
+
+**改法**：
+
+- `cases.jsx` 移除 `<nav className="desktop-nav">` 整塊。
+- `style.css` 新增 `.cases-page` 基礎層規則：header 收成單列 `"brand actions"`，
+  `--header-height: 72px`（桌面 84px），並讓 `.cases-page .header-actions` 在所有斷點顯示
+  （原本行動版是 `display:none`，移除導覽後 header 會太空）。
+- 刪除 media query 內的 `.cases-page .desktop-nav` 與 `.cases-page .desktop-nav a`。
+- 清除 11 條 `.nav-album-*` 規則與 `:target` 高亮清單中的 9 行。
+  **注意**：這些規則與首頁的 `.nav-needs` 等共用選擇器，只能拆開，不能整條刪。
+
+**實測**：
+
+| 斷點 | header 高 | 導覽 | 水平溢出 |
+|---|---|---|---|
+| 375 | 132px → **75px** | 已移除 | 無（原本文字重疊已消失） |
+| 768 | 132px → **81px** | 已移除 | 無 |
+| 桌面 | 132px → **77px** | 已移除 | 無 |
+
+- 首頁**未受影響**：導覽仍在、6 個連結、6 個配色各自獨立且全不同、header 維持 104px。
+- `pnpm lint` 0 error；`pnpm build` 成功。
+- CSS 結構檢查：大括號 409/409 平衡、無孤兒選擇器、`nav-album` 殘留 0 處。
+
+**⚠️ 施工過程的教訓（給下一個 AI）**：我第一次用腳本批次刪 `nav-album` 時，
+腳本從「含 nav-album 的那一行」開始收集選擇器，沒有往回抓同一條規則的前置選擇器行，
+結果把 `.desktop-nav .nav-needs,` 這類共用規則整條刪掉、留下孤兒選擇器，
+會讓首頁 6 個導覽全部套到同一個顏色。已 `git checkout` 還原後改用逐條精確替換。
+**共用選擇器清單不要用腳本批次處理。**
+
+**本輪明確未驗**：
+
+- 未確認移除導覽後，是否有使用者仰賴那排快速跳轉（無分析數據可查）。
+- 未測 1440px 以上的寬螢幕。
 
 ### 2026-09-10 複驗 Codex 三批＋修正三處（Claude）— ⚠️ 請 Codex 覆審
 
