@@ -7,7 +7,9 @@
 > 4. **所有時間戳一律台灣時間（Asia/Taipei, UTC+8）**。
 > 5. **不要把「已完成」寫在沒有實測的項目上**。未驗的事項寫進「本輪明確未驗」。
 
-最後更新：2026-09-10（Codex）— **重整案例頁手機版：修正 header 聯絡鈕重疊、LINE 內建瀏覽器首屏擁擠、相簿分類與洗地打蠟項目**。
+最後更新：2026-09-10（Claude）— **複驗 Codex `e9fd7d4`：未發現阻斷問題**，四項核心修正實測全通過。
+另修三項衍生問題：四大矩陣張數與點開內容不符、商業廚房分類標籤不一致、刪除 1.60 MB 重複死資產。
+**捲動行為受測試環境限制完全未驗，必須真機複驗**（見本輪紀錄第四節）。⚠️ 請 Codex 覆審。
 複驗結論：A1／A2／C1 **通過**（A2 四顆 LINE 按鈕實測全過 AA）；**B2 是假綠，已改回未完成**（robots.txt 放在子路徑對爬蟲無效，見陷阱 7）。
 本輪狀態：Claude 已移除案例頁 header 相簿導覽、合併 `handoff-fixes.css`；Codex 已修正 `820–1279px` 首頁固定聯絡入口、壓縮桌面導覽與右上聯絡鈕，並改版 OG 分享圖。
 
@@ -138,6 +140,19 @@ cp950 主控台跑 Python 輸出繁中會 `UnicodeEncodeError`，前面加 `PYTH
 `--color-line` 之外，`style.css` 的 `.line-contact-card` 另有一組硬編碼的 rgba 漸層。
 只改變數會漏掉這張卡片。2026-09-10 已一併改為 `#017a35` 系。
 
+**9. 案例頁四大分類的張數／相簿數／跳轉目標，一律從 `albums` 計算，不要硬編碼。**
+2026-09-10 曾寫死「15／14／13／16 張」，結果與點開後實際看到的張數對不上
+（標「重點清潔 14 張」，點進去只有洗地打蠟 5 張），因為 `count` 是分類總和、
+`target` 卻只指向單一相簿。現已改為 `featuredCategoryMeta` + 從 `albums` 推算。
+**新增或搬動相簿時不需要再改任何數字**；只有業主指定要跳特定相簿時才在 meta 裡寫 `target`。
+
+**10. `grid-area` 只在父容器是 grid 時生效——跨 commit 的組合式 bug 要查完整歷史。**
+`.header-action { grid-area: actions }` 早在 `af35cda` 就寫下，但當時父層是 flex，屬於無效宣告、
+沒人發現。直到 `1188538` 把 `.header-actions` 改成 `display: grid`，這行沉睡的宣告突然生效，
+三顆聯絡按鈕全部擠進同一格，畫面上只看得到最後一顆（粉專）。
+**教訓**：症狀出現的 commit 不一定是問題的來源。只看單一 commit 的 diff 找不到這種 bug，
+要用 `git log -S'<關鍵字>'` 追出宣告的完整生命週期。已於 `e9fd7d4` 移除該規則。
+
 ---
 
 ## 5. 待辦清單（2026-09-10 稽核產出，依施工順序排列）
@@ -157,6 +172,7 @@ cp950 主控台跑 Python 輸出繁中會 `UnicodeEncodeError`，前面加 `PYTH
 | C1 | 🟠 高 | `handleFiles` 補 `try/finally`；移除硬編碼密碼 | `src/caseAdmin.jsx:88`、`:6` | 30 分 | ✅ |
 | C2 | 🟡 待決策 | LINE 標誌換官方素材（現為自繪，違反自家 DESIGN.md） | `public/brand/icon-line.svg` | 待業主 | ⬜ |
 | C3 | 🟢 中 | 圖片轉 WebP、刪 4.63 MB 死資產、同步 DESIGN.md、CI 加 `pnpm lint` | 多處 | 半天 | ⬜ |
+| E1 | 🟡 **待業主決定** | 首頁與案例頁的服務分類不對應：首頁「一般清潔」（退租入住／大掃除／清運）在案例頁**沒有任何對應相簿**；首頁大類叫「裝潢清潔」、案例頁相簿叫「裝潢細清」 | `src/main.jsx:164`、`src/cases.jsx` | 需先確認 | ⬜ |
 | D1 | 🟡 待討論 | 設計回流機制（定期清潔提醒、老客推薦）— 五段檢查第 5 段完全空白 | — | 需先討論 | ⬜ |
 
 ### 待辦細節（施工時展開看）
@@ -172,14 +188,82 @@ FAQ 已改成「案例頁已整理自家案場實拍相簿」，並明確不放�
 目前 JSON-LD 未誤用這兩者，維持現狀即可。`public/robots.txt` 與 `public/sitemap.xml` 已新增；
 Google Search Console 送審仍需有權限的人手動處理。
 
-**C3 死資產清單**（SHA-256 去重＋雙向引用比對確認，皆無任何頁面引用）：
-- `public/cases/rental-clearance/` 5 張（1.90 MB）— 是 `case-20260909/` 的逐位元組副本
-- `og-image.png`／`og-image-20260909-service-area.png`／`og-image-20260909-line-card.png`（1.87 MB）— 三張內容完全相同
-- `brand/favicon.png`／`logo-horizontal.png`／`logo-mark.png`（0.92 MB）
+**C3 死資產清單**（2026-09-10 重新盤點，分母 `public/` 共 40.77 MB，死資產 **4.38 MB / 11%**）：
+
+| 檔案 | 大小 | 說明 |
+|---|---|---|
+| `cases/rental-clearance/` 5 張 | 1.90 MB | 是 `case-20260909/` 的逐位元組副本 |
+| `og-line-square-20260909.png` | 985 KB | **新增**：`3b423cb` 換 OG 圖後失去引用 |
+| `og-image-20260909-service-area.png` | 623 KB | 與 line-card 內容完全相同 |
+| `og-image-20260909-line-card.png` | 623 KB | 同上 |
+| `brand/logo-mark.png` | 300 KB | 非透明版，實作用 transparent 版 |
+
+`public/robots.txt` 與 `sitemap.xml` **不是**死資產（給爬蟲用，本來就不會被 HTML 引用），
+掃描腳本會誤報，不要刪。
+
+已清除：`cases/parking-floor-cleaning/` 5 張（1.60 MB）—— 與 `floor-waxing/` 逐位元組重複且已無引用，
+於 2026-09-10 刪除。
 
 ---
 
 ## 6. 進度紀錄（倒序）
+
+### 2026-09-10 Claude 複驗 `e9fd7d4` 並修正三項 — ⚠️ 請 Codex 覆審
+
+**複驗結論：未發現阻斷問題。** Codex 本輪四項核心修正實測全部通過，另修掉三個衍生問題。
+
+#### 一、複驗 Codex `e9fd7d4`
+
+| 檢查項 | 結論 | 依據 |
+|---|---|---|
+| header 只剩粉專 | ✅ 已修，**根因診斷正確** | 見下方「根因驗證」 |
+| 360／375／390／430px | ✅ 全通過 | 四寬度皆無水平溢出；三顆鈕 **46×46**（＞WCAG 44×44），互不重疊 |
+| LINE 首屏擁擠 | ✅ 明顯改善 | 四大矩陣底部 **779 → 616px**（−163）；LINE CTA **385 → 260px**；header **73 → 64px** |
+| 四大矩陣展開 | ✅ 展開正確 | 4/4 正確設 hash、`aria-expanded=true`、同時僅 1 個抽屜開啟 |
+| 裝潢細清命名 | ✅ 案例頁無殘留 | `grep "一般清潔" src/cases.jsx` 為空 |
+| 長標題換行 | ✅ 無逐字直排 | `word-break: keep-all`＋`writing-mode: horizontal-tb`；375/390/430 實測「廚房重油汙」「重水地區水垢處理」「商業廚房清潔」皆 1 行 |
+| 無障礙／lazy／鍵盤 | ✅ 無退步，**兩處改善** | 四大矩陣由 `div` 改 `<button>`（可鍵盤操作）；header 三顆補 `aria-label`。`aria-controls` 9/9、初始 0 抽屜展開、0 張案場圖下載、0 個負 tabindex |
+
+**根因驗證**（我一度誤判 Codex 診斷有誤，實測後撤回）：
+`grid-area` 只在父容器是 grid 時生效，我在 `f1e24f3` 看到父層是 flex，因此懷疑那是無效宣告。
+實際 build `1188538` 重現後證實 Codex 正確——該版把 `.header-actions` 改成 `display: grid`，
+三顆按鈕 box 完全相同（`l:320, r:356, w:37`）、`重疊: true`，截圖右上角只看得到粉專。
+詳見陷阱 10。
+
+#### 二、Claude 本輪修正
+
+1. **四大矩陣張數與點開內容不符（3/4 格）** — 標「重點清潔 14 張」點進去只有 5 張；
+   「裝潢細清 15 張」→ 10 張；「特殊清潔 13 張」→ 6 張。原因是 `count` 寫死為分類總和、
+   `target` 卻只指向單一相簿。改為從 `albums` 推算，並新增「共 N 個相簿」提示，
+   讓訪客知道同分類還有其他相簿。**業主指定的「重點清潔 → `#floor-waxing`」已保留**
+   （`featuredCategoryMeta` 可覆寫 target）。見陷阱 9。
+2. **商業廚房分類標籤不一致** — 四大矩陣當它是獨立分類，但 `albums` 裡 `category` 是「重點清潔」，
+   展開後 eyebrow 顯示「重點清潔」與剛點的標籤不符。已改為 `category: '商業廚房'`。
+3. **刪除 `cases/parking-floor-cleaning/`（1.60 MB）** — 與 `floor-waxing/` 五張 SHA-256 逐位元組相同，
+   且改名後已無任何引用。C3 死資產清單已重新盤點更新。
+
+**驗算**：改成自動計算後，四分類為裝潢細清 15／重點清潔 14／特殊清潔 13／商業廚房 16，
+**總計 58 張，與原本硬編碼完全一致**，證明計算邏輯正確且數字本來就對，錯的只是與 target 的對應。
+
+#### 三、未處理（已列待辦 E1，需業主決定）
+
+首頁「一般清潔」（退租入住／大掃除／清運）在案例頁沒有對應相簿；首頁大類叫「裝潢清潔」、
+案例頁相簿叫「裝潢細清」。這屬於業務分類決策，不自行更動。
+
+#### 四、本輪明確未驗
+
+- **捲動行為完全沒驗到**：Browser pane 處於隱藏狀態，連 `window.scrollTo(0, 3000)` 都無效，
+  是環境限制而非網站問題。`scrollIntoView` 的程式碼層面檢查合理
+  （`<section id>` 永遠在 DOM、`scroll-margin-top: 86px`、`html { scroll-behavior: smooth }`、
+  `setTimeout(0)` 排在 React commit 之後），但**必須真機複驗**。
+- **`.site-shell` 有 `overflow-x: hidden`**，computed 為 `overflow: hidden auto`，使其成為候選捲動容器。
+  目前 `scrollHeight === clientHeight` 所以無害，但 `scrollIntoView` 在 nested scroll container 下，
+  **iOS WebView 行為與桌面 Chrome 有已知差異**——這正是上一項需要真機驗的技術原因。
+- 未在真機 LINE 內建瀏覽器測（iOS／Android 各一）。
+- 未測 iPhone SE 等 667px 短螢幕（推算四大矩陣會被切一排，但 LINE CTA 仍完整可見）。
+- 未用真實螢幕閱讀器（VoiceOver／TalkBack），只驗 DOM 與 ARIA 屬性正確性。
+- 未看到抽屜展開後的照片網格視覺（環境無法捲動）。
+- **未確認 `floor-waxing` 的照片內容是否真的是打蠟工程**——那是停車位／地板清潔的原始照片，需業主確認語意相符。
 
 ### 2026-09-10 Codex 重整案例頁手機版與洗地打蠟相簿
 

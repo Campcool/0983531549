@@ -22,13 +22,6 @@ const facebookPageUrl = 'https://www.facebook.com/share/1GMwVQdp7J/?mibextid=wwX
 const lineIcon = assetPath('brand/icon-line.svg')
 const facebookIcon = assetPath('brand/icon-facebook.svg')
 
-const featuredCategories = [
-  { title: '裝潢細清', count: '15 張', icon: Sparkles, target: 'general-cleaning' },
-  { title: '重點清潔', count: '14 張', icon: Droplets, target: 'floor-waxing' },
-  { title: '特殊清潔', count: '13 張', icon: ShieldAlert, target: 'mold-removal' },
-  { title: '商業廚房', count: '16 張＋影片', icon: Warehouse, target: 'commercial-kitchen' },
-]
-
 const generatedPhotos = (folder, prefix, count) =>
   Array.from({ length: count }, (_, index) =>
     assetPath(`cases/${folder}/${prefix}-${String(index + 1).padStart(2, '0')}.jpg`),
@@ -128,7 +121,7 @@ const albums = [
   {
     slug: 'commercial-kitchen',
     title: '商業廚房清潔',
-    category: '重點清潔',
+    category: '商業廚房',
     icon: Warehouse,
     copy: '營業空間、設備周邊、地面油汙與清潔動線，先確認可施工時間與現場安全。',
     photos: generatedPhotos('commercial-kitchen', 'commercial-kitchen', 16),
@@ -137,6 +130,31 @@ const albums = [
     ],
   },
 ]
+
+// 四大分類的顯示順序與圖示。張數、相簿數與跳轉目標全部從 albums 推算，
+// 不要再硬編碼——過去寫死的「15/14/13/16 張」與點開後實際看到的張數對不上
+// （例如標「重點清潔 14 張」，點進去只有洗地打蠟的 5 張）。
+// target 省略時預設跳該分類第一個相簿；業主指定要跳特定相簿時才明寫。
+const featuredCategoryMeta = [
+  { title: '裝潢細清', icon: Sparkles },
+  { title: '重點清潔', icon: Droplets, target: 'floor-waxing' },
+  { title: '特殊清潔', icon: ShieldAlert },
+  { title: '商業廚房', icon: Warehouse },
+]
+
+const featuredCategories = featuredCategoryMeta.map(({ title, icon, target }) => {
+  const inCategory = albums.filter((album) => album.category === title)
+  const photoCount = inCategory.reduce((sum, album) => sum + album.photos.length, 0)
+  const videoCount = inCategory.reduce((sum, album) => sum + (album.videos?.length ?? 0), 0)
+
+  return {
+    title,
+    icon,
+    target: target ?? inCategory[0]?.slug ?? '',
+    countLabel: `${photoCount} 張${videoCount ? '＋影片' : ''}`,
+    albumCount: inCategory.length,
+  }
+})
 
 export function CasesApp() {
   const [openAlbum, setOpenAlbum] = React.useState(getAlbumFromHash)
@@ -229,8 +247,8 @@ export function CasesApp() {
                   <button type="button" onClick={() => openAlbumSection(item.target)}>
                     <Icon size={28} aria-hidden="true" />
                     <strong>{item.title}</strong>
-                    <span>{item.count}</span>
-                    <small>點開相簿</small>
+                    <span>{item.countLabel}</span>
+                    <small>{item.albumCount > 1 ? `共 ${item.albumCount} 個相簿` : '點開相簿'}</small>
                   </button>
                 </li>
               )
