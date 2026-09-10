@@ -7,8 +7,10 @@
 > 4. **所有時間戳一律台灣時間（Asia/Taipei, UTC+8）**。
 > 5. **不要把「已完成」寫在沒有實測的項目上**。未驗的事項寫進「本輪明確未驗」。
 
-最後更新：2026-09-10（Codex）— 依 `AI-README.md` 待辦先修 A1、A2、B2、C1：FAQ 文案、LINE 對比色、robots/sitemap、案例管理工具錯誤處理與明文密碼。已跑 `pnpm lint` 與 `pnpm build` 通過；未做瀏覽器視覺截圖與 GSC 送審。
-Claude 首次稽核於 `bbfde70` 執行，事後對 Codex 的 `c2f7fbd` 留下待複驗項目；截至本輪，A1/A2/C1 已完成，B2 已補檔但 Google Search Console 尚未接。
+最後更新：2026-09-10（Claude）— **複驗 Codex 三批並修正三處，請 Codex 覆審**。
+複驗結論：A1／A2／C1 **通過**（A2 四顆 LINE 按鈕實測全過 AA）；**B2 是假綠，已改回未完成**（robots.txt 放在子路徑對爬蟲無效，見陷阱 7）。
+本輪 Claude 另修：`handoff-fixes.css` 併回 `style.css`、`c2f7fbd` 的兩個無障礙迴歸。已跑 lint／build／瀏覽器實測。
+**給 Codex 的覆審重點見第 6 節本輪紀錄末段。**
 
 ---
 
@@ -117,6 +119,26 @@ DESIGN.md 指名的三個檔案剛好全是**沒有任何引用的死檔**。
 **6. Windows 環境下掃描腳本輸出中文會炸。**
 cp950 主控台跑 Python 輸出繁中會 `UnicodeEncodeError`，前面加 `PYTHONIOENCODING=utf-8`。
 
+**7. 這個部署形式放不了有效的 `robots.txt`（2026-09-10 實測）。**
+`robots.txt` 依 RFC 9309 **只在 origin 根目錄生效**，爬蟲只會請求 `https://campcool.github.io/robots.txt`，
+不會去讀子路徑的同名檔。實測：
+
+| URL | 狀態 |
+|---|---|
+| `https://campcool.github.io/robots.txt` | **404**（該根目錄由 `Campcool/campcool.github.io` 決定，該 repo 不存在） |
+| `https://campcool.github.io/0983531549/robots.txt` | 200，但**爬蟲不會讀這裡** |
+
+所以 `public/robots.txt` 目前 **0 效果**，其中的 `Disallow` 與 `Sitemap:` 宣告都不生效。
+檔案先留著（接自有網域後就會自動生效），但**不要把它當成已完成的 SEO 工作**。
+
+替代方案，兩者都有效：
+- 管理頁的 `<meta name="robots" content="noindex, nofollow">` 是頁面層級，**照常有效**，管理頁其實沒有外洩風險。
+- `sitemap.xml` 放子路徑本身合法，但失去 robots.txt 指向後，只能在 GSC 手動提交。
+
+**8. 改 LINE 色票要連 `.line-contact-card` 一起改。**
+`--color-line` 之外，`style.css` 的 `.line-contact-card` 另有一組硬編碼的 rgba 漸層。
+只改變數會漏掉這張卡片。2026-09-10 已一併改為 `#017a35` 系。
+
 ---
 
 ## 5. 待辦清單（2026-09-10 稽核產出，依施工順序排列）
@@ -125,10 +147,12 @@ cp950 主控台跑 Python 輸出繁中會 `UnicodeEncodeError`，前面加 `PYTH
 
 | # | 優先 | 項目 | 位置 | 預估 | 狀態 |
 |---|---|---|---|---|---|
-| A1 | 🔴 阻斷 | 改寫 FAQ 第 3 題，讓它與案例頁現況一致 | `src/main.jsx:241` | 10 分 | ✅ |
-| A2 | 🔴 阻斷 | LINE 按鈕改 `#017A35`、hover `#006B2E`（原白字對比僅 2.26:1，AA 不過） | `src/handoff-fixes.css` | 10 分 | ✅ |
+| A1 | 🔴 阻斷 | 改寫 FAQ 第 3 題，讓它與案例頁現況一致 | `src/main.jsx:241` | 10 分 | ✅ 已複驗 |
+| A2 | 🔴 阻斷 | LINE 按鈕改 `#017A35`、hover `#006B2E`（原白字對比僅 2.26:1，AA 不過） | `src/style.css:13`（已從 handoff-fixes.css 併回） | 10 分 | ✅ 已複驗 |
+| A3 | 🔴 阻斷 | 修 `c2f7fbd` 兩個無障礙迴歸：`aria-controls` 指向不存在元素（9/9）、`aria-hidden` 藏掉分類卡與索引卡張數 | `src/cases.jsx`、`style.css` | 30 分 | ✅ **待 Codex 覆審** |
 | B1 | 🟠 高 | scenario 背景圖改 `<img loading="lazy">`＋`object-fit:cover`，首屏 1.56 MB → 約 0.8 MB | `src/main.jsx:390`、`style.css` | 1 小時 | ⬜ |
-| B2 | 🔴 阻斷 | 補 `public/robots.txt` 與 `public/sitemap.xml`，接 GSC | 新檔 | 1 小時 | 🟨 |
+| B2 | 🔴 阻斷 | ~~補 robots.txt~~ ＋ `sitemap.xml`，接 GSC。**robots.txt 這半做不到**（見陷阱 7），剩下的是去 GSC 手動提交 sitemap | GSC 後台 | 30 分 | ⬜ **需業主帳號** |
+| B5 | 🟢 中 | 案例頁 375px 下 header 導覽 9 個膠囊文字重疊溢出（既有問題，非 `c2f7fbd` 造成） | `src/style.css` `.desktop-nav` | 1 小時 | ⬜ |
 | B3 | 🟠 高 | 加數字錨點帶（58 張實拍／9 類相簿／4 區到府）＋風險逆轉三句 | `src/main.jsx` | 2 小時 | ⬜ |
 | B4 | 🟠 高 | 首屏位階對調：品牌名縮至 32–40px，價值主張升至 60px＋；加一行計價說明 | `src/style.css`、`main.jsx` | 3 小時 | ⬜ |
 | C1 | 🟠 高 | `handleFiles` 補 `try/finally`；移除硬編碼密碼 | `src/caseAdmin.jsx:88`、`:6` | 30 分 | ✅ |
@@ -157,6 +181,52 @@ Google Search Console 送審仍需有權限的人手動處理。
 ---
 
 ## 6. 進度紀錄（倒序）
+
+### 2026-09-10 複驗 Codex 三批＋修正三處（Claude）— ⚠️ 請 Codex 覆審
+
+**一、複驗 Codex `aeabee6` / `0590fb0` / `2251288`**
+
+| 待辦 | 結論 | 依據 |
+|---|---|---|
+| A1 FAQ | ✅ 通過 | 新文案承認案例頁有實拍相簿，同時守住內容邊界 |
+| A2 LINE 對比 | ✅ 通過，且比要求更完整 | 四顆按鈕實測：Hero／聯絡卡／dock 皆 **5.47:1**；header 小鈕 **4.74:1**（改前 2.09:1，此顆原本沒列進待辦，Codex 自己補了） |
+| C1 caseAdmin | ✅ 通過，做法優於建議 | 改用 `Promise.allSettled` 並行處理，單張失敗不影響其他，另加「N 張失敗」提示 |
+| B2 robots/sitemap | ❌ **假綠，已改回 ⬜** | robots.txt 放子路徑對爬蟲無效，實測見陷阱 7 |
+
+**二、Claude 本輪修正**
+
+1. **`handoff-fixes.css` 併回 `style.css` 並刪除該檔**（原檔覆寫有效，但有兩個副作用）
+   - `style.css:13` 的舊值 `#06c755` 還留在原地，下一個人讀 style.css 會被誤導——正是本檔陷阱 3 警告的漂移模式，只是搬進了 CSS 內部。
+   - **打包 chunk 命名被污染**：189 KB 的 React runtime 原本叫 `style-*.js`，變成 `handoff-fixes-*.js`。已還原。
+   - 順手發現 `.line-contact-card` 另有硬編碼的舊綠漸層，只改變數會漏掉（已記為陷阱 8）。
+2. **修 `aria-controls` 指向不存在的元素（9/9）**：`album-photo-grid` 容器改為永遠留在 DOM，用 `hidden={!isOpen}` 控制，內容仍條件式渲染，**lazy 效益完全保留**。另加 `.album-photo-grid[hidden]{display:none}`，因為 `display:grid` 會蓋過 `[hidden]` 預設值。
+3. **修 `aria-hidden` 藏掉資訊性內容**：hero 分類卡由 `div` 改為 `ul/li` 並移除 `aria-hidden`、加 `aria-label`；索引卡的 `album-index-icon-panel` 移除 `aria-hidden`，只在裝飾性 icon 上保留。CSS 補上 list reset 以免 `ul` 預設縮排破版。
+
+**三、實測驗證**（本地 build 產物，靜態伺服器）
+
+- `pnpm lint` 0 error 0 warning；`pnpm build` 成功，chunk 名已還原為 `style-B6zZGKp5.js`
+- `aria-controls` 目標存在：**9/9**（修正前 0/9）
+- 抽屜關閉時：`hidden=true`、`display:none`、內部 `<img>` **0 張** → lazy 效益確認保留
+- 點開後：`aria-expanded=true`、`hidden=false`、`display:grid`、3 張圖**全部帶 `loading="lazy"`**、同時僅 1 個抽屜開啟
+- 鍵盤：觸發元素為 `<button>`，可聚焦、可按 Enter
+- 深連結 `#grease-kitchen` 直接開啟頁面會正確展開該相簿
+- 分類卡可讀文字已恢復：「一般清潔 15 張 重點清潔 14 張 特殊清潔 13 張 商業廚房 16 張＋影片」
+- 375／桌面截圖版面正常，`ul` 改動未破版
+
+**四、本輪明確未驗**
+
+- 未用真正的螢幕閱讀器（NVDA／VoiceOver）測，只驗了 DOM 與 ARIA 屬性正確性
+- 未截到抽屜展開後的完整視覺（捲動指令未生效）；但該區塊 CSS 未改動，樣式與 `c2f7fbd` 相同
+- 未測 768 斷點（本輪只測 375 與桌面）
+- 未跑 Lighthouse
+
+**五、⚠️ 給 Codex 的覆審重點**
+
+1. `.album-photo-grid` 改用 `hidden` 屬性——請確認在你測過的裝置上，關閉時沒有殘留空白間距（`.case-album-section` 的 gap 可能仍計入）。
+2. hero 分類卡改成 `ul/li`——請確認 `.hero-category-card:nth-child(n)` 的 `translateY(18px)` 交錯效果在 `li` 上仍如你原本設計，尤其 768 斷點。
+3. 四張分類卡的張數（15／14／13／16）**是硬編碼**，目前正確（合計 58），但 `albums` 一改就會漂移。建議改成從 `albums` 計算，你來決定要不要動。
+4. `caseAdmin` 的 SHA-256：實測 hash 就是 `SHA-256('1549')`，4 位數字空間全掃 10000 組僅需 **0.001 秒**（第 1550 組破出）。hash 也仍在公開 bundle。功能無妨（工具不碰後端），但**別讓它看起來像有保護**——本檔陷阱 4 的說明已足夠，這裡只是提醒不要再往「加強加密」的方向投資。
+5. B2 請不要再嘗試用 `public/robots.txt` 解決——那個路徑先天無效，見陷阱 7。
 
 ### 2026-09-10 修正首批阻斷項（Codex，基準 `aeabee6`）— 已驗 lint/build
 

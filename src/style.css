@@ -10,8 +10,10 @@
   --color-primary-soft: #dff3ef;
   --color-accent: #7cc4e8;
   --color-mint: #a7dcc8;
-  --color-line: #06c755;
-  --color-line-strong: #04a948;
+  /* LINE 綠：白字需達 WCAG AA。原 #06c755 對比僅 2.26:1，不合格。
+     #017a35 = 5.47:1、#006b2e = 6.68:1。改動前請先算對比再換色。 */
+  --color-line: #017a35;
+  --color-line-strong: #006b2e;
   --color-border: #d8d1c4;
   --color-focus: #174f5d;
   --shadow-soft: 0 20px 60px rgba(35, 66, 76, .1);
@@ -1496,10 +1498,10 @@ body:has(#commercial-kitchen:target) .nav-album-9 {
 
 .line-contact-card {
   background:
-    linear-gradient(135deg, rgba(6, 199, 85, .95), rgba(4, 169, 72, .9)),
+    linear-gradient(135deg, rgba(1, 122, 53, .96), rgba(0, 107, 46, .92)),
     rgba(255, 255, 255, .12);
-  border-color: rgba(156, 240, 182, .5);
-  box-shadow: 0 18px 40px rgba(6, 199, 85, .22);
+  border-color: rgba(156, 240, 182, .58);
+  box-shadow: 0 18px 40px rgba(0, 107, 46, .24);
 }
 
 .phone-contact-card {
@@ -1702,6 +1704,10 @@ details p {
   align-content: center;
   gap: 14px;
   min-height: 300px;
+  /* 語意上是清單（ul/li），要清掉瀏覽器預設的縮排與項目符號 */
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 .hero-category-card {
@@ -2081,6 +2087,12 @@ details p {
   display: grid;
   gap: 16px;
   margin-top: 18px;
+}
+
+/* 抽屜關閉時容器仍留在 DOM，讓 aria-controls 指得到；
+   display:grid 會蓋過 [hidden] 的預設值，所以要明確關掉。 */
+.album-photo-grid[hidden] {
+  display: none;
 }
 
 .album-photo-card {

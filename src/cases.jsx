@@ -14,7 +14,6 @@ import {
   Warehouse,
 } from 'lucide-react'
 import './style.css'
-import './handoff-fixes.css'
 
 const assetPath = (path) => `${import.meta.env.BASE_URL}${path.replace(/^\/+/, '')}`
 const lineUrl = 'https://line.me/R/ti/p/~chenli0775'
@@ -210,7 +209,7 @@ export function CasesApp() {
               </a>
             </div>
           </div>
-          <div className="case-cover-stack case-category-stack" aria-hidden="true">
+          <ul className="case-cover-stack case-category-stack" aria-label="案場照片分類與張數">
             {[
               { title: '一般清潔', count: '15 張', icon: Sparkles },
               { title: '重點清潔', count: '14 張', icon: Droplets },
@@ -219,14 +218,14 @@ export function CasesApp() {
             ].map((item) => {
               const Icon = item.icon
               return (
-                <div className="hero-category-card" key={item.title}>
-                  <Icon size={28} />
+                <li className="hero-category-card" key={item.title}>
+                  <Icon size={28} aria-hidden="true" />
                   <strong>{item.title}</strong>
                   <span>{item.count}</span>
-                </div>
+                </li>
               )
             })}
-          </div>
+          </ul>
         </section>
 
         <section className="section album-index" aria-label="案例相簿列表">
@@ -244,8 +243,8 @@ export function CasesApp() {
                 key={album.slug}
                 onClick={() => setOpenAlbum(album.slug)}
               >
-                <div className="album-index-icon-panel" aria-hidden="true">
-                  <Icon size={30} />
+                <div className="album-index-icon-panel">
+                  <Icon size={30} aria-hidden="true" />
                   <span>
                     <Icon size={19} aria-hidden="true" />
                     {album.photos.length} 張
@@ -284,8 +283,9 @@ export function CasesApp() {
                 <span className="album-drawer-meta">{album.photos.length} 張</span>
                 <ChevronDown className="album-drawer-chevron" size={26} aria-hidden="true" />
               </button>
-              {isOpen && (
-                <div className="album-photo-grid" id={`${album.slug}-photos`}>
+              <div className="album-photo-grid" id={`${album.slug}-photos`} hidden={!isOpen}>
+                {isOpen && (
+                  <>
                   {album.videos?.map((video, index) => (
                     <figure className="album-photo-card album-video-card" key={video}>
                       <video
@@ -346,8 +346,9 @@ export function CasesApp() {
                       </figcaption>
                     </figure>
                   ))}
-                </div>
-              )}
+                  </>
+                )}
+              </div>
               {!isOpen && (
                 <p className="album-drawer-hint">點開後才載入照片，節省手機流量。</p>
               )}
