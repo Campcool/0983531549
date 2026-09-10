@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import {
   ArrowLeft,
   Camera,
+  ChevronDown,
   Droplets,
   Flame,
   ImagePlus,
@@ -27,6 +28,13 @@ const generatedPhotos = (folder, prefix, count) =>
   )
 
 const floorAdhesivePhotos = generatedPhotos('floor-adhesive-removal', 'floor-adhesive-removal', 7)
+
+const getAlbumFromHash = () => {
+  if (typeof window === 'undefined') return ''
+
+  const hash = decodeURIComponent(window.location.hash.replace('#', ''))
+  return albums.some((album) => album.slug === hash) ? hash : ''
+}
 
 const albums = [
   {
@@ -124,6 +132,28 @@ const albums = [
 ]
 
 export function CasesApp() {
+  const [openAlbum, setOpenAlbum] = React.useState(getAlbumFromHash)
+
+  React.useEffect(() => {
+    const syncAlbumFromHash = () => setOpenAlbum(getAlbumFromHash())
+
+    syncAlbumFromHash()
+    window.addEventListener('hashchange', syncAlbumFromHash)
+    return () => window.removeEventListener('hashchange', syncAlbumFromHash)
+  }, [])
+
+  const toggleAlbum = (slug) => {
+    const nextAlbum = openAlbum === slug ? '' : slug
+    setOpenAlbum(nextAlbum)
+
+    if (nextAlbum) {
+      window.history.replaceState(null, '', `#${nextAlbum}`)
+      return
+    }
+
+    window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}`)
+  }
+
   return (
     <div className="site-shell cases-page">
       <header className="site-header" aria-label="案例頁主選單">
@@ -138,7 +168,14 @@ export function CasesApp() {
         </a>
         <nav className="desktop-nav" aria-label="案例分類">
           {albums.map((album, index) => (
-            <a className={`nav-album-${index + 1}`} href={`#${album.slug}`} key={album.slug}>{album.title}</a>
+            <a
+              className={`nav-album-${index + 1}`}
+              href={`#${album.slug}`}
+              key={album.slug}
+              onClick={() => setOpenAlbum(album.slug)}
+            >
+              {album.title}
+            </a>
           ))}
         </nav>
         <div className="header-actions">
@@ -172,10 +209,22 @@ export function CasesApp() {
               </a>
             </div>
           </div>
-          <div className="case-cover-stack" aria-hidden="true">
-            <img src={albums[1].photos[0]} alt="" />
-            <img src={albums[2].photos[0]} alt="" />
-            <img src={albums[8].photos[0]} alt="" />
+          <div className="case-cover-stack case-category-stack" aria-hidden="true">
+            {[
+              { title: '一般清潔', count: '15 張', icon: Sparkles },
+              { title: '重點清潔', count: '14 張', icon: Droplets },
+              { title: '特殊清潔', count: '13 張', icon: ShieldAlert },
+              { title: '商業廚房', count: '16 張＋影片', icon: Warehouse },
+            ].map((item) => {
+              const Icon = item.icon
+              return (
+                <div className="hero-category-card" key={item.title}>
+                  <Icon size={28} />
+                  <strong>{item.title}</strong>
+                  <span>{item.count}</span>
+                </div>
+              )
+            })}
           </div>
         </section>
 
@@ -187,20 +236,24 @@ export function CasesApp() {
           </div>
           {albums.map((album) => {
             const Icon = album.icon
-            const cover = album.photos[0]
             return (
-              <a className="album-index-card" href={`#${album.slug}`} key={album.slug}>
-                <figure>
-                  <img src={cover} alt={`${album.title}相簿封面`} width="1200" height="900" loading="eager" />
-                  <figcaption>
+              <a
+                className="album-index-card"
+                href={`#${album.slug}`}
+                key={album.slug}
+                onClick={() => setOpenAlbum(album.slug)}
+              >
+                <div className="album-index-icon-panel" aria-hidden="true">
+                  <Icon size={30} />
+                  <span>
                     <Icon size={19} aria-hidden="true" />
                     {album.photos.length} 張
-                  </figcaption>
-                </figure>
+                  </span>
+                </div>
                 <div>
                   <span>{album.category}</span>
                   <strong>{album.title}</strong>
-                  <small>查看相簿</small>
+                  <small>點開相簿</small>
                 </div>
               </a>
             )
@@ -209,80 +262,94 @@ export function CasesApp() {
 
         {albums.map((album) => {
           const Icon = album.icon
+          const isOpen = openAlbum === album.slug
           return (
-            <section className="case-album-section" id={album.slug} key={album.slug}>
-              <div className="case-album-heading">
+            <section className={`case-album-section album-drawer ${isOpen ? 'is-open' : ''}`} id={album.slug} key={album.slug}>
+              <button
+                className="case-album-heading album-drawer-trigger"
+                type="button"
+                aria-expanded={isOpen}
+                aria-controls={`${album.slug}-photos`}
+                onClick={() => toggleAlbum(album.slug)}
+              >
                 <div className="album-icon" aria-hidden="true">
                   <Icon size={28} />
                 </div>
-                <div>
+                <div className="case-album-title">
                   <p className="eyebrow">{album.category}</p>
                   <h2>{album.title}</h2>
                   <p>{album.copy}</p>
                 </div>
-              </div>
-              <div className="album-photo-grid">
-                {album.videos?.map((video, index) => (
-                  <figure className="album-photo-card album-video-card" key={video}>
-                    <video
-                      src={video}
-                      controls
-                      preload="metadata"
-                      playsInline
-                      poster={album.photos[0]}
-                    />
-                    <figcaption>
-                      <Camera size={16} aria-hidden="true" />
-                      案場影片 {String(index + 1).padStart(2, '0')}
-                    </figcaption>
-                  </figure>
-                ))}
-                {album.beforeAfter?.map((pair, index) => (
-                  <figure className="album-photo-card before-after-card" key={`${pair.label}-${index}`}>
-                    <div className="before-after-grid">
-                      <div className="before-after-panel">
-                        <img
-                          src={pair.before}
-                          alt={`${album.title}${pair.label}清潔前`}
-                          width="900"
-                          height="1200"
-                          loading="lazy"
-                        />
-                        <span>清潔前</span>
+                <span className="album-drawer-meta">{album.photos.length} 張</span>
+                <ChevronDown className="album-drawer-chevron" size={26} aria-hidden="true" />
+              </button>
+              {isOpen && (
+                <div className="album-photo-grid" id={`${album.slug}-photos`}>
+                  {album.videos?.map((video, index) => (
+                    <figure className="album-photo-card album-video-card" key={video}>
+                      <video
+                        src={video}
+                        controls
+                        preload="metadata"
+                        playsInline
+                        poster={album.photos[0]}
+                      />
+                      <figcaption>
+                        <Camera size={16} aria-hidden="true" />
+                        案場影片 {String(index + 1).padStart(2, '0')}
+                      </figcaption>
+                    </figure>
+                  ))}
+                  {album.beforeAfter?.map((pair, index) => (
+                    <figure className="album-photo-card before-after-card" key={`${pair.label}-${index}`}>
+                      <div className="before-after-grid">
+                        <div className="before-after-panel">
+                          <img
+                            src={pair.before}
+                            alt={`${album.title}${pair.label}清潔前`}
+                            width="900"
+                            height="1200"
+                            loading="lazy"
+                          />
+                          <span>清潔前</span>
+                        </div>
+                        <div className="before-after-panel">
+                          <img
+                            src={pair.after}
+                            alt={`${album.title}${pair.label}清潔後`}
+                            width="900"
+                            height="1200"
+                            loading="lazy"
+                          />
+                          <span>清潔後</span>
+                        </div>
                       </div>
-                      <div className="before-after-panel">
-                        <img
-                          src={pair.after}
-                          alt={`${album.title}${pair.label}清潔後`}
-                          width="900"
-                          height="1200"
-                          loading="lazy"
-                        />
-                        <span>清潔後</span>
-                      </div>
-                    </div>
-                    <figcaption>
-                      <Camera size={16} aria-hidden="true" />
-                      {pair.label}
-                    </figcaption>
-                  </figure>
-                ))}
-                {(album.detailPhotos ?? album.photos).map((photo, index) => (
-                  <figure className="album-photo-card" key={photo}>
-                    <img
-                      src={photo}
-                      alt={`${album.title}案場照片 ${index + 1}`}
-                      width="1200"
-                      height="900"
-                      loading="lazy"
-                    />
-                    <figcaption>
-                      <Camera size={16} aria-hidden="true" />
-                      案場照片 {String(index + 1).padStart(2, '0')}
-                    </figcaption>
-                  </figure>
-                ))}
-              </div>
+                      <figcaption>
+                        <Camera size={16} aria-hidden="true" />
+                        {pair.label}
+                      </figcaption>
+                    </figure>
+                  ))}
+                  {(album.detailPhotos ?? album.photos).map((photo, index) => (
+                    <figure className="album-photo-card" key={photo}>
+                      <img
+                        src={photo}
+                        alt={`${album.title}案場照片 ${index + 1}`}
+                        width="1200"
+                        height="900"
+                        loading="lazy"
+                      />
+                      <figcaption>
+                        <Camera size={16} aria-hidden="true" />
+                        案場照片 {String(index + 1).padStart(2, '0')}
+                      </figcaption>
+                    </figure>
+                  ))}
+                </div>
+              )}
+              {!isOpen && (
+                <p className="album-drawer-hint">點開後才載入照片，節省手機流量。</p>
+              )}
             </section>
           )
         })}
