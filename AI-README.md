@@ -182,6 +182,47 @@ Google Search Console 送審仍需有權限的人手動處理。
 
 ## 6. 進度紀錄（倒序）
 
+### 2026-09-10 修首頁 header 導覽與聯絡鈕重疊（Claude）— ⚠️ 請 Codex 覆審
+
+**業主回報**：首頁上方導覽最後一項與右側 LINE／粉專按鈕重疊。**這是既有 bug，不是本日任何一批改動造成的。**
+
+**成因**（實測 900px）：
+
+桌面版（`min-width: 820px`）的 header 是
+`grid-template-columns: auto minmax(0, 1fr) auto` / `"brand nav actions"`，grid 佈局本身正確
+（nav 欄 209–639、actions 647–840，兩者不重疊）。問題在 **`.desktop-nav a` 有 `min-width: 116px`**：
+6 個膠囊硬要 721px，而 `minmax(0, 1fr)` 的欄位只給得出 430px，膠囊便畫到欄位外，
+最後一項「服務地區」跑到 814–930，直接蓋住 647 起的聯絡鈕。
+`.desktop-nav` 的 `overflow-x: auto` 則會生出橫向捲動條——那正是先前 `4dc02a3`
+「fix: remove mobile nav horizontal scroll」修掉過的東西，在桌面版又長回來。
+
+**改法**：
+
+1. `.desktop-nav a` 拿掉 `min-width: 116px`（改 `auto`），padding 與 font-size 改用
+   `clamp()` 隨視窗流動，窄桌面自動收斂。
+2. 新增 `@media (min-width: 820px) and (max-width: 1399px)`：header 改回兩欄
+   `"brand nav"`，`.header-actions` 收起。底部 dock 已提供 LINE／電話／粉專，聯絡動線不受影響。
+
+**斷點怎麼算出來的**（過程留著，避免下次又猜）：膠囊字級在 1308px 後達 clamp 上限 17px，
+導覽自然寬固定 811px；同列還要放 logo 204 + 聯絡鈕 193 + gap 16 + 頁緣 128 = 556px，
+故需 1367px 才夠。實測 1280px 重疊 39px、1360px 仍溢出 7px 且間距只剩 1px，因此取 1400 為界。
+
+**實測**（首頁，`need` = 導覽自然寬，`have` = 欄位可用寬）：
+
+| 寬度 | 聯絡鈕 | need / have | 溢出 | 碰撞 | 間距 |
+|---|---|---|---|---|---|
+| 820 | 收起 | 559 / 559 | 無 | 無 | — |
+| 1024 | 收起 | 735 / 735 | 無 | 無 | — |
+| 1399 | 收起 | 1044 / 1044 | 無 | 無 | — |
+| 1400 | 顯示 | 844 / 844 | 無 | 無 | 21px |
+| 1920 | 顯示 | 1364 / 1364 | 無 | 無 | 281px |
+
+- 案例頁**不受影響**：`.cases-page .header-actions`（specificity 0,2,0）勝過新規則的
+  `.header-actions`（0,1,0），900px 實測聯絡鈕仍顯示、無碰撞、header 84px。
+- 行動版不受影響：改動全在 `min-width: 820px` 之內。
+
+**本輪明確未驗**：未測 820px 以下首頁 header 的既有 3 欄網格是否也有類似擠壓。
+
 ### 2026-09-10 移除案例頁 header 相簿導覽（Claude，業主指定）— ⚠️ 請 Codex 覆審
 
 **業主回報**：案例頁上方那排導覽「蠻不喜歡但不知道怎麼改」。診斷後由業主選定「直接移除」。

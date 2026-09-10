@@ -2466,10 +2466,14 @@ select {
 
   .desktop-nav a {
     flex: 0 0 auto;
-    min-width: 116px;
+    /* 不設 min-width：固定 116px 會讓 6 個膠囊硬要 721px，
+       在 grid 的 minmax(0,1fr) 欄位裡溢出、蓋到右側聯絡鈕。
+       改成隨視窗流動，窄桌面自動收斂。 */
+    min-width: auto;
     min-height: 48px;
-    padding-right: 14px;
-    padding-left: 14px;
+    padding-right: clamp(9px, 1.1vw, 14px);
+    padding-left: clamp(9px, 1.1vw, 14px);
+    font-size: clamp(14px, 1.3vw, 17px);
     white-space: nowrap;
   }
 
@@ -2578,6 +2582,25 @@ select {
   .site-footer {
     flex-direction: row;
     justify-content: space-between;
+  }
+}
+
+/* 820–1399px：首頁的 logo ＋ 6 個導覽 ＋ LINE/粉專 塞不進同一列。
+   膠囊字級在 1308px 之後達 clamp 上限 17px，導覽自然寬固定 811px；
+   同時要放 logo(204) + 聯絡鈕(193) + gap(16) + 頁緣(128)，共佔 556px，
+   因此需要 811 + 556 = 1367px 才容納得下。實測 1280px 重疊 39px、
+   1360px 仍溢出 7px，故取 1400 為界。
+   收起聯絡鈕可讓導覽多拿 201px，此區間足夠。底部 dock 已提供
+   LINE／電話／粉專，收起 header 聯絡鈕不影響聯絡動線。
+   案例頁不受影響：`.cases-page` 的規則 specificity 較高，且該頁沒有導覽。 */
+@media (min-width: 820px) and (max-width: 1399px) {
+  .site-header {
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas: "brand nav";
+  }
+
+  .header-actions {
+    display: none;
   }
 }
 
