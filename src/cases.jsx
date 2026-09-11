@@ -6,10 +6,10 @@ import {
   Camera,
   ChevronDown,
   Droplets,
-  ImagePlus,
   Phone,
   ShieldAlert,
   Sparkles,
+  Trash2,
   Utensils,
   Warehouse,
 } from 'lucide-react'
@@ -46,12 +46,15 @@ const albums = [
     photos: generatedPhotos('general-cleaning', 'general-cleaning', 10),
   },
   {
-    slug: 'case-20260909',
-    title: '20260909 案場紀錄',
-    category: '裝潢細清',
-    icon: ImagePlus,
-    copy: '依實際案場日期整理，作為裝潢後細清與空屋整理需求的照片參考。',
-    photos: generatedPhotos('case-20260909', 'case-20260909', 5),
+    // 2026-09-11 業主回報：這批照片是垃圾屋清運現場，不是裝潢細清，
+    // 整個相簿改歸特殊清潔。浮水印腳本的 Label 本來就標「退租清運」，
+    // 一直是前台分類標錯。
+    slug: 'garbage-clearance',
+    title: '特殊清潔 垃圾清運',
+    category: '特殊清潔',
+    icon: Trash2,
+    copy: '垃圾屋、囤積物與退租清空，先確認物品量、搬運動線與可處理範圍，再安排清運方式。',
+    photos: generatedPhotos('garbage-clearance', 'garbage-clearance', 5),
   },
   {
     slug: 'mold-removal',

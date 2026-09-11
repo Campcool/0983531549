@@ -1622,6 +1622,29 @@ body:has(#areas:target) .nav-areas {
   transition: transform .24s cubic-bezier(.34, 1.56, .64, 1), background-color .2s ease;
 }
 
+/* 林口、龜山是工作室所在與最常到府的區域，視覺上要與其他縣市分層。 */
+.area-item-primary {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 2px;
+  border-color: color-mix(in srgb, var(--color-primary) 45%, white);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, .9), var(--color-primary-soft));
+  box-shadow: 0 10px 26px rgba(47, 143, 143, .12);
+}
+
+.area-item-primary svg {
+  color: var(--color-primary);
+}
+
+.area-item-primary small {
+  color: var(--color-muted);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: .02em;
+}
+
 .area-item svg {
   flex: 0 0 auto;
 }
@@ -2461,6 +2484,149 @@ select {
   gap: 7px;
   color: var(--color-primary);
   font-weight: 900;
+}
+
+/* ── Google 評論區 ──────────────────────────────
+   只呈現文字與連回商家的路徑；星等由 Google 端顯示，
+   本站不得加 Review／AggregateRating 結構化資料。 */
+.review-summary {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  margin-bottom: 20px;
+  padding: 16px 20px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.review-summary strong {
+  color: var(--color-primary-strong);
+  font-size: 34px;
+  font-weight: 900;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.review-summary span {
+  color: var(--color-muted);
+  font-size: 15px;
+}
+
+.review-summary a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+  color: var(--color-primary);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.review-list {
+  display: grid;
+  gap: 14px;
+}
+
+.review-card {
+  margin: 0;
+  padding: 20px 22px;
+  border: 1px solid var(--color-border);
+  border-left: 4px solid var(--color-primary);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.review-card p {
+  margin: 0 0 12px;
+  color: var(--color-ink);
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.review-card footer {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+}
+
+.review-card footer strong {
+  color: var(--color-primary-strong);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.review-card footer small {
+  color: var(--color-muted);
+  font-size: 13px;
+}
+
+/* ── 商家資料與地圖 ────────────────────────────── */
+.business-grid {
+  display: grid;
+  gap: 18px;
+}
+
+.business-info dl {
+  display: grid;
+  gap: 12px;
+  margin: 0 0 18px;
+}
+
+.business-info dl > div {
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr);
+  gap: 10px;
+  align-items: baseline;
+}
+
+.business-info dt {
+  color: var(--color-muted);
+  font-size: 14px;
+}
+
+.business-info dd {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.7;
+}
+
+.business-info dd a {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.business-map {
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  line-height: 0;
+}
+
+.business-map iframe {
+  width: 100%;
+  height: 280px;
+  border: 0;
+}
+
+@media (min-width: 820px) {
+  .business-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    align-items: start;
+    gap: 28px;
+  }
+
+  .business-map iframe {
+    height: 340px;
+  }
+
+  .review-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 480px) {

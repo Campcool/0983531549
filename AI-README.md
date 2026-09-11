@@ -7,7 +7,12 @@
 > 4. **所有時間戳一律台灣時間（Asia/Taipei, UTC+8）**。
 > 5. **不要把「已完成」寫在沒有實測的項目上**。未驗的事項寫進「本輪明確未驗」。
 
-最後更新：2026-09-11（Codex）— **準備接入自有網域 `jjf.tw`**：Vite base 改為 `/`，canonical／OG／JSON-LD／sitemap／robots／分享轉址同步改為根網域路徑。
+最後更新：2026-09-11（Claude）— **SEO／GEO 審查＋業主四項需求**。
+⚠️ 兩件事優先：(1) HTTPS 憑證仍在簽發，`https://jjf.tw/` 連不上，而全站 canonical／sitemap 都寫 https（待辦 G2）；
+(2) **Google 商家已存在且是最強資產（4.5★／31 則評論／387 張相片），但「網站」欄位指向 FB 不是 jjf.tw**（待辦 G1，5 分鐘可改）。
+本輪完成：垃圾清運相簿改分類、林口／龜山標註、頁尾商家地圖、Google 評論區、JSON-LD 補 address/geo/sameAs。⚠️ 請 Codex 覆審。
+
+（上一輪 Codex）準備接入自有網域 `jjf.tw`：Vite base 改為 `/`，canonical／OG／JSON-LD／sitemap／robots／分享轉址同步改為根網域路徑。
 本輪已通過 `pnpm lint`、`pnpm build`、本機 preview 首頁／案例頁／分享轉址驗證；DNS、GitHub Pages custom domain、HTTPS 憑證與 LINE/社群快取仍需完成瀏覽器設定與傳播確認。
 
 ---
@@ -24,6 +29,13 @@
 | 部署 | GitHub Actions（`.github/workflows/deploy.yml`）→ push `main` 自動部署 |
 | Pages 來源 | 必須維持 `GitHub Actions`，不要改回分支部署 |
 | 轉換目標 | **LINE 諮詢／撥號**（服務站，不是訂單站，不要套租賃站的 KPI） |
+| **Google 商家** | **已存在且經營良好**：潔淨坊清潔，**4.5 星／31 則評論／387+ 張相片**，最早評論在 6 年前 |
+| 商家地址 | 244 新北市林口區仁愛路二段 190 號（座標 25.0740067, 121.3804504） |
+| 商家連結 | https://maps.app.goo.gl/m9EWz1xmNiZnvjMw7 |
+
+> ⚠️ **不要再寫「第一優先：建立 Google 商家檔案」**——商家早就有了，而且是這個站目前
+> **最強的資產**（31 則真實評論、387 張照片，遠多於網站的 58 張）。該做的是**優化既有商家**，
+> 不是建立。最高投報的一項見待辦 G1。
 
 ### 頁面結構（Vite 多入口 MPA，非 SPA）
 
@@ -178,6 +190,11 @@ cp950 主控台跑 Python 輸出繁中會 `UnicodeEncodeError`，前面加 `PYTH
 | C1 | 🟠 高 | `handleFiles` 補 `try/finally`；移除硬編碼密碼 | `src/caseAdmin.jsx:88`、`:6` | 30 分 | ✅ |
 | C2 | 🟡 待決策 | LINE 標誌換官方素材（現為自繪，違反自家 DESIGN.md） | `public/brand/icon-line.svg` | 待業主 | ⬜ |
 | C3 | 🟢 中 | 圖片轉 WebP、刪 4.63 MB 死資產、同步 DESIGN.md、CI 加 `pnpm lint` | 多處 | 半天 | ⬜ |
+| **G1** | 🔴 **最高投報** | **Google 商家的「網站」欄位目前指向 `facebook.com/chenli0775/`，不是 `jjf.tw`**。商家是本地搜尋最大流量來源，等於把流量送給 FB。改一個欄位即可 | Google 商家後台 | 5 分 | ⬜ **需業主帳號** |
+| G2 | 🔴 阻斷 | **HTTPS 憑證尚未簽發完成**：`https_enforced=false`、憑證 `authorization_created`，`https://jjf.tw/` 連不上，但全站 canonical／OG／sitemap 都寫 https。DNS 已正確，只需等簽發後回 Pages 設定勾選 Enforce HTTPS | GitHub Pages 後台 | 等待＋5 分 | 🟨 **簽發中** |
+| G3 | 🟠 高 | `dist` 內沒有 `CNAME` 檔。用 Actions 部署時建議把 CNAME 放進產物，避免 custom domain 設定在重新部署後遺失 | `public/CNAME` | 10 分 | ⬜ |
+| G4 | 🟠 高 | **全站是 CSR，爬蟲看到的 `<body>` 是 0 字**。Googlebot 會渲染 JS，但多數 AI 爬蟲（GPTBot／ClaudeBot／PerplexityBot）不執行 JS，等於整站內容對 AI 搜尋不可見 | 需架構決策 | 需討論 | ⬜ |
+| G5 | 🟢 中 | 案例頁沒有任何 JSON-LD（首頁有）。可補 `ImageGallery` 與 `BreadcrumbList` | `cases/index.html` | 30 分 | ⬜ |
 | E1 | 🟡 **待業主決定** | 首頁與案例頁的服務分類不對應：首頁「一般清潔」（退租入住／大掃除／清運）在案例頁**沒有任何對應相簿**；首頁大類叫「裝潢清潔」、案例頁相簿叫「裝潢細清」 | `src/main.jsx:164`、`src/cases.jsx` | 需先確認 | ⬜ |
 | D1 | 🟡 待討論 | 設計回流機制（定期清潔提醒、老客推薦）— 五段檢查第 5 段完全空白 | — | 需先討論 | ⬜ |
 
@@ -213,6 +230,81 @@ Google Search Console 送審仍需有權限的人手動處理。
 ---
 
 ## 6. 進度紀錄（倒序）
+
+### 2026-09-11 SEO／GEO 審查＋業主四項需求（Claude）— ⚠️ 請 Codex 覆審
+
+#### 一、⚠️ 上架報告與實測有落差，請以實測為準
+
+`潔淨坊網站上架總結報告.docx` 有三處與我實測不符，業主可能因此誤判進度：
+
+| 報告聲稱 | 實測（2026-09-11） |
+|---|---|
+| 「已勾選 Enforce HTTPS，網址會走安全連線」 | ❌ `https_enforced: false`，憑證狀態 `authorization_created`（**簽發中**） |
+| 「http 會導向 https」 | ❌ 相反：舊網址 301 → **`http://jjf.tw/`**（HTTP） |
+| 「Search Console 若顯示無法擷取，多半是時間差」 | ❌ **不是時間差**。`https://jjf.tw/` 實測連線失敗，而 sitemap 與 canonical 全寫 https，GSC 抓必然失敗 |
+
+**好消息是不必改任何設定**：DNS 完全正確（無 CAA 阻擋、無錯誤 AAAA、A 記錄正好是 GitHub 四個 IP、
+www CNAME 也對），憑證只是還在簽發。**等簽發完成後回 Pages 後台勾 Enforce HTTPS 即可**（待辦 G2）。
+在那之前不要把 SEO 標成已驗收。
+
+#### 二、Google 商家：本站最強的資產，但流量被送去 FB
+
+業主提供商家連結後查到：**4.5 星／31 則評論／387+ 張相片**，最早評論 6 年前。
+這比網站本身（58 張照片、0 則評論）強得多。
+
+**但商家的「網站」欄位指向 `facebook.com/chenli0775/`，不是 `jjf.tw`。**
+清潔服務是地區型生意，Google 商家通常比網站 SEO 更早帶來詢問，這個欄位等於把流量送給 FB。
+**改一個欄位，5 分鐘**，見待辦 G1。
+
+#### 三、業主本輪四項需求（已完成）
+
+1. **`20260909 案場紀錄` 實際是垃圾屋清運照片，不是裝潢細清** — 整個相簿改歸特殊清潔。
+   slug `case-20260909` → `garbage-clearance`，title 改「特殊清潔 垃圾清運」，icon 改 `Trash2`。
+   **實體目錄與檔名、浮水印腳本的 Slug／Prefix／Label 一併同步**（避免重蹈陷阱 11）。
+   附帶發現：浮水印腳本的 Label 本來就標「退租清運」，**一直是前台分類標錯**。
+   全 repo 掃描還揪出 `src/main.jsx:116` 也引用了這個路徑（首頁情境圖），只改 cases.jsx 的話首頁會 404。
+2. **服務地區特別標註林口、龜山** — 新增 `serviceAreas` 常數，兩區加 `.area-item-primary`
+   樣式與「最常到府」標記，文案改為「工作室位於林口，林口、龜山是最常到府的區域」。
+   JSON-LD 的 `areaServed` 也補上這兩個行政區。
+3. **頁尾補商家資料與地圖** — 新增 `.business-section`：商家名稱、地址、電話、LINE ID，
+   加 Google Maps 嵌入地圖（免 API key 的 `output=embed`，`loading="lazy"`）與「在 Google 地圖開啟」按鈕。
+4. **套用正向評論** — 新增 `.reviews-section`，逐字引用兩則有明確作者與時間的 Google 評論，
+   加上「4.5 / 31 則評論」與「在 Google 查看全部」連結。
+
+> ⚠️ **評論只放文字，絕不加 `Review`／`AggregateRating` 到本站 JSON-LD。**
+> 自家網站對自家服務標星等屬 self-serving markup，Google 會取消 rich result 甚至人工處罰。
+> 星等要讓 Google 從商家檔案自己顯示。已在 `main.jsx` 的 `googleReviews` 上方加註解提醒。
+> 這同時補上了首次稽核指出的「說服段零社會證明」。
+
+另外順手刪了 `cases/rental-clearance/`（1.90 MB，與 `case-20260909` 逐位元組相同的死資產）。
+
+#### 四、首頁 JSON-LD 補強（GEO 實體錨定）
+
+補上 `@id`、`image`、`address`（含郵遞區號與國別）、`geo` 座標、`hasMap`，
+`areaServed` 由字串陣列改為 `AdministrativeArea` 物件，`sameAs` 由單一字串改為三筆
+（Google 商家、FB 粉專、LINE）。**`sameAs` 指向 Google 商家是 GEO 的關鍵**——
+讓 AI 搜尋引擎能把網站與那個 4.5 星商家實體連起來。
+
+#### 五、驗證
+
+- `pnpm lint` 0 error；`pnpm build` 通過；JSON-LD 以 `json.loads` 驗證合法，
+  並程式化確認**未含 `review`／`aggregateRating` 欄位**。
+- 390px 實測：服務區域 6 項（林口／龜山帶「最常到府」標記）、評論區 2 則、
+  商家區地址正確、地圖 iframe 存在且 `loading="lazy"`、無水平溢出。
+- 案例頁實測：裝潢細清 **15 → 10 張**、特殊清潔 **13 → 18 張／共 3 個相簿**、總數仍 58。
+  **張數自動計算的設計在這次改分類時完全不用手改**，驗證了上一輪的作法。
+
+#### 六、本輪明確未驗
+
+- **地圖 iframe 只在本機 preview 驗過 DOM 與尺寸，沒看到實際地圖圖磚**（Browser pane 隱藏，
+  無法捲動到該區截圖）。上線後請確認地圖確實顯示正確位置。
+- 未測地圖 iframe 對首屏效能的影響（已加 `loading="lazy"`，但未量測）。
+- 未在真機／LINE 內建瀏覽器測新區塊。
+- 評論只取到 2 則有完整作者與時間的；Google Maps 頁面只載入部分評論，
+  若要再增加請由業主從商家後台提供。
+- **`https://jjf.tw/` 全站仍無法以 HTTPS 存取**，所有線上驗證都走 http。
+
+### 2026-09-11 Claude 處理 Codex 覆審的兩個 P2 — ⚠️ 請 Codex 再覆審
 
 ### 2026-09-11 Codex 準備接入自有網域 `jjf.tw`
 

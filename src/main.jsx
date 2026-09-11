@@ -113,7 +113,7 @@ const scenarios = [
     icon: BedDouble,
     tag: '搬家整理',
     tone: 'move',
-    image: assetPath('cases/case-20260909/case-20260909-01.jpg'),
+    image: assetPath('cases/garbage-clearance/garbage-clearance-01.jpg'),
   },
   {
     title: '年節或大掃除',
@@ -224,6 +224,49 @@ const contactActions = [
     icon: PhoneCall,
     href: phoneUrl,
     type: 'phone',
+  },
+]
+
+// 2026-09-11 業主指定：林口、龜山要特別標註為主要服務區。
+// 工作室登記地就在新北市林口區，龜山緊鄰，這兩區是實際最常到府的範圍；
+// 對本地搜尋而言，「林口／龜山 × 清潔品項」也比籠統的四個縣市更有長尾價值。
+const serviceAreas = [
+  { name: '林口', primary: true },
+  { name: '龜山', primary: true },
+  { name: '台北市' },
+  { name: '新北市' },
+  { name: '桃園市' },
+  { name: '基隆市' },
+]
+
+// Google 商家檔案（4.5 星／31 則評論／387+ 張相片）。
+// 座標取自商家頁面，供頁尾地圖與 JSON-LD 的 geo 使用。
+const business = {
+  mapsUrl: 'https://maps.app.goo.gl/m9EWz1xmNiZnvjMw7',
+  address: '244 新北市林口區仁愛路二段 190 號',
+  lat: 25.0740067,
+  lng: 121.3804504,
+  rating: '4.5',
+  reviewCount: 31,
+}
+
+// 摘自 Google 商家的公開評論，逐字引用、標明作者與時間，並連回商家頁面供查證。
+//
+// ⚠️ 只展示文字，**不得**把 Review／AggregateRating 寫進本站 JSON-LD。
+// 自家網站對自家服務標星等屬於 self-serving markup，Google 會取消 rich result
+// 甚至人工處罰。星等要讓 Google 自己從商家檔案顯示。詳見 AI-README 可信度設計規則。
+const googleReviews = [
+  {
+    author: 'Roslyn Chiang',
+    meta: 'Google 在地嚮導',
+    when: '10 個月前',
+    text: '第一次請人家來細清，千挑萬選選到潔淨坊來清潔，覺得真的太值得了！',
+  },
+  {
+    author: 'Rose Liu',
+    meta: 'Google 評論',
+    when: '4 年前',
+    text: '清潔乾淨、工作認真有效率、價格公道。',
   },
 ]
 
@@ -535,14 +578,45 @@ export function App() {
 
         <section className="area-section" id="areas">
           <SectionIntro eyebrow="Areas" title="主要詢問區域">
-            目前主要服務地區為台北、新北、桃園與基隆，實際是否可安排仍以地址、日期與路程確認。
+            工作室位於<strong>林口</strong>，<strong>林口、龜山</strong>是最常到府的區域；台北、新北、桃園與基隆也可詢問。實際是否可安排仍以地址、日期與路程確認。
           </SectionIntro>
           <div className="area-grid" aria-label="服務地區">
-            {['台北市', '新北市', '桃園市', '基隆市'].map((area) => (
-              <div className="area-item" key={area}>
+            {serviceAreas.map((area) => (
+              <div
+                className={`area-item${area.primary ? ' area-item-primary' : ''}`}
+                key={area.name}
+              >
                 <MapPin size={20} aria-hidden="true" />
-                <span>{area}</span>
+                <span>{area.name}</span>
+                {area.primary && <small>最常到府</small>}
               </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="section reviews-section" aria-label="Google 評論">
+          <SectionIntro eyebrow="Reviews" title="客戶在 Google 留下的評價">
+            以下逐字摘自 Google 商家的公開評論，可直接點開商家頁面查看全部內容。
+          </SectionIntro>
+          <div className="review-summary">
+            <strong>{business.rating}</strong>
+            <span>
+              Google 評分 · {business.reviewCount} 則評論
+            </span>
+            <a href={business.mapsUrl} target="_blank" rel="noreferrer">
+              在 Google 查看全部
+              <ArrowRight size={16} aria-hidden="true" />
+            </a>
+          </div>
+          <div className="review-list">
+            {googleReviews.map((review) => (
+              <blockquote className="review-card" key={review.author}>
+                <p>{review.text}</p>
+                <footer>
+                  <strong>{review.author}</strong>
+                  <small>{review.meta}· {review.when}</small>
+                </footer>
+              </blockquote>
             ))}
           </div>
         </section>
@@ -578,6 +652,46 @@ export function App() {
               <Phone size={19} aria-hidden="true" />
               撥打 0983531549
             </a>
+          </div>
+        </section>
+
+        <section className="section business-section" aria-label="商家資料與位置">
+          <SectionIntro eyebrow="Location" title="工作室位置">
+            工作室在林口，林口與龜山是最常到府的範圍。到府服務仍以實際地址與路程確認。
+          </SectionIntro>
+          <div className="business-grid">
+            <div className="business-info">
+              <dl>
+                <div>
+                  <dt>商家名稱</dt>
+                  <dd>潔淨坊清潔工作室</dd>
+                </div>
+                <div>
+                  <dt>地址</dt>
+                  <dd>{business.address}</dd>
+                </div>
+                <div>
+                  <dt>電話</dt>
+                  <dd><a href={phoneUrl}>0983-531-549</a></dd>
+                </div>
+                <div>
+                  <dt>LINE</dt>
+                  <dd><a href={lineUrl} target="_blank" rel="noreferrer">ID chenli0775</a></dd>
+                </div>
+              </dl>
+              <a className="button secondary" href={business.mapsUrl} target="_blank" rel="noreferrer">
+                <MapPin size={19} aria-hidden="true" />
+                在 Google 地圖開啟
+              </a>
+            </div>
+            <div className="business-map">
+              <iframe
+                src={`https://maps.google.com/maps?q=${business.lat},${business.lng}&z=16&hl=zh-TW&output=embed`}
+                title="潔淨坊清潔工作室位置地圖"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            </div>
           </div>
         </section>
       </main>
