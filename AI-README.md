@@ -7,7 +7,7 @@
 > 4. **所有時間戳一律台灣時間（Asia/Taipei, UTC+8）**。
 > 5. **不要把「已完成」寫在沒有實測的項目上**。未驗的事項寫進「本輪明確未驗」。
 
-最後更新：2026-09-11（Codex）— 修正「油漆清潔」第 7／8 張照片方向，並在產圖腳本加入單張旋轉規則。
+最後更新：2026-09-12（Codex）— 補入「油漆清潔」完工照，案例頁同步為 11 個相簿／67 張照片／2 支影片。
 
 **⚠️ 兩件事卡在業主帳號，做完才會有效果：**
 1. **G1｜Google 商家的「網站」欄位仍指向 FB，不是 `jjf.tw`** — 5 分鐘可改，是整份清單投報最高的一項。
@@ -51,7 +51,7 @@
 | 入口 | 進入點 | 用途 |
 |---|---|---|
 | `index.html` | `src/main.jsx` | 首頁 |
-| `cases/index.html` | `src/cases.jsx` | 案場相簿（11 相簿／66 張照片／2 支影片） |
+| `cases/index.html` | `src/cases.jsx` | 案場相簿（11 相簿／67 張照片／2 支影片） |
 | `cases/manage/index.html` | `src/caseAdmin.jsx` | 內部照片壓縮工具（已 noindex） |
 | `share/index.html` | 無 jsx，純轉址頁 | LINE 分享預覽用 |
 
@@ -198,7 +198,7 @@ cp950 主控台跑 Python 輸出繁中會 `UnicodeEncodeError`，前面加 `PYTH
 
 狀態圖例：`⬜ 未開始` / `🟨 進行中` / `✅ 已完成並實測`
 
-本輪 2026-09-11 油漆清潔 07／08 照片方向已即時修正，無新增長期待辦。
+本輪 2026-09-12 油漆清潔完工照已補入案例相簿，無新增長期待辦。
 
 | # | 優先 | 項目 | 位置 | 預估 | 狀態 |
 |---|---|---|---|---|---|
@@ -285,6 +285,30 @@ Measurement ID 會出現在前端原始碼裡，這是 GA4 的正常設計，**�
 ---
 
 ## 6. 進度紀錄（倒序）
+
+### 2026-09-12 Codex 補入油漆清潔完工照
+
+**業主需求**：業主提供一張油漆清潔完工照片，要求補到油漆清潔案例相簿。
+
+**修正**：
+
+1. 新增 `public/cases/paint-cleaning/paint-cleaning-09.jpg`。來源為本輪 ChatGPT 附件 `1-Photo-1.jpg`，保留原圖上的「潔淨坊／除泡沫紙／除膠、油漆完成後」完工標示。
+2. `src/cases.jsx` 的 `paint-cleaning` 相簿由 8 張改為 9 張；四大矩陣特殊清潔張數會自動更新為 25 張＋影片／共 4 個相簿。
+3. `cases/index.html` JSON-LD 手動同步為 11 個相簿、67 張照片、2 支影片；油漆清潔節點改為 9 張與 1 支影片。
+4. `tools/watermark-cases.ps1` 補註記：`paint-cleaning-09.jpg` 是附件補入，不在 D 槽來源 mapping 內；若重跑腳本，需另行補回或先移入來源端。
+
+**驗證**：
+
+- 目視檢查新增完工照：方向正確、內容為油漆清潔完工現場，原圖已含潔淨坊標示。
+- `pnpm lint` 通過。
+- `pnpm build` 通過（沙盒內若仍遇 Windows/esbuild 權限問題，需用外部執行重跑）。
+- JSON-LD 以 Node 解析合法：11 個 `hasPart`，未含 `Review`／`AggregateRating`。
+
+**本輪明確未驗**：
+
+- 尚未在真機 LINE 內建瀏覽器檢查新增照片顯示與快取刷新。
+- 未跑 Google Rich Results Test 線上驗證；本輪只做本機 JSON-LD 解析。
+- 未重跑整支 `tools/watermark-cases.ps1`；陷阱 12 仍成立，且 `paint-cleaning-09.jpg` 需另行補回。
 
 ### 2026-09-11 Codex 修正油漆清潔 07／08 照片方向
 

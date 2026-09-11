@@ -74,7 +74,7 @@ const albums = [
     category: '特殊清潔',
     icon: PaintRoller,
     copy: '牆面、天花板與燈具周邊油漆整理，先確認材質、施工範圍與現場保護條件。',
-    photos: generatedPhotos('paint-cleaning', 'paint-cleaning', 8),
+    photos: generatedPhotos('paint-cleaning', 'paint-cleaning', 9),
     videos: [
       assetPath('cases/paint-cleaning/paint-cleaning-video.mp4'),
     ],
