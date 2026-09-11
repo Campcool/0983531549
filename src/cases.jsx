@@ -156,6 +156,13 @@ const featuredCategories = featuredCategoryMeta.map(({ title, icon, target }) =>
   }
 })
 
+// 不依賴任何元件狀態，放在模組層級，useEffect 才不必把它列進依賴。
+const scrollAlbumIntoView = (slug) => {
+  window.setTimeout(() => {
+    document.getElementById(slug)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }, 0)
+}
+
 export function CasesApp() {
   const [openAlbum, setOpenAlbum] = React.useState(getAlbumFromHash)
 
@@ -163,15 +170,19 @@ export function CasesApp() {
     const syncAlbumFromHash = () => setOpenAlbum(getAlbumFromHash())
 
     syncAlbumFromHash()
+
+    // 深連結（例如分享 /cases/#floor-waxing）必須自己補捲動：
+    // 瀏覽器的原生錨點捲動發生在解析 HTML 當下，那時 React 還沒 render，
+    // #slug 對應的 <section> 尚不存在，之後瀏覽器也不會重試。
+    // 抽屜本身靠 useState 初始值就已展開，這裡只補捲動。
+    const initialAlbum = getAlbumFromHash()
+    if (initialAlbum) {
+      scrollAlbumIntoView(initialAlbum)
+    }
+
     window.addEventListener('hashchange', syncAlbumFromHash)
     return () => window.removeEventListener('hashchange', syncAlbumFromHash)
   }, [])
-
-  const scrollAlbumIntoView = (slug) => {
-    window.setTimeout(() => {
-      document.getElementById(slug)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    }, 0)
-  }
 
   const openAlbumSection = (slug) => {
     setOpenAlbum(slug)

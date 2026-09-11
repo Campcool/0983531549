@@ -7,9 +7,11 @@
 > 4. **所有時間戳一律台灣時間（Asia/Taipei, UTC+8）**。
 > 5. **不要把「已完成」寫在沒有實測的項目上**。未驗的事項寫進「本輪明確未驗」。
 
-最後更新：2026-09-10（Claude）— **複驗 Codex `e9fd7d4`：未發現阻斷問題**，四項核心修正實測全通過。
-另修三項衍生問題：四大矩陣張數與點開內容不符、商業廚房分類標籤不一致、刪除 1.60 MB 重複死資產。
-**捲動行為受測試環境限制完全未驗，必須真機複驗**（見本輪紀錄第四節）。⚠️ 請 Codex 覆審。
+最後更新：2026-09-11（Claude）— 處理 Codex 覆審 `1642054` 提出的兩個 P2，**兩項都成立且已修**：
+浮水印腳本 mapping 指向已刪相簿（實際影響比回報更大，`floor-waxing` 原本根本沒有 mapping）、
+深連結 `/cases/#hash` 不自動捲動。
+**深連結捲動的「實際位移」仍未驗到**（我的環境 `window.innerHeight` 為 0、無法捲動），
+只驗到函式以正確參數被呼叫——請在真機或可見瀏覽器確認。⚠️ 請 Codex 再覆審。
 複驗結論：A1／A2／C1 **通過**（A2 四顆 LINE 按鈕實測全過 AA）；**B2 是假綠，已改回未完成**（robots.txt 放在子路徑對爬蟲無效，見陷阱 7）。
 本輪狀態：Claude 已移除案例頁 header 相簿導覽、合併 `handoff-fixes.css`；Codex 已修正 `820–1279px` 首頁固定聯絡入口、壓縮桌面導覽與右上聯絡鈕，並改版 OG 分享圖。
 
@@ -146,6 +148,14 @@ cp950 主控台跑 Python 輸出繁中會 `UnicodeEncodeError`，前面加 `PYTH
 `target` 卻只指向單一相簿。現已改為 `featuredCategoryMeta` + 從 `albums` 推算。
 **新增或搬動相簿時不需要再改任何數字**；只有業主指定要跳特定相簿時才在 meta 裡寫 `target`。
 
+**11. 查資產是否還被引用時，一定要掃 `tools/` 與 `scripts/`，不能只掃前台原始碼。**
+2026-09-10 我刪 `cases/parking-floor-cleaning/` 前只掃了
+`src/ cases/ index.html share/ DESIGN.md README.md`，**漏掉 `tools/`**，
+結果 `tools/watermark-cases.ps1` 裡的 mapping 仍指向該 slug，
+重跑浮水印腳本會把已刪的相簿重新產出來（由 Codex 覆審抓到）。
+**正確作法**：`grep -rn "<關鍵字>" . --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=dist`。
+`scripts/generate-og.ps1` 同理，也會引用圖片路徑。
+
 **10. `grid-area` 只在父容器是 grid 時生效——跨 commit 的組合式 bug 要查完整歷史。**
 `.header-action { grid-area: actions }` 早在 `af35cda` 就寫下，但當時父層是 flex，屬於無效宣告、
 沒人發現。直到 `1188538` 把 `.header-actions` 改成 `display: grid`，這行沉睡的宣告突然生效，
@@ -207,6 +217,64 @@ Google Search Console 送審仍需有權限的人手動處理。
 ---
 
 ## 6. 進度紀錄（倒序）
+
+### 2026-09-11 Claude 處理 Codex 覆審的兩個 P2 — ⚠️ 請 Codex 再覆審
+
+Codex 覆審 `1642054` 的結論是「未發現阻斷問題，兩個 P2」，兩項都成立，已修。
+
+#### P2-1：`tools/watermark-cases.ps1` 的 mapping 仍指向已刪相簿
+
+**Codex 的描述正確，但實際影響比描述的更大。** 除了「重跑會復活已刪的
+`parking-floor-cleaning/`」之外，還有一個沒被指出的問題：
+**`floor-waxing` 在腳本裡根本沒有 mapping**。也就是說清空 `public/cases/` 重跑腳本後，
+前台正在用的 `floor-waxing/` 五張**不會被重建**，案例頁會 404。
+現有那五張是 `e9fd7d4` 手動複製進去的，一直不在腳本的產出路徑上。
+
+**修法**：腳本的 `Folder` 是業主本機的**來源**目錄、`Slug` 是**輸出**目錄，兩者不必同名。
+所以保持 `Folder`（停車位與地板清潔）不動，只把 `Slug`／`Prefix` 改為 `floor-waxing`、
+`Label`（浮水印文字）改為「洗地打蠟」。重跑後會從同一批來源照片產出正確的相簿，
+也不會再產生 `parking-floor-cleaning/`。
+
+⚠️ **副作用（需業主知情）**：現有五張的浮水印文字仍是舊的「停車位與地板清潔」，
+因為它們是複製來的。下次重跑腳本才會換成「洗地打蠟」。若要現在就換，
+需要業主提供 `SourceRoot` 重跑：
+`pwsh tools/watermark-cases.ps1 -SourceRoot <來源根目錄> -OutputRoot public/cases`
+
+**這是我上一輪的疏漏**：刪除死資產前只掃了前台原始碼，沒掃 `tools/`。已寫成陷阱 11。
+
+#### P2-2：深連結 `/cases/#floor-waxing` 不會自動捲到相簿
+
+**成立。** 原因是瀏覽器的原生錨點捲動發生在解析 HTML 當下，那時 React 還沒 render，
+`#slug` 對應的 `<section>` 尚不存在，之後瀏覽器也不會重試。抽屜本身會展開
+（`useState` 初始值就吃了 hash），只有捲動缺席。
+
+**修法**：`scrollAlbumIntoView` 移到模組層級（它不依賴任何元件狀態，
+留在元件內會讓 `useEffect` 的 exhaustive-deps 出問題），並在 mount 的 effect 內
+判斷 hash 有效時補呼叫一次。
+
+**為什麼 `hashchange` 路徑不需要同樣處理**：同頁改 hash 時 section 已存在，
+瀏覽器原生錨點捲動本來就有效，不必重複捲。
+
+#### 驗證
+
+- `pnpm lint` 0 error 0 warning；`pnpm build` 通過。
+- `tools/watermark-cases.ps1` 以 PowerShell AST parser 檢查語法無誤；
+  mapping 解碼實測為 Folder=`停車位與地板清潔`／Slug=`floor-waxing`／Label=`洗地打蠟`。
+- 深連結 `/cases/#floor-waxing` 進站：抽屜 `aria-expanded=true`、5 張圖已載入。
+- **以 spy 攔截 `Element.prototype.scrollIntoView`**，確認 `scrollAlbumIntoView`
+  以正確參數（`{behavior:'smooth', block:'start'}`）呼叫正確的 section
+  （矩陣點擊→`mold-removal`、抽屜點擊→`grease-kitchen`）。
+- 檢查 build 產物確認初始捲動邏輯沒被 tree-shake：`n&&y(n)` 存在於 `useEffect` 內。
+
+#### 本輪明確未驗
+
+- **深連結的捲動「實際位移」仍未驗到**。我的環境 Browser pane 隱藏，
+  `window.innerHeight` 為 0、`window.scrollTo(0,1500)` 無效，
+  只能驗到「函式以正確參數被呼叫」，驗不到「畫面真的捲過去」。
+  **請 Codex 或業主在真機／可見瀏覽器開 `/cases/#floor-waxing` 確認。**
+- 未重跑浮水印腳本（沒有 `SourceRoot`），所以 mapping 的正確性是靜態檢查，
+  不是實際產出驗證。
+- 仍未做：iOS／Android LINE 真機、iPhone SE 667px、VoiceOver／TalkBack。
 
 ### 2026-09-10 Claude 複驗 `e9fd7d4` 並修正三項 — ⚠️ 請 Codex 覆審
 
