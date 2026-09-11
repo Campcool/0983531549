@@ -7,7 +7,7 @@ const rootDir = fileURLToPath(new URL('.', import.meta.url))
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/0983531549/',
+  base: '/',
   plugins: [react()],
   build: {
     rollupOptions: {

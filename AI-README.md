@@ -7,13 +7,8 @@
 > 4. **所有時間戳一律台灣時間（Asia/Taipei, UTC+8）**。
 > 5. **不要把「已完成」寫在沒有實測的項目上**。未驗的事項寫進「本輪明確未驗」。
 
-最後更新：2026-09-11（Claude）— 處理 Codex 覆審 `1642054` 提出的兩個 P2，**兩項都成立且已修**：
-浮水印腳本 mapping 指向已刪相簿（實際影響比回報更大，`floor-waxing` 原本根本沒有 mapping）、
-深連結 `/cases/#hash` 不自動捲動。
-**深連結捲動的「實際位移」仍未驗到**（我的環境 `window.innerHeight` 為 0、無法捲動），
-只驗到函式以正確參數被呼叫——請在真機或可見瀏覽器確認。⚠️ 請 Codex 再覆審。
-複驗結論：A1／A2／C1 **通過**（A2 四顆 LINE 按鈕實測全過 AA）；**B2 是假綠，已改回未完成**（robots.txt 放在子路徑對爬蟲無效，見陷阱 7）。
-本輪狀態：Claude 已移除案例頁 header 相簿導覽、合併 `handoff-fixes.css`；Codex 已修正 `820–1279px` 首頁固定聯絡入口、壓縮桌面導覽與右上聯絡鈕，並改版 OG 分享圖。
+最後更新：2026-09-11（Codex）— **準備接入自有網域 `jjf.tw`**：Vite base 改為 `/`，canonical／OG／JSON-LD／sitemap／robots／分享轉址同步改為根網域路徑。
+本輪已通過 `pnpm lint`、`pnpm build`、本機 preview 首頁／案例頁／分享轉址驗證；DNS、GitHub Pages custom domain、HTTPS 憑證與 LINE/社群快取仍需完成瀏覽器設定與傳播確認。
 
 ---
 
@@ -22,8 +17,9 @@
 | 項目 | 值 |
 |---|---|
 | 站別 | 潔淨坊清潔工作室（居家／裝潢／重點／特殊清潔） |
-| 網址 | https://campcool.github.io/0983531549/ |
-| 自有網域 | **尚未接**（仍在 Pages 子路徑） |
+| 網址 | https://jjf.tw/ |
+| 舊網址 | https://campcool.github.io/0983531549/ |
+| 自有網域 | `jjf.tw` 接入中；需 GitHub Pages custom domain + GoDaddy DNS 傳播完成 |
 | 技術棧 | React 19.1 + Vite 6.3，pnpm 10.4.1，無 router |
 | 部署 | GitHub Actions（`.github/workflows/deploy.yml`）→ push `main` 自動部署 |
 | Pages 來源 | 必須維持 `GitHub Actions`，不要改回分支部署 |
@@ -80,7 +76,7 @@ React runtime 已正確拆成共用 chunk（189 KB／gzip 59.7 KB），四個入
 | LINE URL | `https://line.me/R/ti/p/~chenli0775` | 三支 jsx 各自宣告一次 |
 | 電話 | `0983531549` | jsx、JSON-LD、README |
 | FB 粉專 | `https://www.facebook.com/share/1GMwVQdp7J/?mibextid=wwXIfr` | `main.jsx`、`cases.jsx` |
-| Vite base | `/0983531549/` | `vite.config.js` |
+| Vite base | `/` | `vite.config.js`；自有網域根目錄部署用 |
 | 品牌主色 | `--color-primary: #2f8f8f` | `src/style.css:8` |
 | 管理入口 | access code hash | `src/caseAdmin.jsx` — 靜態前端只能降低明文暴露，不能當成真正權限控管 |
 
@@ -95,9 +91,9 @@ React runtime 已正確拆成共用 chunk（189 KB／gzip 59.7 KB），四個入
 `loading="lazy"` 只對 `<img>` 有效，所以這 3 張共 767 KB 的圖雖然在首屏之下，仍會立即載入。
 頁面 17 個 `<img>` 有 15 個正確標了 lazy，唯獨這幾張漏網。改法見待辦 B1。
 
-**2. `share/index.html` 硬編碼 base 路徑。**
-內有兩處寫死 `/0983531549/`（JS 轉址與 fallback 連結），與 `vite.config.js` 的 `base` 脫鉤。
-**接自有網域時這兩行會壞**，記得一起改。
+**2. `share/index.html` 曾硬編碼 Pages 子路徑。**
+2026-09-11 已配合 `jjf.tw` 改為 `window.location.replace('/')` 與根目錄 fallback 連結。
+若未來又切回子路徑部署，必須同步檢查這兩處與 `vite.config.js` 的 `base`。
 
 **3. `DESIGN.md` 已與實作漂移。** 照著它做會改錯檔案：
 
@@ -122,8 +118,8 @@ DESIGN.md 指名的三個檔案剛好全是**沒有任何引用的死檔**。
 **6. Windows 環境下掃描腳本輸出中文會炸。**
 cp950 主控台跑 Python 輸出繁中會 `UnicodeEncodeError`，前面加 `PYTHONIOENCODING=utf-8`。
 
-**7. 這個部署形式放不了有效的 `robots.txt`（2026-09-10 實測）。**
-`robots.txt` 依 RFC 9309 **只在 origin 根目錄生效**，爬蟲只會請求 `https://campcool.github.io/robots.txt`，
+**7. Pages 子路徑放不了有效的 `robots.txt`；自有根網域才會生效。**
+`robots.txt` 依 RFC 9309 **只在 origin 根目錄生效**，子路徑部署時爬蟲只會請求 `https://campcool.github.io/robots.txt`，
 不會去讀子路徑的同名檔。實測：
 
 | URL | 狀態 |
@@ -131,8 +127,8 @@ cp950 主控台跑 Python 輸出繁中會 `UnicodeEncodeError`，前面加 `PYTH
 | `https://campcool.github.io/robots.txt` | **404**（該根目錄由 `Campcool/campcool.github.io` 決定，該 repo 不存在） |
 | `https://campcool.github.io/0983531549/robots.txt` | 200，但**爬蟲不會讀這裡** |
 
-所以 `public/robots.txt` 目前 **0 效果**，其中的 `Disallow` 與 `Sitemap:` 宣告都不生效。
-檔案先留著（接自有網域後就會自動生效），但**不要把它當成已完成的 SEO 工作**。
+2026-09-11 已把 `public/robots.txt` 改成根網域路徑：`Disallow: /cases/manage/`、`Sitemap: https://jjf.tw/sitemap.xml`。
+只有在 `https://jjf.tw/robots.txt` 可公開讀取後，這份檔案才算真正生效；DNS/Pages 尚未傳播完成前不要標成 SEO 已驗收。
 
 替代方案，兩者都有效：
 - 管理頁的 `<meta name="robots" content="noindex, nofollow">` 是頁面層級，**照常有效**，管理頁其實沒有外洩風險。
@@ -175,7 +171,7 @@ cp950 主控台跑 Python 輸出繁中會 `UnicodeEncodeError`，前面加 `PYTH
 | A2 | 🔴 阻斷 | LINE 按鈕改 `#017A35`、hover `#006B2E`（原白字對比僅 2.26:1，AA 不過） | `src/style.css:13`（已從 handoff-fixes.css 併回） | 10 分 | ✅ 已複驗 |
 | A3 | 🔴 阻斷 | 修 `c2f7fbd` 兩個無障礙迴歸：`aria-controls` 指向不存在元素（9/9）、`aria-hidden` 藏掉分類卡與索引卡張數 | `src/cases.jsx`、`style.css` | 30 分 | ✅ **待 Codex 覆審** |
 | B1 | 🟠 高 | scenario 背景圖改 `<img loading="lazy">`＋`object-fit:cover`，首屏 1.56 MB → 約 0.8 MB | `src/main.jsx:390`、`style.css` | 1 小時 | ⬜ |
-| B2 | 🔴 阻斷 | ~~補 robots.txt~~ ＋ `sitemap.xml`，接 GSC。**robots.txt 這半做不到**（見陷阱 7），剩下的是去 GSC 手動提交 sitemap | GSC 後台 | 30 分 | ⬜ **需業主帳號** |
+| B2 | 🔴 阻斷 | 自有網域根目錄接上後，確認 `robots.txt`／`sitemap.xml` 可公開讀取，並到 GSC 手動提交 sitemap | GitHub Pages／GoDaddy／GSC 後台 | 30–60 分 | 🟨 **接入中，GSC 需業主帳號** |
 | B5 | 🟢 中 | 案例頁 header 相簿導覽（9 膠囊 3×3）**已移除**，導覽職責交給下方「案場相簿索引」 | `src/cases.jsx`、`style.css` | 1 小時 | ✅ **待 Codex 覆審** |
 | B3 | 🟠 高 | 加數字錨點帶（58 張實拍／9 類相簿／4 區到府）＋風險逆轉三句 | `src/main.jsx` | 2 小時 | ⬜ |
 | B4 | 🟠 高 | 首屏位階對調：品牌名縮至 32–40px，價值主張升至 60px＋；加一行計價說明 | `src/style.css`、`main.jsx` | 3 小時 | ⬜ |
@@ -217,6 +213,36 @@ Google Search Console 送審仍需有權限的人手動處理。
 ---
 
 ## 6. 進度紀錄（倒序）
+
+### 2026-09-11 Codex 準備接入自有網域 `jjf.tw`
+
+**業主需求**：已在 GoDaddy 購買 `JJF.tw`，需要協助完成 GoDaddy DNS、GitHub Pages custom domain 與網站路徑設定。
+
+**修正**：
+
+1. `vite.config.js` 的 `base` 從 `/0983531549/` 改為 `/`，讓正式站可部署在 `https://jjf.tw/` 根目錄。
+2. `index.html`、`cases/index.html`、`share/index.html` 的 canonical、`og:url`、`og:image`、`og:image:secure_url`、`twitter:image` 全部改為 `https://jjf.tw/...`。
+3. `index.html` JSON-LD 補上 `"url": "https://jjf.tw/"`。
+4. `share/index.html` 的 JS 轉址與 fallback 連結從 `/0983531549/` 改為 `/`，避免 LINE 分享入口在自有網域下轉錯路徑。
+5. `public/sitemap.xml` 改列 `https://jjf.tw/` 與 `https://jjf.tw/cases/`，`lastmod` 更新為 `2026-09-11`。
+6. `public/robots.txt` 改為根網域路徑：`Disallow: /cases/manage/`、`Sitemap: https://jjf.tw/sitemap.xml`。
+
+**驗證**：
+
+- `pnpm lint` 通過。
+- `pnpm build` 通過；`dist/` 內資源路徑輸出為 `/assets/...`，不再依賴 `/0983531549/`。
+- `rg "campcool.github.io/0983531549|/0983531549/" dist` 無命中。
+- 本機 preview `http://127.0.0.1:4173/` 首頁載入正常，導覽案例入口為 `/cases/`。
+- 本機 preview `http://127.0.0.1:4173/cases/` 載入案例頁正常。
+- 本機 preview `http://127.0.0.1:4173/share/` 會自動回首頁 `/`。
+
+**本輪明確未驗**：
+
+- GoDaddy DNS 記錄是否已成功儲存、傳播完成。
+- GitHub Pages custom domain `jjf.tw` 是否已通過 DNS check。
+- GitHub Pages HTTPS 憑證是否已簽發並可勾選 Enforce HTTPS。
+- LINE／Facebook 分享快取是否已重抓新版 OG。
+- Google Search Console sitemap 提交，仍需業主帳號操作。
 
 ### 2026-09-11 Claude 處理 Codex 覆審的兩個 P2 — ⚠️ 請 Codex 再覆審
 
