@@ -8,8 +8,7 @@
 > 5. **不要把「已完成」寫在沒有實測的項目上**。未驗的事項寫進「本輪明確未驗」。
 
 最後更新：2026-09-11（Claude）— **SEO／GEO 審查＋業主四項需求**。
-⚠️ 兩件事優先：(1) HTTPS 憑證仍在簽發，`https://jjf.tw/` 連不上，而全站 canonical／sitemap 都寫 https（待辦 G2）；
-(2) **Google 商家已存在且是最強資產（4.5★／31 則評論／387 張相片），但「網站」欄位指向 FB 不是 jjf.tw**（待辦 G1，5 分鐘可改）。
+⚠️ 優先事項：**Google 商家的「網站」欄位指向 FB 不是 jjf.tw**（待辦 G1，5 分鐘可改）。HTTPS 憑證已於本日簽發完成，四個 URL 全部 200（G2 已結案）。
 本輪完成：垃圾清運相簿改分類、林口／龜山標註、頁尾商家地圖、Google 評論區、JSON-LD 補 address/geo/sameAs。⚠️ 請 Codex 覆審。
 
 （上一輪 Codex）準備接入自有網域 `jjf.tw`：Vite base 改為 `/`，canonical／OG／JSON-LD／sitemap／robots／分享轉址同步改為根網域路徑。
@@ -191,7 +190,7 @@ cp950 主控台跑 Python 輸出繁中會 `UnicodeEncodeError`，前面加 `PYTH
 | C2 | 🟡 待決策 | LINE 標誌換官方素材（現為自繪，違反自家 DESIGN.md） | `public/brand/icon-line.svg` | 待業主 | ⬜ |
 | C3 | 🟢 中 | 圖片轉 WebP、刪 4.63 MB 死資產、同步 DESIGN.md、CI 加 `pnpm lint` | 多處 | 半天 | ⬜ |
 | **G1** | 🔴 **最高投報** | **Google 商家的「網站」欄位目前指向 `facebook.com/chenli0775/`，不是 `jjf.tw`**。商家是本地搜尋最大流量來源，等於把流量送給 FB。改一個欄位即可 | Google 商家後台 | 5 分 | ⬜ **需業主帳號** |
-| G2 | 🔴 阻斷 | **HTTPS 憑證尚未簽發完成**：`https_enforced=false`、憑證 `authorization_created`，`https://jjf.tw/` 連不上，但全站 canonical／OG／sitemap 都寫 https。DNS 已正確，只需等簽發後回 Pages 設定勾選 Enforce HTTPS | GitHub Pages 後台 | 等待＋5 分 | 🟨 **簽發中** |
+| G2 | 🔴 阻斷 | HTTPS 憑證 — **2026-09-11 已簽發完成並自動生效** | GitHub Pages | — | ✅ 已驗證 |
 | G3 | 🟠 高 | `dist` 內沒有 `CNAME` 檔。用 Actions 部署時建議把 CNAME 放進產物，避免 custom domain 設定在重新部署後遺失 | `public/CNAME` | 10 分 | ⬜ |
 | G4 | 🟠 高 | **全站是 CSR，爬蟲看到的 `<body>` 是 0 字**。Googlebot 會渲染 JS，但多數 AI 爬蟲（GPTBot／ClaudeBot／PerplexityBot）不執行 JS，等於整站內容對 AI 搜尋不可見 | 需架構決策 | 需討論 | ⬜ |
 | G5 | 🟢 中 | 案例頁沒有任何 JSON-LD（首頁有）。可補 `ImageGallery` 與 `BreadcrumbList` | `cases/index.html` | 30 分 | ⬜ |
@@ -243,9 +242,12 @@ Google Search Console 送審仍需有權限的人手動處理。
 | 「http 會導向 https」 | ❌ 相反：舊網址 301 → **`http://jjf.tw/`**（HTTP） |
 | 「Search Console 若顯示無法擷取，多半是時間差」 | ❌ **不是時間差**。`https://jjf.tw/` 實測連線失敗，而 sitemap 與 canonical 全寫 https，GSC 抓必然失敗 |
 
-**好消息是不必改任何設定**：DNS 完全正確（無 CAA 阻擋、無錯誤 AAAA、A 記錄正好是 GitHub 四個 IP、
-www CNAME 也對），憑證只是還在簽發。**等簽發完成後回 Pages 後台勾 Enforce HTTPS 即可**（待辦 G2）。
-在那之前不要把 SEO 標成已驗收。
+**追記（同日稍晚）：憑證已簽發完成，上述三項全部解決。** 複驗結果：
+`cert.state=approved`、`https_enforced=true`、憑證 subject 為 `CN=jjf.tw`、
+`https://jjf.tw/`、`/cases/`、`/robots.txt`、`/sitemap.xml` **四個 URL 全部 200**、
+http 正確 301 導向 https。DNS 本來就完全正確（無 CAA 阻擋、無錯誤 AAAA、
+A 記錄正好是 GitHub 四個 IP、www CNAME 也對），所以不必改任何設定，純粹是等簽發。
+**現在可以去 GSC 重新提交 sitemap 了**（先前失敗是因為 https 連不上，不是時間差）。
 
 #### 二、Google 商家：本站最強的資產，但流量被送去 FB
 
