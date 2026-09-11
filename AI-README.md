@@ -205,9 +205,10 @@ cp950 主控台跑 Python 輸出繁中會 `UnicodeEncodeError`，前面加 `PYTH
 | C3 | 🟢 中 | 圖片轉 WebP、刪 4.63 MB 死資產、同步 DESIGN.md、CI 加 `pnpm lint` | 多處 | 半天 | ⬜ |
 | **G1** | 🔴 **最高投報** | **Google 商家的「網站」欄位目前指向 `facebook.com/chenli0775/`，不是 `jjf.tw`**。商家是本地搜尋最大流量來源，等於把流量送給 FB。改一個欄位即可 | Google 商家後台 | 5 分 | ⬜ **需業主帳號** |
 | G2 | 🔴 阻斷 | HTTPS 憑證 — **2026-09-11 已簽發完成並自動生效** | GitHub Pages | — | ✅ 已驗證 |
-| G3 | 🟠 高 | `dist` 內沒有 `CNAME` 檔。用 Actions 部署時建議把 CNAME 放進產物，避免 custom domain 設定在重新部署後遺失 | `public/CNAME` | 10 分 | ⬜ |
-| G4 | 🟠 高 | **全站是 CSR，爬蟲看到的 `<body>` 是 0 字**。Googlebot 會渲染 JS，但多數 AI 爬蟲（GPTBot／ClaudeBot／PerplexityBot）不執行 JS，等於整站內容對 AI 搜尋不可見 | 需架構決策 | 需討論 | ⬜ |
-| G5 | 🟢 中 | 案例頁沒有任何 JSON-LD（首頁有）。可補 `ImageGallery` 與 `BreadcrumbList` | `cases/index.html` | 30 分 | ⬜ |
+| G3 | 🟠 高 | `public/CNAME` 已建立並確認進入 `dist` 產物 | `public/CNAME` | 10 分 | ✅ 已完成 |
+| G4 | 🟠 高 | **全站是 CSR，爬蟲看到的 `<body>` 是 0 字**。Googlebot 會渲染 JS，但多數 AI 爬蟲（GPTBot／ClaudeBot／PerplexityBot）不執行 JS，等於整站內容對 AI 搜尋不可見 | 需架構決策 | 需討論 | 🟡 **業主指定三方決議**：業主、Codex、Claude 三方都同意才做 |
+| G5 | 🟢 中 | 案例頁已補 `BreadcrumbList` ＋ `ImageGallery`（10 個相簿、代表圖與張數），並以 `about` 指回首頁的 business `@id` | `cases/index.html` | 30 分 | ✅ 已完成 |
+| **G6** | 🔴 **需業主帳號** | **填入 GA4 Measurement ID 才會開始收數據**。埋點已完成，`src/analytics.js` 的 `GA_MEASUREMENT_ID` 目前是空字串（安全 no-op）。到 GA 建資源拿到 `G-XXXXXXXXXX` 後填入、推 main 即生效 | `src/analytics.js` | 5 分 | ⬜ |
 | E1 | 🟡 **待業主決定** | 首頁與案例頁的服務分類不對應：首頁「一般清潔」（退租入住／大掃除／清運）在案例頁**沒有任何對應相簿**；首頁大類叫「裝潢清潔」、案例頁相簿叫「裝潢細清」 | `src/main.jsx:164`、`src/cases.jsx` | 需先確認 | ⬜ |
 | D1 | 🟡 待討論 | 設計回流機制（定期清潔提醒、老客推薦）— 五段檢查第 5 段完全空白 | — | 需先討論 | ⬜ |
 
@@ -239,6 +240,37 @@ Google Search Console 送審仍需有權限的人手動處理。
 
 已清除：`cases/parking-floor-cleaning/` 5 張（1.60 MB）—— 與 `floor-waxing/` 逐位元組重複且已無引用，
 於 2026-09-10 刪除。
+
+---
+
+## 5.5 事件追蹤（GA4）
+
+埋點已完成，**但還沒開始收數據**——`src/analytics.js` 的 `GA_MEASUREMENT_ID` 目前是空字串。
+
+**怎麼啟用**：到 Google Analytics 建立 GA4 資源，取得 Measurement ID（格式 `G-XXXXXXXXXX`），
+填進 `src/analytics.js` 最上方那個常數，推 main 就生效。
+Measurement ID 會出現在前端原始碼裡，這是 GA4 的正常設計，**不是機密**，不需要放 GitHub Secret。
+
+**沒填 ID 時的行為**：不載入任何外部資源、不發任何請求、所有追蹤呼叫都是安全的 no-op。
+
+**怎麼驗證埋點有沒有在跑**（不需要 GA）：開瀏覽器 Console 輸入 `window.__trackLog`，
+會看到目前這次瀏覽記錄到的所有事件。這個 log 無論有沒有設定 GA 都會運作，最多保留 200 筆。
+
+**收集的事件**：
+
+| 事件 | 參數 | 說明 |
+|---|---|---|
+| `contact_click` | `method`（line／phone／facebook）、`area` | 所有聯絡按鈕點擊 |
+| `album_open` | `album`（slug）、`source`（category_card／index_card／drawer） | 相簿開啟，可看出客戶對哪類清潔有興趣 |
+| `nav_click` | `target`、`area` | 站內導覽、前往案例頁、Google 地圖 |
+
+`area` 取自最近祖先的 `data-track-area`，目前標了 hero／dock／inquiry／process／business／reviews／hero_line_hint。
+
+**實作方式**：用**一個事件委派**接管全站 `<a>` 的點擊，不必在每個連結掛 onClick——
+新增聯絡按鈕時自動就會被追蹤，不會漏。相簿開闔因為是 `<button>`，另外明確呼叫 `trackAlbum`。
+
+⚠️ 已明確追蹤的元素要加 `data-track-skip`，否則同一次點擊會同時產生 `album_open` 與
+`nav_click`，數據重複計算（相簿索引卡就踩過這個坑，已修）。
 
 ---
 

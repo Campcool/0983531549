@@ -30,6 +30,7 @@ import {
   Warehouse,
 } from 'lucide-react'
 import './style.css'
+import { useClickTracking } from './analytics.js'
 
 const assetPath = (path) => `${import.meta.env.BASE_URL}${path.replace(/^\/+/, '')}`
 
@@ -285,7 +286,7 @@ const faqs = [
   },
   {
     question: '服務地區是哪裡？',
-    answer: '首頁先以台北、新北、桃園、基隆作為主要詢問範圍，實際可到府地點仍以排程與交通確認為準。',
+    answer: '工作室在新北市林口區，林口與龜山是最常到府的範圍；台北、新北、桃園與基隆也可詢問。實際可到府地點仍以地址、日期與路程確認為準。',
   },
 ]
 
@@ -300,6 +301,9 @@ function SectionIntro({ eyebrow, title, children }) {
 }
 
 export function App() {
+  // 一個事件委派接管全站 <a> 的點擊追蹤（LINE／電話／粉專／站內導覽）
+  useClickTracking()
+
   return (
     <div className="site-shell">
       <a className="skip-link" href="#main-content">跳到主要內容</a>
@@ -359,7 +363,7 @@ export function App() {
               <p><strong>家裡需要重整</strong>，不必先整理成完整清單。</p>
               <p>直接用 <strong>LINE 傳照片</strong>，我們再一起確認區域、時間與現場條件。</p>
             </div>
-            <div className="hero-actions" aria-label="主要行動">
+            <div className="hero-actions" aria-label="主要行動" data-track-area="hero">
               <a className="button line-primary" href={lineUrl} target="_blank" rel="noreferrer">
                 <SocialBrandIcon type="line" size={21} />
                 加入 LINE 詢問
@@ -369,7 +373,7 @@ export function App() {
                 撥打電話
               </a>
             </div>
-            <div className="line-hint" aria-label="LINE 聯絡資訊">
+            <div className="line-hint" aria-label="LINE 聯絡資訊" data-track-area="hero_line_hint">
               <a href={lineUrl} target="_blank" rel="noreferrer">
                 <Search size={15} aria-hidden="true" />
                 LINE 搜尋 0983531549
@@ -518,7 +522,7 @@ export function App() {
                 </li>
               ))}
             </ol>
-            <div className="process-quick-actions" aria-label="快速預約">
+            <div className="process-quick-actions" aria-label="快速預約" data-track-area="process">
               <a className="button line-primary" href={lineUrl} target="_blank" rel="noreferrer">
                 <SocialBrandIcon type="line" size={21} />
                 LINE 傳照片詢問
@@ -529,7 +533,7 @@ export function App() {
               </a>
             </div>
           </div>
-          <div className="note-panel" id="inquiry">
+          <div className="note-panel" id="inquiry" data-track-area="inquiry">
             <Sparkles size={26} aria-hidden="true" />
             <h2>LINE 詢問資料</h2>
             <p>
@@ -594,7 +598,7 @@ export function App() {
           </div>
         </section>
 
-        <section className="section reviews-section" aria-label="Google 評論">
+        <section className="section reviews-section" aria-label="Google 評論" data-track-area="reviews">
           <SectionIntro eyebrow="Reviews" title="客戶在 Google 留下的評價">
             以下逐字摘自 Google 商家的公開評論，可直接點開商家頁面查看全部內容。
           </SectionIntro>
@@ -655,7 +659,7 @@ export function App() {
           </div>
         </section>
 
-        <section className="section business-section" aria-label="商家資料與位置">
+        <section className="section business-section" aria-label="商家資料與位置" data-track-area="business">
           <SectionIntro eyebrow="Location" title="工作室位置">
             工作室在林口，林口與龜山是最常到府的範圍。到府服務仍以實際地址與路程確認。
           </SectionIntro>
@@ -708,7 +712,7 @@ export function App() {
 
 function MobileContactDock() {
   return (
-    <nav className="mobile-contact-dock" aria-label="快速聯絡">
+    <nav className="mobile-contact-dock" aria-label="快速聯絡" data-track-area="dock">
       <a className="dock-line" href={lineUrl} target="_blank" rel="noreferrer">
         <SocialBrandIcon type="line" size={20} />
         <span>LINE</span>

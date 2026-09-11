@@ -15,6 +15,7 @@ import {
   Warehouse,
 } from 'lucide-react'
 import './style.css'
+import { useClickTracking, trackAlbum } from './analytics.js'
 
 const assetPath = (path) => `${import.meta.env.BASE_URL}${path.replace(/^\/+/, '')}`
 const lineUrl = 'https://line.me/R/ti/p/~chenli0775'
@@ -187,6 +188,9 @@ const scrollAlbumIntoView = (slug) => {
 export function CasesApp() {
   const [openAlbum, setOpenAlbum] = React.useState(getAlbumFromHash)
 
+  // 一個事件委派接管全站 <a> 的點擊追蹤；相簿開闔另外明確記錄（見下方）
+  useClickTracking()
+
   React.useEffect(() => {
     const syncAlbumFromHash = () => setOpenAlbum(getAlbumFromHash())
 
@@ -205,8 +209,9 @@ export function CasesApp() {
     return () => window.removeEventListener('hashchange', syncAlbumFromHash)
   }, [])
 
-  const openAlbumSection = (slug) => {
+  const openAlbumSection = (slug, source = 'category_card') => {
     setOpenAlbum(slug)
+    trackAlbum(slug, source)
     window.history.replaceState(null, '', `#${slug}`)
     scrollAlbumIntoView(slug)
   }
@@ -216,6 +221,7 @@ export function CasesApp() {
     setOpenAlbum(nextAlbum)
 
     if (nextAlbum) {
+      trackAlbum(nextAlbum, 'drawer')
       window.history.replaceState(null, '', `#${nextAlbum}`)
       scrollAlbumIntoView(nextAlbum)
       return
@@ -301,9 +307,10 @@ export function CasesApp() {
                 className="album-index-card"
                 href={`#${album.slug}`}
                 key={album.slug}
+                data-track-skip="album-index"
                 onClick={(event) => {
                   event.preventDefault()
-                  openAlbumSection(album.slug)
+                  openAlbumSection(album.slug, 'index_card')
                 }}
               >
                 <div className="album-index-icon-panel">
