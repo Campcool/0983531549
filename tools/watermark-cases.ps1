@@ -50,6 +50,7 @@ $albums = @(
   @{ Folder = "20260909"; Slug = "garbage-clearance"; Prefix = "garbage-clearance"; Label = (U 0x5783, 0x573e, 0x6e05, 0x904b) },
   @{ Folder = (U 0x4e00, 0x822c, 0x6e05, 0x6f54); Slug = "general-cleaning"; Prefix = "general-cleaning"; Label = (U 0x4e00, 0x822c, 0x6e05, 0x6f54); Recursive = $true },
   @{ Folder = (U 0x9664, 0x9709); Slug = "mold-removal"; Prefix = "mold-removal"; Label = (U 0x7279, 0x6b8a, 0x6e05, 0x6f54, 0x0020, 0x9664, 0x9709) },
+  @{ Folder = (U 0x6cb9, 0x6f06, 0x6e05, 0x6f54); Slug = "paint-cleaning"; Prefix = "paint-cleaning"; Label = (U 0x6cb9, 0x6f06, 0x6e05, 0x6f54); Recursive = $true },
   @{ Folder = (U 0x5eda, 0x623f, 0x91cd, 0x6cb9, 0x6c59); Slug = "grease-kitchen"; Prefix = "grease-kitchen"; Label = (U 0x5eda, 0x623f, 0x91cd, 0x6cb9, 0x6c59) },
   @{ Folder = (U 0x6c34, 0x57a2, 0x8655, 0x7406); Slug = "scale-removal"; Prefix = "scale-removal"; Label = (U 0x91cd, 0x6c34, 0x5730, 0x5340, 0x6c34, 0x57a2, 0x8655, 0x7406) },
   @{ Folder = (U 0x6d17, 0x96e8, 0x68da); Slug = "awning-cleaning"; Prefix = "awning-cleaning"; Label = (U 0x6d17, 0x96e8, 0x68da); Recursive = $true },

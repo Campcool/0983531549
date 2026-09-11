@@ -7,6 +7,7 @@ import {
   ChevronDown,
   Droplets,
   LayoutGrid,
+  PaintRoller,
   Phone,
   ShieldAlert,
   Sparkles,
@@ -66,6 +67,17 @@ const albums = [
     icon: ShieldAlert,
     copy: '霉斑與潮濕區域需先確認材質、範圍與通風條件，再安排處理方式。',
     photos: generatedPhotos('mold-removal', 'mold-removal', 6),
+  },
+  {
+    slug: 'paint-cleaning',
+    title: '油漆清潔',
+    category: '特殊清潔',
+    icon: PaintRoller,
+    copy: '牆面、天花板與燈具周邊油漆整理，先確認材質、施工範圍與現場保護條件。',
+    photos: generatedPhotos('paint-cleaning', 'paint-cleaning', 8),
+    videos: [
+      assetPath('cases/paint-cleaning/paint-cleaning-video.mp4'),
+    ],
   },
   {
     slug: 'grease-kitchen',
@@ -177,6 +189,8 @@ const featuredCategories = featuredCategoryMeta.map(({ title, icon, target }) =>
     albumCount: inCategory.length,
   }
 })
+
+const albumCountLabel = (album) => `${album.photos.length} 張${album.videos?.length ? '＋影片' : ''}`
 
 // 不依賴任何元件狀態，放在模組層級，useEffect 才不必把它列進依賴。
 const scrollAlbumIntoView = (slug) => {
@@ -317,7 +331,7 @@ export function CasesApp() {
                   <Icon size={30} aria-hidden="true" />
                   <span>
                     <Icon size={19} aria-hidden="true" />
-                    {album.photos.length} 張
+                    {albumCountLabel(album)}
                   </span>
                 </div>
                 <div>
@@ -350,7 +364,7 @@ export function CasesApp() {
                   <h2>{album.title}</h2>
                   <p>{album.copy}</p>
                 </div>
-                <span className="album-drawer-meta">{album.photos.length} 張</span>
+                <span className="album-drawer-meta">{albumCountLabel(album)}</span>
                 <ChevronDown className="album-drawer-chevron" size={26} aria-hidden="true" />
               </button>
               <div className="album-photo-grid" id={`${album.slug}-photos`} hidden={!isOpen}>

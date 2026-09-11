@@ -7,7 +7,7 @@
 > 4. **所有時間戳一律台灣時間（Asia/Taipei, UTC+8）**。
 > 5. **不要把「已完成」寫在沒有實測的項目上**。未驗的事項寫進「本輪明確未驗」。
 
-最後更新：2026-09-11（Claude）— 本日共三批：SEO／GEO 審查＋業主四項需求 → 商廚照片轉正＋木地板相簿獨立 → CNAME／GA4 埋點／案例頁結構化資料。
+最後更新：2026-09-11（Codex）— 新增「油漆清潔」特殊清潔相簿，案例頁同步為 11 個相簿／66 張照片／2 支影片。
 
 **⚠️ 兩件事卡在業主帳號，做完才會有效果：**
 1. **G1｜Google 商家的「網站」欄位仍指向 FB，不是 `jjf.tw`** — 5 分鐘可改，是整份清單投報最高的一項。
@@ -51,7 +51,7 @@
 | 入口 | 進入點 | 用途 |
 |---|---|---|
 | `index.html` | `src/main.jsx` | 首頁 |
-| `cases/index.html` | `src/cases.jsx` | 案場相簿（9 相簿／58 張照片） |
+| `cases/index.html` | `src/cases.jsx` | 案場相簿（11 相簿／66 張照片／2 支影片） |
 | `cases/manage/index.html` | `src/caseAdmin.jsx` | 內部照片壓縮工具（已 noindex） |
 | `share/index.html` | 無 jsx，純轉址頁 | LINE 分享預覽用 |
 
@@ -215,7 +215,7 @@ cp950 主控台跑 Python 輸出繁中會 `UnicodeEncodeError`，前面加 `PYTH
 | G2 | 🔴 阻斷 | HTTPS 憑證 — **2026-09-11 已簽發完成並自動生效** | GitHub Pages | — | ✅ 已驗證 |
 | G3 | 🟠 高 | `public/CNAME` 已建立並確認進入 `dist` 產物 | `public/CNAME` | 10 分 | ✅ 已完成 |
 | G4 | 🟠 高 | **全站是 CSR，爬蟲看到的 `<body>` 是 0 字**。Googlebot 會渲染 JS，但多數 AI 爬蟲（GPTBot／ClaudeBot／PerplexityBot）不執行 JS，等於整站內容對 AI 搜尋不可見 | 需架構決策 | 需討論 | 🟡 **業主指定三方決議**：業主、Codex、Claude 三方都同意才做 |
-| G5 | 🟢 中 | 案例頁已補 `BreadcrumbList` ＋ `ImageGallery`（10 個相簿、代表圖與張數），並以 `about` 指回首頁的 business `@id` | `cases/index.html` | 30 分 | ✅ 已完成 |
+| G5 | 🟢 中 | 案例頁已補 `BreadcrumbList` ＋ `ImageGallery`（11 個相簿、代表圖與張數），並以 `about` 指回首頁的 business `@id` | `cases/index.html` | 30 分 | ✅ 已完成 |
 | **G6** | 🔴 **需業主帳號** | **填入 GA4 Measurement ID 才會開始收數據**。埋點已完成，`src/analytics.js` 的 `GA_MEASUREMENT_ID` 目前是空字串（安全 no-op）。到 GA 建資源拿到 `G-XXXXXXXXXX` 後填入、推 main 即生效 | `src/analytics.js` | 5 分 | ⬜ |
 | E1 | 🟡 **待業主決定** | 首頁與案例頁的服務分類不對應：首頁「一般清潔」（退租入住／大掃除／清運）在案例頁**沒有任何對應相簿**；首頁大類叫「裝潢清潔」、案例頁相簿叫「裝潢細清」 | `src/main.jsx:164`、`src/cases.jsx` | 需先確認 | ⬜ |
 | D1 | 🟡 待討論 | 設計回流機制（定期清潔提醒、老客推薦）— 五段檢查第 5 段完全空白 | — | 需先討論 | ⬜ |
@@ -283,6 +283,36 @@ Measurement ID 會出現在前端原始碼裡，這是 GA4 的正常設計，**�
 ---
 
 ## 6. 進度紀錄（倒序）
+
+### 2026-09-11 Codex 新增油漆清潔相簿
+
+**業主需求**：`D:\網站設計\潔淨坊\案場照片\油漆清潔` 補充油漆清潔照片與影片，要求列入特殊清潔並新增相簿。
+
+**修正**：
+
+1. 新增 `public/cases/paint-cleaning/`：8 張照片輸出為 `paint-cleaning-01.jpg`～`paint-cleaning-08.jpg`，並保留 1 支 `paint-cleaning-video.mp4`。
+2. 8 張照片已依既有相簿規格縮到最大邊 1800px、JPEG quality 84，並加上「潔淨坊 清潔服務／油漆清潔」浮水印；影片直接複製，未重新壓縮。
+3. `src/cases.jsx` 新增 `paint-cleaning` 相簿，分類為「特殊清潔」，標題「油漆清潔」，含 8 張照片與 1 支影片。四大矩陣的特殊清潔張數會自動更新為 24 張＋影片／共 4 個相簿。
+4. 案例頁相簿卡與抽屜 meta 改用 `albumCountLabel()`，有影片的相簿會顯示「＋影片」；既有商業廚房影片也會正確顯示。
+5. 首頁服務分類同步：裝潢清潔移除「油漆後整理」；特殊清潔加入「油漆清潔」。
+6. `cases/index.html` JSON-LD 手動同步為 11 個相簿、66 張照片、2 支影片，新增 `paint-cleaning` 的 `ImageGallery` 節點。
+7. `tools/watermark-cases.ps1` 新增來源資料夾「油漆清潔」→ slug `paint-cleaning` 的 mapping。注意：陷阱 12 仍成立，整支腳本仍不能安全重建跨來源的 `wood-floor-cleaning`。
+
+**驗證**：
+
+- 來源資料夾確認有 8 張 JPG、1 支 MP4。
+- 產出照片抽查：浮水印存在，第一張照片顯示正常。
+- `pnpm lint` 通過。
+- `pnpm build` 通過（沙盒內仍因 Windows/esbuild 權限擋住 `vite.config.js`，改用外部執行重跑成功）。
+- JSON-LD 以 Node 解析合法：11 個 `hasPart`，縮圖缺檔 0，未含 `Review`／`AggregateRating`。
+- 本機 preview `/cases/#paint-cleaning` 實測：油漆清潔抽屜自動展開，8 張照片與 1 支影片載入；四大矩陣特殊清潔顯示「24 張＋影片／共 4 個相簿」。
+- 390／768 viewport override 量測：未出現水平溢出，新相簿標題與「8 張＋影片」可讀。
+
+**本輪明確未驗**：
+
+- 尚未在真機 LINE 內建瀏覽器檢查新增相簿與影片播放。
+- 未重新壓縮影片，也未驗證手機網路下的影片載入成本。
+- 未跑 Google Rich Results Test 線上驗證；本輪只做本機 JSON-LD 解析，需部署後再測 `https://jjf.tw/cases/`。
 
 ### 2026-09-11（三）CNAME、GA4 事件追蹤、案例頁結構化資料（Claude）— ⚠️ 請 Codex 覆審
 
