@@ -6,6 +6,7 @@ import {
   Camera,
   ChevronDown,
   Droplets,
+  LayoutGrid,
   Phone,
   ShieldAlert,
   Sparkles,
@@ -27,7 +28,8 @@ const generatedPhotos = (folder, prefix, count) =>
     assetPath(`cases/${folder}/${prefix}-${String(index + 1).padStart(2, '0')}.jpg`),
   )
 
-const floorAdhesivePhotos = generatedPhotos('floor-adhesive-removal', 'floor-adhesive-removal', 7)
+const floorAdhesivePhotos = generatedPhotos('floor-adhesive-removal', 'floor-adhesive-removal', 5)
+const woodFloorPhotos = generatedPhotos('wood-floor-cleaning', 'wood-floor-cleaning', 4)
 
 const getAlbumFromHash = () => {
   if (typeof window === 'undefined') return ''
@@ -97,20 +99,36 @@ const albums = [
     photos: floorAdhesivePhotos,
     beforeAfter: [
       {
-        label: '木紋地板殘膠處理',
-        before: floorAdhesivePhotos[0],
-        after: floorAdhesivePhotos[1],
-      },
-      {
         label: '地磚殘膠與髒污整理',
-        before: floorAdhesivePhotos[3],
-        after: floorAdhesivePhotos[4],
+        before: floorAdhesivePhotos[1],
+        after: floorAdhesivePhotos[2],
       },
     ],
     detailPhotos: [
-      floorAdhesivePhotos[2],
-      floorAdhesivePhotos[5],
-      floorAdhesivePhotos[6],
+      floorAdhesivePhotos[0],
+      floorAdhesivePhotos[3],
+      floorAdhesivePhotos[4],
+    ],
+  },
+  {
+    // 2026-09-11 業主指正：木紋地板那組與商業廚房裡的兩張木地板照片，
+    // 都屬於「木地板清潔」，不是殘膠處理，獨立成一個相簿。
+    slug: 'wood-floor-cleaning',
+    title: '木地板清潔',
+    category: '重點清潔',
+    icon: LayoutGrid,
+    copy: '木紋地板的長期髒污、水漬與表面沉積，先確認板材狀況與可用的清潔方式，再決定處理程度。',
+    photos: woodFloorPhotos,
+    beforeAfter: [
+      {
+        label: '木紋地板清潔',
+        before: woodFloorPhotos[0],
+        after: woodFloorPhotos[1],
+      },
+    ],
+    detailPhotos: [
+      woodFloorPhotos[2],
+      woodFloorPhotos[3],
     ],
   },
   {
@@ -127,7 +145,7 @@ const albums = [
     category: '商業廚房',
     icon: Warehouse,
     copy: '營業空間、設備周邊、地面油汙與清潔動線，先確認可施工時間與現場安全。',
-    photos: generatedPhotos('commercial-kitchen', 'commercial-kitchen', 16),
+    photos: generatedPhotos('commercial-kitchen', 'commercial-kitchen', 14),
     videos: [
       assetPath('cases/commercial-kitchen/commercial-kitchen-video.mp4'),
     ],
