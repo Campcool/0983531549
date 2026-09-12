@@ -1,5 +1,8 @@
 User-agent: *
 Allow: /
-Disallow: /cases/manage/
+
+# /cases/manage/ 不在這裡 Disallow：Disallow 會讓爬蟲根本讀不到那頁的
+# <meta name="robots" content="noindex, nofollow">，兩個設定會互相抵銷。
+# 頁面層級的 noindex 才是確定有效的那個，見 AI-README 陷阱 7。
 
 Sitemap: https://jjf.tw/sitemap.xml

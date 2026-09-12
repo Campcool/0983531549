@@ -252,8 +252,8 @@ export function CasesApp() {
             className="brand-logo"
             src={assetPath('brand/logo-horizontal-transparent.png')}
             alt="潔淨坊清潔服務"
-            width="720"
-            height="356"
+            width="480"
+            height="237"
           />
         </a>
         <div className="header-actions">
@@ -417,11 +417,12 @@ export function CasesApp() {
                   ))}
                   {(album.detailPhotos ?? album.photos).map((photo, index) => (
                     <figure className="album-photo-card" key={photo}>
+                      {/* 相簿照片共 13 種長寬比（直式為主），宣告單一 width/height 必然
+                          與多數照片不符；版面由 .album-photo-card img 的固定高 +
+                          object-fit: cover 決定，實測 CLS 為 0，所以不宣告尺寸。 */}
                       <img
                         src={photo}
                         alt={`${album.title}案場照片 ${index + 1}`}
-                        width="1200"
-                        height="900"
                         loading="lazy"
                       />
                       <figcaption>
@@ -472,7 +473,6 @@ function SocialBrandIcon({ type, size = 20 }) {
       width={size}
       height={size}
       aria-hidden="true"
-      loading="lazy"
     />
   )
 }

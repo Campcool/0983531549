@@ -70,7 +70,7 @@ motion:
 
 ## Components
 
-按鈕至少 44px 高，圖示使用 lucide-react。LINE CTA 使用文字與通用訊息圖示，不使用未授權的 LINE 官方標誌。首頁品牌使用 `public/brand/logo-horizontal.png`，分頁小圖使用 `public/brand/favicon.png`，社群預覽使用 `public/og-image.png`。卡片只用於單一情境或案場照片項目；段落用 full-width band 或自然分隔，不做卡片包卡片。所有可操作元素需有明確 focus-visible 狀態。
+按鈕至少 44px 高，圖示使用 lucide-react。LINE CTA 使用文字與通用訊息圖示，不使用未授權的 LINE 官方標誌。首頁品牌使用 `public/brand/logo-horizontal-transparent.png`，分頁小圖使用 `public/brand/favicon-transparent.png`，社群預覽使用 `public/og-cleaning-area-services-20260910.jpg`。卡片只用於單一情境或案場照片項目；段落用 full-width band 或自然分隔，不做卡片包卡片。所有可操作元素需有明確 focus-visible 狀態。
 
 ## Motion
 

@@ -5,6 +5,10 @@
     <link rel="icon" type="image/png" href="%BASE_URL%brand/favicon-transparent.png" />
     <link rel="apple-touch-icon" href="%BASE_URL%brand/favicon-transparent.png" />
     <link rel="canonical" href="https://jjf.tw/share/" />
+    <!-- 這頁只是給 FB／LINE 抓 OG 卡片用的轉址頁，內容只有一行「正在前往首頁」。
+         FB／LINE 取 OG 不看 robots meta，所以加 noindex 不影響分享卡片，
+         但可以避免它被當成一個薄頁收錄、跟首頁競食同一組查詢。 -->
+    <meta name="robots" content="noindex, follow" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"

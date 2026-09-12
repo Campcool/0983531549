@@ -18,7 +18,7 @@ React 與 Vite 製作的潔淨坊清潔工作室第一版首頁。
 ## 素材
 
 - `public/brand/`：首頁 Logo、分頁小圖示與品牌圖標。
-- `public/og-image.png`：社群分享用 OG 圖。
+- `public/og-cleaning-area-services-20260910.jpg`：社群分享用 OG 圖（1200×1200）。
 - `public/cases/`：已提供的實際案場清潔照片。
 
 ## 本機開發

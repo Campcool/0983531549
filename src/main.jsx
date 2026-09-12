@@ -44,36 +44,48 @@ const facebookIcon = assetPath('brand/icon-facebook.svg')
 const casePhotos = [
   {
     src: assetPath('cases/high-cabinet-cleaning.jpg'),
+    w: 1108,
+    h: 1477,
     alt: '工作人員進行高處櫃體清潔',
     title: '高處櫃體清潔',
     copy: '櫃面、層板與不易碰到的位置，先確認高度與工具安全。',
   },
   {
     src: assetPath('cases/cabinet-detail-cleaning.jpg'),
+    w: 1108,
+    h: 1477,
     alt: '工作人員清潔木作櫃體內部',
     title: '木作櫃內整理',
     copy: '櫃內灰塵、抽屜縫隙與板材表面，依材質確認擦拭方式。',
   },
   {
     src: assetPath('cases/room-after-work-cleaning.jpg'),
+    w: 1108,
+    h: 1477,
     alt: '房間木作與地面清潔現場',
     title: '房間與木作除塵',
     copy: '裝修或搬動後的粉塵，分區處理地面、家具與平台。',
   },
   {
     src: assetPath('cases/vacuum-dust-cleaning.jpg'),
+    w: 1108,
+    h: 1477,
     alt: '工作人員使用吸塵設備清潔櫃體與牆面',
     title: '吸塵設備輔助',
     copy: '針對灰塵量較高的位置，搭配吸塵與局部擦拭。',
   },
   {
     src: assetPath('cases/commercial-kitchen/commercial-kitchen-01.jpg'),
+    w: 1108,
+    h: 1477,
     alt: '商業廚房與店面清潔現場',
     title: '商業廚房清潔',
     copy: '營業空間、設備周邊與地面油汙，先確認動線與可施工時間。',
   },
   {
     src: assetPath('cases/floor-adhesive-removal/floor-adhesive-removal-01.jpg'),
+    w: 1477,
+    h: 1108,
     alt: '地板殘膠特殊清潔現場',
     title: '地板除膠',
     copy: '地板殘膠與施工痕跡，先看材質與殘膠範圍再確認處理方式。',
@@ -282,7 +294,7 @@ const faqs = [
   },
   {
     question: '有真實案例或評論嗎？',
-    answer: '案例頁已整理自家案場實拍相簿，方便先看不同清潔情境。不放未經確認的客戶名稱、評論或成果數字；前後對比只使用已確認可公開的素材。',
+    answer: '案例頁已整理自家案場實拍相簿，方便先看不同清潔情境。評論只逐字引用 Google 商家上可公開查證的內容，標明作者與時間並附商家連結；不自行編寫或轉述客戶說法，也不放未確認的成果數字。前後對比只使用已確認可公開的素材。',
   },
   {
     question: '服務地區是哪裡？',
@@ -314,8 +326,8 @@ export function App() {
             className="brand-logo"
             src={assetPath('brand/logo-horizontal-transparent.png')}
             alt="潔淨坊清潔服務"
-            width="720"
-            height="356"
+            width="480"
+            height="237"
           />
         </a>
         <nav className="desktop-nav" aria-label="頁面段落">
@@ -350,7 +362,7 @@ export function App() {
         </div>
       </header>
 
-      <main id="main-content">
+      <main id="main-content" tabIndex={-1}>
         <section className="hero" id="top" aria-labelledby="hero-title">
           <div className="hero-copy">
             <p className="eyebrow">質感居家服務</p>
@@ -363,7 +375,7 @@ export function App() {
               <p><strong>家裡需要重整</strong>，不必先整理成完整清單。</p>
               <p>直接用 <strong>LINE 傳照片</strong>，我們再一起確認區域、時間與現場條件。</p>
             </div>
-            <div className="hero-actions" aria-label="主要行動" data-track-area="hero">
+            <div className="hero-actions" data-track-area="hero">
               <a className="button line-primary" href={lineUrl} target="_blank" rel="noreferrer">
                 <SocialBrandIcon type="line" size={21} />
                 加入 LINE 詢問
@@ -373,7 +385,7 @@ export function App() {
                 撥打電話
               </a>
             </div>
-            <div className="line-hint" aria-label="LINE 聯絡資訊" data-track-area="hero_line_hint">
+            <div className="line-hint" data-track-area="hero_line_hint">
               <a href={lineUrl} target="_blank" rel="noreferrer">
                 <Search size={15} aria-hidden="true" />
                 LINE 搜尋 0983531549
@@ -388,8 +400,9 @@ export function App() {
             <img
               src={heroImage}
               alt="潔淨坊清潔工作室實際案場清潔照片"
-              width="1478"
-              height="1108"
+              width="1108"
+              height="1477"
+              fetchPriority="high"
             />
             <div className="floating-tools" aria-hidden="true">
               <span><SprayCan size={20} /></span>
@@ -423,7 +436,9 @@ export function App() {
               const Icon = item.icon
               return (
                 <article className={`scenario-card scenario-${item.tone}`} key={item.title}>
-                  <span className="scenario-photo" style={{ '--scenario-image': `url(${item.image})` }} aria-hidden="true" />
+                  <span className="scenario-photo" aria-hidden="true">
+                    <img src={item.image} alt="" loading="lazy" decoding="async" />
+                  </span>
                   <Icon className="scenario-watermark" size={138} aria-hidden="true" />
                   <div className="card-topline">
                     <span>{String(index + 1).padStart(2, '0')}</span>
@@ -495,7 +510,7 @@ export function App() {
             <div className="case-photo-grid">
               {casePhotos.map((photo) => (
                 <article className="case-photo-card" key={photo.title}>
-                  <img src={photo.src} alt={photo.alt} width="1108" height="1477" loading="lazy" />
+                  <img src={photo.src} alt={photo.alt} width={photo.w} height={photo.h} loading="lazy" />
                   <div>
                     <h3>{photo.title}</h3>
                     <p>{photo.copy}</p>
@@ -522,7 +537,7 @@ export function App() {
                 </li>
               ))}
             </ol>
-            <div className="process-quick-actions" aria-label="快速預約" data-track-area="process">
+            <div className="process-quick-actions" data-track-area="process">
               <a className="button line-primary" href={lineUrl} target="_blank" rel="noreferrer">
                 <SocialBrandIcon type="line" size={21} />
                 LINE 傳照片詢問
@@ -539,7 +554,7 @@ export function App() {
             <p>
               先傳空間照片、行政區、預計清潔區域與希望日期。特別在意的角落，也可以另外拍近照。
             </p>
-            <div className="contact-action-grid" aria-label="LINE 與電話資訊">
+            <div className="contact-action-grid" role="group" aria-label="LINE 與電話資訊">
               {contactActions.map((method) => {
                 const Icon = method.icon
                 return (
@@ -584,7 +599,7 @@ export function App() {
           <SectionIntro eyebrow="Areas" title="主要詢問區域">
             工作室位於<strong>林口</strong>，<strong>林口、龜山</strong>是最常到府的區域；台北、新北、桃園與基隆也可詢問。實際是否可安排仍以地址、日期與路程確認。
           </SectionIntro>
-          <div className="area-grid" aria-label="服務地區">
+          <div className="area-grid" role="group" aria-label="服務地區">
             {serviceAreas.map((area) => (
               <div
                 className={`area-item${area.primary ? ' area-item-primary' : ''}`}
@@ -618,7 +633,7 @@ export function App() {
                 <p>{review.text}</p>
                 <footer>
                   <strong>{review.author}</strong>
-                  <small>{review.meta}· {review.when}</small>
+                  <small>{review.meta} · {review.when}</small>
                 </footer>
               </blockquote>
             ))}
@@ -740,7 +755,6 @@ function SocialBrandIcon({ type, size = 20 }) {
       width={size}
       height={size}
       aria-hidden="true"
-      loading="lazy"
     />
   )
 }

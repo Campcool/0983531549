@@ -7,7 +7,8 @@
 > 4. **所有時間戳一律台灣時間（Asia/Taipei, UTC+8）**。
 > 5. **不要把「已完成」寫在沒有實測的項目上**。未驗的事項寫進「本輪明確未驗」。
 
-最後更新：2026-09-12（Codex）— 補入「油漆清潔」完工照，案例頁同步為 11 個相簿／67 張照片／2 支影片。
+最後更新：2026-09-12（Claude）— 上架前全站稽核並修正 P1×5／P2×10：首屏 1,975→1,177 KB、服務流程區白字對比補到 AA、title 補地理詞、刪 3.66 MB 死資產。
+（同日稍早 Codex 補入「油漆清潔」完工照，案例頁為 11 個相簿／67 張照片／2 支影片。）
 
 **⚠️ 兩件事卡在業主帳號，做完才會有效果：**
 1. **G1｜Google 商家的「網站」欄位仍指向 FB，不是 `jjf.tw`** — 5 分鐘可改，是整份清單投報最高的一項。
@@ -105,10 +106,12 @@ React runtime 已正確拆成共用 chunk（189 KB／gzip 59.7 KB），四個入
 
 ## 4. 已知陷阱（踩過或實測確認）
 
-**1. CSS 背景圖無法 lazy load。**
-`main.jsx` 的 scenario 卡片用 `style={{'--scenario-image': url(...)}}` 走 CSS `background-image`。
-`loading="lazy"` 只對 `<img>` 有效，所以這 3 張共 767 KB 的圖雖然在首屏之下，仍會立即載入。
-頁面 17 個 `<img>` 有 15 個正確標了 lazy，唯獨這幾張漏網。改法見待辦 B1。
+**1. ~~CSS 背景圖無法 lazy load~~ — 2026-09-12 已修，但原理要記著。**
+`loading="lazy"` **只對 `<img>` 有效**，CSS `background-image` 一律立即載入。
+scenario 卡片原本用 `style={{'--scenario-image': url(...)}}`，五張（實測位置在
+`top` 1625–2537px，全部在 844px 首屏之下）每次開頁都跟著載，佔首屏 949 KB。
+已改成 `.scenario-photo > img[loading=lazy]`，白色漸層移到 `::after`，視覺等價。
+**下次要在卡片上放裝飾圖，請一律用 `<img>`，不要回頭用 background-image。**
 
 **2. `share/index.html` 曾硬編碼 Pages 子路徑。**
 2026-09-11 已配合 `jjf.tw` 改為 `window.location.replace('/')` 與根目錄 fallback 連結。
@@ -116,14 +119,15 @@ React runtime 已正確拆成共用 chunk（189 KB／gzip 59.7 KB），四個入
 
 **3. `DESIGN.md` 已與實作漂移。** 照著它做會改錯檔案：
 
-| DESIGN.md 指定 | 實際使用 |
-|---|---|
-| `logo-horizontal.png` | `logo-horizontal-transparent.png` |
-| `favicon.png` | `favicon-transparent.png` |
-| `og-image.png` | `og-cleaning-area-services-20260910.jpg` |
-| 大標「潔淨坊／清潔服務」 | 「潔淨坊／清潔工作室」 |
+| DESIGN.md 指定 | 實際使用 | 狀態 |
+|---|---|---|
+| `logo-horizontal.png` | `logo-horizontal-transparent.png` | ✅ 2026-09-12 已校正 |
+| `favicon.png` | `favicon-transparent.png` | ✅ 2026-09-12 已校正 |
+| `og-image.png` | `og-cleaning-area-services-20260910.jpg` | ✅ 2026-09-12 已校正 |
+| 大標「潔淨坊／清潔服務」 | 「潔淨坊／清潔工作室」 | ⬜ 仍漂移 |
 
-DESIGN.md 指名的三個檔案剛好全是**沒有任何引用的死檔**。
+上面三個死檔已於 2026-09-12 連同其他死資產一起刪除，DESIGN.md 與 README.md 的指向
+也一併改成實作真正在用的檔名。**剩下的大標文案仍與實作不符，改文案時請順手校正。**
 
 **4. `caseAdmin.jsx` 仍不是正式權限系統。**
 目前已移除 `1549` 明文比對，改用 SHA-256 hash 檢查 access code，並補上照片壓縮失敗時的
@@ -177,6 +181,24 @@ cp950 主控台跑 Python 輸出繁中會 `UnicodeEncodeError`，前面加 `PYTH
 且浮水印腳本用 System.Drawing 處理時丟失了 EXIF Orientation），
 已用 PIL 順時針旋轉 90° 修正並重存。**若重跑腳本，這三張會變回橫躺。**
 
+**13. 有色底上的白色半透明疊層會相乘，只改底色救不了對比。**
+2026-09-12 稽核發現「服務流程／LINE 詢問資料」整段白字都不到 WCAG AA
+（最低 `.step-list small` 只有 **2.57:1**）。第一次只把 `.split-section` 的漸層
+亮端從 `#2f8f8f` 壓到 `#1d6b6b`，實測只從 2.57 升到 3.41 —— 因為上面還疊了兩層白：
+
+| 層 | 白色疊層 | 淨值 |
+|---|---|---|
+| `.split-section` | 漸層底色 | — |
+| `.process-panel` / `.note-panel` | `linear-gradient(.12,.06)` + `rgba(.08)` | 約 .19 |
+| `.step-list li` | `linear-gradient(.14,.07)` + `rgba(.08)` | 約 .19 |
+
+三層相加後實際渲染出來的底色是 `rgb(99,141,148)`（亮度 .238），**純白字在其上
+最高只有 3.64:1**，所以那塊底色上任何字色都過不了 AA。最後是底色壓到 `#1a6060`
+**加上**兩層白各減半（`.06/.03`+`.03`、`.07/.035`+`.035`）才到 5.2–5.7。
+
+**教訓**：在有色底上量對比要量「實際渲染出來的像素」，不要只看 CSS 裡寫的底色值；
+用透明度做視覺層級在有色底上特別危險，層級請交給字級與字重。
+
 **11. 查資產是否還被引用時，一定要掃 `tools/` 與 `scripts/`，不能只掃前台原始碼。**
 2026-09-10 我刪 `cases/parking-floor-cleaning/` 前只掃了
 `src/ cases/ index.html share/ DESIGN.md README.md`，**漏掉 `tools/`**，
@@ -198,6 +220,8 @@ cp950 主控台跑 Python 輸出繁中會 `UnicodeEncodeError`，前面加 `PYTH
 
 狀態圖例：`⬜ 未開始` / `🟨 進行中` / `✅ 已完成並實測`
 
+2026-09-12 上架前稽核：B1 已完成；C3 完成三項之二（死資產、DESIGN.md、CI lint），只剩圖片轉 WebP。
+新增 B6（影片壓縮）、B7（scenario／hero 專用小圖）、C4（粉專網址待業主確認）、C5（手機導覽觸控高度）。
 本輪 2026-09-12 油漆清潔完工照已補入案例相簿，無新增長期待辦。
 
 | # | 優先 | 項目 | 位置 | 預估 | 狀態 |
@@ -205,14 +229,18 @@ cp950 主控台跑 Python 輸出繁中會 `UnicodeEncodeError`，前面加 `PYTH
 | A1 | 🔴 阻斷 | 改寫 FAQ 第 3 題，讓它與案例頁現況一致 | `src/main.jsx:241` | 10 分 | ✅ 已複驗 |
 | A2 | 🔴 阻斷 | LINE 按鈕改 `#017A35`、hover `#006B2E`（原白字對比僅 2.26:1，AA 不過） | `src/style.css:13`（已從 handoff-fixes.css 併回） | 10 分 | ✅ 已複驗 |
 | A3 | 🔴 阻斷 | 修 `c2f7fbd` 兩個無障礙迴歸：`aria-controls` 指向不存在元素（9/9）、`aria-hidden` 藏掉分類卡與索引卡張數 | `src/cases.jsx`、`style.css` | 30 分 | ✅ **待 Codex 覆審** |
-| B1 | 🟠 高 | scenario 背景圖改 `<img loading="lazy">`＋`object-fit:cover`，首屏 1.56 MB → 約 0.8 MB | `src/main.jsx:390`、`style.css` | 1 小時 | ⬜ |
+| B1 | 🟠 高 | scenario 背景圖改 `<img loading="lazy">`＋`object-fit:cover` | `src/main.jsx:426`、`style.css:967` | 1 小時 | ✅ **2026-09-12 完成並實測**：首屏 1,975→1,177 KB |
 | B2 | 🔴 阻斷 | 自有網域根目錄接上後，確認 `robots.txt`／`sitemap.xml` 可公開讀取，並到 GSC 手動提交 sitemap | GitHub Pages／GoDaddy／GSC 後台 | 30–60 分 | 🟨 **接入中，GSC 需業主帳號** |
 | B5 | 🟢 中 | 案例頁 header 相簿導覽（9 膠囊 3×3）**已移除**，導覽職責交給下方「案場相簿索引」 | `src/cases.jsx`、`style.css` | 1 小時 | ✅ **待 Codex 覆審** |
 | B3 | 🟠 高 | 加數字錨點帶（58 張實拍／9 類相簿／4 區到府）＋風險逆轉三句 | `src/main.jsx` | 2 小時 | ⬜ |
 | B4 | 🟠 高 | 首屏位階對調：品牌名縮至 32–40px，價值主張升至 60px＋；加一行計價說明 | `src/style.css`、`main.jsx` | 3 小時 | ⬜ |
 | C1 | 🟠 高 | `handleFiles` 補 `try/finally`；移除硬編碼密碼 | `src/caseAdmin.jsx:88`、`:6` | 30 分 | ✅ |
 | C2 | 🟡 待決策 | LINE 標誌換官方素材（現為自繪，違反自家 DESIGN.md） | `public/brand/icon-line.svg` | 待業主 | ⬜ |
-| C3 | 🟢 中 | 圖片轉 WebP、刪 4.63 MB 死資產、同步 DESIGN.md、CI 加 `pnpm lint` | 多處 | 半天 | ⬜ |
+| C3 | 🟢 中 | ~~刪死資產~~、~~同步 DESIGN.md~~、~~CI 加 `pnpm lint`~~ 已完成；**只剩圖片轉 WebP** | 多處 | 2 小時 | 🟨 **部分完成** |
+| B6 | 🟢 中 | `commercial-kitchen-video.mp4` **14.7 MB** 未壓縮，是全站最大單一檔案。720p H.264 CRF 26 通常可到 2–3 MB。沙盒無 ffmpeg，需在本機做 | `public/cases/commercial-kitchen/` | 30 分 | ⬜ |
+| B7 | 🟢 中 | hero 與 scenario 另外輸出手機用小圖。現在首屏仍有 `garbage-clearance-01.jpg`(376KB)＋`site-cleaning-hero.jpg`(291KB)＋`room-after-work`(183KB)＝850 KB，這三張是 1108×1477 原圖卻只渲染成 ~350px 寬（scenario 還只有 34% 不透明度）。輸出 5+1 張 ~720px 寬的衍生圖可再省約 600 KB | `public/cases/` | 1 小時 | ⬜ |
+| C4 | 🟡 **待業主確認** | 粉專網址不一致：站上三個入口用 `facebook.com/share/1GMwVQdp7J/?mibextid=wwXIfr`（帶追蹤參數的分享短連結），首頁 JSON-LD 的 `sameAs` 用 `facebook.com/chenli0775/`。`sameAs` 是給搜尋引擎做實體消歧用的，指到兩個不同 URL 會削弱訊號。**請業主到 FB 後台確認現行正式網址**，再把兩處一起改 | `src/main.jsx:40`、`src/cases.jsx:24`、`index.html:40` | 10 分 | ⬜ |
+| C5 | 🟢 中 | 手機版 6 顆導覽膠囊高 32px，低於 Google 行動友善建議的 48px（WCAG 2.5.8 的 24px 已通過）。**本輪刻意不改**：header 是固定 96px、膠囊排成 3×2，拉到 44px 會撐破 header，要連 `--header-height` 與依賴它的 `[id]{scroll-margin-top}` 一起調，風險不小（陷阱 9、10 都是 header 改動出的事），不適合上架前做 | `src/style.css:169` | 1 小時 | ⬜ |
 | **G1** | 🔴 **最高投報** | **Google 商家的「網站」欄位目前指向 `facebook.com/chenli0775/`，不是 `jjf.tw`**。商家是本地搜尋最大流量來源，等於把流量送給 FB。改一個欄位即可 | Google 商家後台 | 5 分 | ⬜ **需業主帳號** |
 | G2 | 🔴 阻斷 | HTTPS 憑證 — **2026-09-11 已簽發完成並自動生效** | GitHub Pages | — | ✅ 已驗證 |
 | G3 | 🟠 高 | `public/CNAME` 已建立並確認進入 `dist` 產物 | `public/CNAME` | 10 分 | ✅ 已完成 |
@@ -240,16 +268,21 @@ Google Search Console 送審仍需有權限的人手動處理。
 | 檔案 | 大小 | 說明 |
 |---|---|---|
 | `cases/rental-clearance/` 5 張 | 1.90 MB | 是 `case-20260909/` 的逐位元組副本 |
-| `og-line-square-20260909.png` | 985 KB | **新增**：`3b423cb` 換 OG 圖後失去引用 |
-| `og-image-20260909-service-area.png` | 623 KB | 與 line-card 內容完全相同 |
-| `og-image-20260909-line-card.png` | 623 KB | 同上 |
-| `brand/logo-mark.png` | 300 KB | 非透明版，實作用 transparent 版 |
+| `og-line-square-20260909.png` | 985 KB | ✅ 2026-09-12 已刪 |
+| `og-image-20260909-service-area.png` | 623 KB | ✅ 已刪（與下兩者 md5 完全相同） |
+| `og-image-20260909-line-card.png` | 623 KB | ✅ 已刪 |
+| `og-image.png` | 623 KB | ✅ 已刪（只有 DESIGN.md／README.md 指到，已一併校正） |
+| `brand/logo-mark.png` | 300 KB | ✅ 已刪 |
+| `brand/logo-horizontal.png` | 325 KB | ✅ 已刪（陷阱 3 的死檔） |
+| `brand/favicon.png` | 298 KB | ✅ 已刪（陷阱 3 的死檔） |
 
 `public/robots.txt` 與 `sitemap.xml` **不是**死資產（給爬蟲用，本來就不會被 HTML 引用），
 掃描腳本會誤報，不要刪。
 
-已清除：`cases/parking-floor-cleaning/` 5 張（1.60 MB）—— 與 `floor-waxing/` 逐位元組重複且已無引用，
-於 2026-09-10 刪除。
+已清除：`cases/parking-floor-cleaning/` 5 張（1.60 MB），2026-09-10 刪除。
+`cases/rental-clearance/` 與 `case-20260909/` 也早已不存在（舊清單未同步，2026-09-12 校正）。
+**2026-09-12 共刪 3.66 MB**，刪除前已照陷阱 11 全庫掃過（含 `tools/`、`scripts/`），
+`scripts/generate-og.ps1` 用的是 `logo-horizontal-transparent.png`，不受影響。
 
 ---
 
@@ -285,6 +318,96 @@ Measurement ID 會出現在前端原始碼裡，這是 GA4 的正常設計，**�
 ---
 
 ## 6. 進度紀錄（倒序）
+
+### 2026-09-12 上架前全站稽核與修正（Claude）— ⚠️ 請 Codex 覆審
+
+**做法**：建置 `dist` → 本機 server → Playwright 在 320／360／390／414／480／600／768／820／1024／1280／1440
+共 11 個寬度開站，跑 axe-core、Core Web Vitals（Fast-3G 1.6Mbps/150ms + CPU 4× 節流）、
+像素級對比量測、JSON-LD 對程式碼與磁碟的逐項比對、死資產全庫掃描。所有數字都是實測。
+
+**稽核結論**：無 P0 阻斷項。P1 六項、P2 十二項，本輪修掉 P1 五項與 P2 十項。
+
+#### 已修正（全部實測複驗過）
+
+| 項目 | 修正前 | 修正後 |
+|---|---|---|
+| 首頁首屏（390×844，不捲動） | 1,975 KB | **1,177 KB** |
+| 案例頁首屏 | 722 KB | **314 KB** |
+| 案例頁 LCP（節流） | 3.98 s | **2.27 s** |
+| `.step-list small` 對比 | 2.57 | **5.66** |
+| `.step-list strong` 對比 | 3.46 | **5.59** |
+| `.button.dark-secondary` 對比 | 3.57 | **5.23** |
+| `.note-panel p` 對比 | 3.45 | **5.67** |
+| hero／案例頁 eyebrow 對比 | 4.26 | **5.23** |
+| 「在 Google 查看全部」連結 | 3.86 | **5.81** |
+| 商家電話／LINE 連結 | 3.62 | **5.50** |
+| axe-core violations | 5 種 | **0**（唯一殘留是漸層底的已知誤判，像素量測 7.51） |
+| `public/` | 44 MB | **40 MB** |
+
+1. **P1-1 首屏瘦身**
+   - `logo-horizontal-transparent.png` 241 KB／720×356 → **28 KB／480×237**（quantize 256 色，
+     目視與原圖無差異；OG 腳本只畫到 270×134，尺寸仍充足）。
+   - `favicon-transparent.png` 219 KB → **23 KB**（維持 512×512，apple-touch-icon 品質不變）。
+   - scenario 五張背景圖改成真正的 `<img loading="lazy">`（見陷阱 1）。
+   - hero 補 `fetchPriority="high"`，`width/height` 從寫反的 `1478×1108` 改為正確的 `1108×1477`。
+   - header／dock 的品牌 SVG 圖示拿掉 `loading="lazy"`（各 0.3–0.5 KB，在首屏，lazy 只會延後繪製）。
+2. **P1-2 服務流程／LINE 詢問資料整段白字補到 AA** — 見新增的陷阱 13，底色與兩層白色疊層要一起改。
+3. **P1-3 FAQ 第 3 題與同頁 Google 評論區自相矛盾** — 原句「不放未經確認的客戶名稱、評論」，
+   但同一頁就列著兩則具名 Google 評論與 4.5★/31 則。已改寫成「只逐字引用 Google 商家上
+   可公開查證的內容，標明作者與時間並附商家連結；不自行編寫或轉述客戶說法」，守住第 2 節
+   內容邊界又與畫面一致。**評論區本身沒問題**：沒有誤用 `Review`／`AggregateRating`（已驗證）。
+4. **P1-4 `<title>` 補地理詞** — `og:title` 本來就有「基隆・雙北・桃園」，但 SERP 用的 `<title>` 一個地名都沒有。
+   首頁改「林口・龜山清潔公司｜潔淨坊清潔工作室」、案例頁改「清潔案場實拍相簿｜林口潔淨坊清潔工作室」。
+5. **P1-5 `/share/` 加 `noindex, follow`** — 原本自我 canonical、無 robots meta、不在 sitemap，
+   是一個可被索引的薄頁。FB／LINE 取 OG 不看 robots meta，**分享卡片不受影響**。
+6. **P2-1 相簿張數膠囊在手機溢出**（本輪之前「＋影片」造成）— `.album-drawer .case-album-heading`
+   在 <820px 把 meta 塞進寫死 46px 的 icon 欄，「8 張＋影片」需要 55px。第一欄改 `auto`。
+7. **P2-3 五個 `<div aria-label>` 無 role** — ARIA 1.2 禁止，螢幕閱讀器完全忽略。
+   兩個補 `role="group"`，三個直接移除（子連結本身已有名稱）。
+8. **P2-4 skip link 不移動焦點** — `<main>` 補 `tabIndex={-1}`，實測按 Enter 後焦點確實落在 `MAIN#main-content`。
+9. **P2-5 圖片尺寸屬性說謊** — 首頁 casePhotos 改成逐張帶 `w`/`h`（六張裡有一張是橫的）；
+   案例頁相簿照片共 **13 種長寬比**，宣告單一尺寸必然錯，直接不宣告並註明原因（CLS 實測為 0）。
+10. **P2-6 `twitter:card`** — `og:image` 是 1200×1200 方圖，`summary_large_image` 會裁掉上下各約 25%，改 `summary`。
+11. **P2-8 刪 3.66 MB 死資產** 並校正 DESIGN.md／README.md 指向（順帶關掉陷阱 3 的三個死檔）。
+12. **P2-10 評論作者與時間間缺空格**（`{review.meta}· {review.when}`）。
+13. **P2-11 加 `public/404.html`**；`robots.txt` 移除 `/cases/manage/` 的 `Disallow`
+    （Disallow 會讓爬蟲讀不到那頁的 `noindex`，兩者互相抵銷；留頁面層級的 noindex）。
+14. **P2-12 其他** — CI 在 Build 前加 `pnpm lint`；`prefers-reduced-motion` 補上漏掉的四個 `:active` 動畫；
+    JSON-LD `telephone` 改 E.164 `+886983531549`。
+
+#### 刻意不做（連同理由）
+
+- **P1-6 GEO `<noscript>` 摘要**：兩頁的 `<body>` 對不執行 JS 的檢索器都是零字（curl 實證只有
+  `<div id="root"></div>`）。加 `<noscript>` 不動架構就能補，但這屬於待辦 G4 的討論範圍，
+  **業主已指定三方決議**，等業主、Codex、Claude 都同意再做。
+- **C5 手機導覽觸控高度**：見待辦 C5，會撐破固定 96px 的 header，上架前不動 header。
+- **B6 影片壓縮**：沙盒沒有 ffmpeg。
+- **C4 粉專網址**：需業主確認哪一個是現行正式網址，不猜。
+
+#### 驗證
+
+- `pnpm lint` exit 0、`pnpm build` exit 0（Linux 上跑，無 Windows/esbuild 權限問題）。
+- axe-core（wcag2a/aa、wcag21a/aa、wcag22aa、best-practice）兩頁 × 兩個寬度：
+  violations 由 5 種降到 0（唯一殘留是 `.final-cta .eyebrow`，axe 看不到漸層底而誤判 1.08，
+  像素量測實為 7.51；passes 由 40 升到 45）。
+- 像素級對比：11 個代表元素全部達標，方法以 axe 已知值做控制組（誤差 <1%）。
+- 11 個寬度 × 2 頁：水平溢出全部 0；CLS 實測 0；零 console error、零失敗請求、零 HTTP ≥400。
+- 相簿張數膠囊：360／390／414／768px 全部不再溢出。
+- Skip link 實測焦點落點正確；相簿抽屜 `aria-expanded`／`hidden`／hash 開闔仍同步。
+- scenario 卡片與服務流程區目視比對：視覺等價，未走樣。
+- 刪檔前照陷阱 11 全庫掃描（含 `tools/`、`scripts/`），刪後再掃一次確認零殘留引用。
+
+#### 本輪明確未驗
+
+- **線上 `jjf.tw` 完全沒驗**：沙盒的 agent proxy 對該網域回 403，所有量測都在本機 `dist` 產物上做。
+  推上 main 後請務必在真實環境複驗一次，特別是新的 `404.html` 與 `/share/` 的 noindex。
+- **頁尾 Google 地圖 iframe 未驗**：`maps.google.com` 同樣被沙盒擋，在我這裡顯示為破圖。
+  這是沙盒限制不是網站缺陷，但請在真機確認一次。
+- 未在真機 LINE 內建瀏覽器檢查快取刷新、影片播放與撥號跳轉。
+- 首頁 LCP 2.58 s → 2.73 s，看起來略退但那是節流量測的跑次噪音（LCP 元素是文字
+  `SPAN.hero-brand-name`，不受圖片影響），未做多次取樣確認。
+- PageSpeed 實地數據（CrUX）未取，本輪只有實驗室值。
+- 未重跑整支 `tools/watermark-cases.ps1`；陷阱 12 仍成立。
 
 ### 2026-09-12 Codex 補入油漆清潔完工照
 
