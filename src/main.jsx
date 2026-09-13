@@ -263,6 +263,28 @@ const business = {
   reviewCount: 31,
 }
 
+const proofMetrics = [
+  { value: '67', label: '張實拍照片' },
+  { value: '11', label: '個案場相簿' },
+  { value: '4', label: '大類清潔需求' },
+  { value: '31', label: 'Google評論' },
+]
+
+const assuranceNotes = [
+  {
+    title: '費用不先寫死',
+    copy: '坪數、髒污、材質與交通條件確認後再說明，避免用不完整資訊報價。',
+  },
+  {
+    title: '照片先對齊範圍',
+    copy: '先用 LINE 看整體空間與重點角落，再判斷是否需要現場確認。',
+  },
+  {
+    title: '只放實際素材',
+    copy: '案例照片使用已提供案場素材，不補假評論、假客戶或未確認成果。',
+  },
+]
+
 // 摘自 Google 商家的公開評論，逐字引用、標明作者與時間，並連回商家頁面供查證。
 //
 // ⚠️ 只展示文字，**不得**把 Review／AggregateRating 寫進本站 JSON-LD。
@@ -365,12 +387,12 @@ export function App() {
       <main id="main-content" tabIndex={-1}>
         <section className="hero" id="top" aria-labelledby="hero-title">
           <div className="hero-copy">
-            <p className="eyebrow">質感居家服務</p>
+            <p className="eyebrow">林口・龜山到府清潔</p>
             <h1 id="hero-title" className="hero-title">
-              <span className="hero-brand-name">潔淨坊</span>
-              <span className="hero-brand-service">清潔工作室</span>
+              <span className="hero-brand-name">照片先確認範圍</span>
+              <span className="hero-brand-service">再安排到府服務</span>
             </h1>
-            <p className="brand-slogan">專業・細心・值得信賴</p>
+            <p className="brand-slogan">潔淨坊清潔工作室｜專業・細心・值得信賴</p>
             <div className="hero-lede">
               <p><strong>家裡需要重整</strong>，不必先整理成完整清單。</p>
               <p>直接用 <strong>LINE 傳照片</strong>，我們再一起確認區域、時間與現場條件。</p>
@@ -395,6 +417,14 @@ export function App() {
                 ID chenli0775
               </a>
             </div>
+            <dl className="hero-proof-list" aria-label="潔淨坊網站重點數字">
+              {proofMetrics.map((metric) => (
+                <div key={metric.label}>
+                  <dt>{metric.value}</dt>
+                  <dd>{metric.label}</dd>
+                </div>
+              ))}
+            </dl>
           </div>
           <figure className="hero-visual">
             <img
@@ -409,6 +439,10 @@ export function App() {
               <span><BrushCleaning size={20} /></span>
               <span><WashingMachine size={20} /></span>
             </div>
+            <figcaption className="hero-visual-caption">
+              <strong>實拍案場</strong>
+              <span>櫃體、木作、粉塵與局部細節先用照片對齊。</span>
+            </figcaption>
           </figure>
         </section>
 
@@ -425,6 +459,15 @@ export function App() {
               </article>
             )
           })}
+        </section>
+
+        <section className="assurance-strip" aria-label="詢問前先講清楚">
+          {assuranceNotes.map((note) => (
+            <article key={note.title}>
+              <strong>{note.title}</strong>
+              <p>{note.copy}</p>
+            </article>
+          ))}
         </section>
 
         <section className="section" id="needs">

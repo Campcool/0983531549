@@ -11,16 +11,16 @@ colors:
   primary-soft: "#DFF3EF"
   accent: "#7CC4E8"
   mint: "#A7DCC8"
-  line: "#06C755"
-  line-strong: "#04A948"
+  line: "#017A35"
+  line-strong: "#006B2E"
   border: "#D8D1C4"
   focus: "#174F5D"
 typography:
   family: "system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Noto Sans TC, sans-serif"
   display:
-    fontSize: "54px mobile / 78px desktop / 86px wide"
-    fontWeight: 900
-    lineHeight: 0.96
+    fontSize: "42-62px mobile / 58-76px desktop / 66-82px wide"
+    fontWeight: 1000
+    lineHeight: 1.05
   heading:
     fontSize: "32px mobile / 46px desktop / 50px wide"
     fontWeight: 900
@@ -54,7 +54,7 @@ motion:
 
 ## Overview
 
-潔淨坊的第一版定位為「乾淨、讓生活更美好」的質感居家服務：可溝通、重視到府前的需求確認。視覺依本次品牌板建立，以柔和綠、清爽藍、深青綠與柔白作為主系統，搭配已提供的 Logo、分頁小圖示、OG 圖與實際案場照片。
+潔淨坊的目前定位為「照片先確認範圍，再安排到府服務」的地區型清潔品牌：專業但不誇張、重視溝通與現場判斷。視覺要以業主提供的實拍照片、可查證案例數字、Google 商家資產與清楚聯絡入口建立信任；避免看起來像廉價的一頁式 AI 模板。
 
 ## Colors
 
@@ -62,15 +62,15 @@ motion:
 
 ## Typography
 
-系統字體搭配 `Noto Sans TC` fallback，減少字體載入成本並維持繁體中文可讀性。首頁大標固定為「潔淨坊 / 清潔服務」兩行，避免瀏覽器任意斷成「工作 / 室」或破壞品牌名稱。內文用短段落，手機上以自然換行閱讀。
+系統字體搭配 `Noto Sans TC` fallback，減少字體載入成本並維持繁體中文可讀性。首頁大標以價值主張優先，不再把「潔淨坊」做成唯一巨大文字；品牌名放在副標與 Logo 裡，避免首屏只像模板品牌展示。內文用短段落，手機上以自然換行閱讀。
 
 ## Layout
 
-手機優先：首屏放大品牌 Logo、服務主張與 LINE 行動，再接實際案場紀錄、情境、流程、細節、地區與 FAQ。桌面版轉為左右首屏構圖，Hero 圖片使用實拍案場而非生成居家照；其他段落使用寬版 grid，但不把每個區塊都包成大型卡片。
+手機優先：首屏保留 Logo、服務主張、LINE 行動與實拍數字錨點，再接詢問前承諾、實際案場紀錄、情境、流程、細節、地區與 FAQ。桌面版轉為左右首屏構圖，Hero 圖片使用實拍案場而非生成居家照；其他段落使用寬版 grid 與 full-width band，不把每個區塊都包成大型卡片。
 
 ## Components
 
-按鈕至少 44px 高，圖示使用 lucide-react。LINE CTA 使用文字與通用訊息圖示，不使用未授權的 LINE 官方標誌。首頁品牌使用 `public/brand/logo-horizontal-transparent.png`，分頁小圖使用 `public/brand/favicon-transparent.png`，社群預覽使用 `public/og-cleaning-area-services-20260910.jpg`。卡片只用於單一情境或案場照片項目；段落用 full-width band 或自然分隔，不做卡片包卡片。所有可操作元素需有明確 focus-visible 狀態。
+按鈕至少 44px 高，圖示使用 lucide-react 或既有品牌 SVG。LINE CTA 使用高對比深綠，白字必須通過 AA。首頁品牌使用 `public/brand/logo-horizontal-transparent.png`，分頁小圖使用 `public/brand/favicon-transparent.png`，社群預覽使用 `public/og-cleaning-area-services-20260910.jpg`。卡片只用於單一情境、相簿索引或案場照片項目；信任承諾、統計與商家資訊用 full-width band 或自然分隔，不做卡片包卡片。所有可操作元素需有明確 focus-visible 狀態。
 
 ## Motion
 

@@ -190,6 +190,12 @@ const featuredCategories = featuredCategoryMeta.map(({ title, icon, target }) =>
   }
 })
 
+const caseStats = [
+  { value: String(albums.length), label: '個案場相簿' },
+  { value: String(albums.reduce((sum, album) => sum + album.photos.length, 0)), label: '張實拍照片' },
+  { value: String(albums.reduce((sum, album) => sum + (album.videos?.length ?? 0), 0)), label: '支現場影片' },
+]
+
 const albumCountLabel = (album) => `${album.photos.length} 張${album.videos?.length ? '＋影片' : ''}`
 
 // 不依賴任何元件狀態，放在模組層級，useEffect 才不必把它列進依賴。
@@ -280,6 +286,14 @@ export function CasesApp() {
             <p>
               依類型整理實拍相簿，先看接近的現場，再用 LINE 傳照片確認。
             </p>
+            <dl className="case-hero-stats" aria-label="案例相簿統計">
+              {caseStats.map((stat) => (
+                <div key={stat.label}>
+                  <dt>{stat.value}</dt>
+                  <dd>{stat.label}</dd>
+                </div>
+              ))}
+            </dl>
             <div className="hero-actions">
               <a className="button secondary" href={import.meta.env.BASE_URL}>
                 <ArrowLeft size={19} aria-hidden="true" />
