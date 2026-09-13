@@ -673,31 +673,71 @@ p strong {
   order: 1;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   width: min(100%, 560px);
-  gap: 0;
+  gap: 8px;
   margin: 18px 0 0;
-  padding: 12px 0;
+  padding: 12px 0 10px;
   border-top: 1px solid rgba(23, 79, 93, .16);
   border-bottom: 1px solid rgba(23, 79, 93, .16);
 }
 
 .hero-proof-list div {
-  padding: 6px 9px 6px 0;
+  --proof-accent: var(--color-primary);
+  --proof-soft: var(--color-primary-soft);
+  display: grid;
+  min-width: 0;
+  min-height: 88px;
+  align-content: center;
+  justify-items: center;
+  padding: 9px 4px;
+  border: 1px solid color-mix(in srgb, var(--proof-accent) 22%, white);
+  border-radius: 10px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, .92), color-mix(in srgb, var(--proof-soft) 72%, white)),
+    var(--color-surface);
+  box-shadow:
+    inset 0 -12px 20px color-mix(in srgb, var(--proof-accent) 8%, transparent),
+    0 12px 24px rgba(18, 63, 73, .06);
+  text-align: center;
+}
+
+.hero-proof-list div:nth-child(1) {
+  --proof-accent: #2f8f8f;
+  --proof-soft: #e6f7f2;
+}
+
+.hero-proof-list div:nth-child(2) {
+  --proof-accent: #2f77a1;
+  --proof-soft: #e8f5fb;
+}
+
+.hero-proof-list div:nth-child(3) {
+  --proof-accent: #7a6dc8;
+  --proof-soft: #f0edff;
+}
+
+.hero-proof-list div:nth-child(4) {
+  --proof-accent: #c57b2c;
+  --proof-soft: #fff3e5;
 }
 
 .hero-proof-list dt {
-  color: var(--color-ink-deep);
-  font-size: clamp(25px, 7.3vw, 42px);
+  color: color-mix(in srgb, var(--proof-accent) 82%, #12353e);
+  font-size: clamp(34px, 10vw, 58px);
   font-weight: 1000;
-  line-height: 1;
+  line-height: .88;
   font-variant-numeric: tabular-nums;
+  text-shadow: 0 9px 18px color-mix(in srgb, var(--proof-accent) 15%, transparent);
 }
 
 .hero-proof-list dd {
-  margin: 6px 0 0;
-  color: var(--color-muted);
-  font-size: clamp(11px, 3vw, 13px);
-  font-weight: 900;
-  line-height: 1.35;
+  width: 100%;
+  margin: 9px 0 0;
+  color: color-mix(in srgb, var(--proof-accent) 72%, #12353e);
+  font-size: clamp(11px, 2.9vw, 13px);
+  font-weight: 950;
+  line-height: 1.18;
+  text-align: center;
+  text-wrap: balance;
 }
 
 .hero-visual {
