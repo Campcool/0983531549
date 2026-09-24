@@ -1109,6 +1109,14 @@ body:has(#areas:target) .nav-areas {
   --scenario-strong: #403979;
 }
 
+/* 2026-09-24 新增「退租入住」情境卡。前 5 個 tone 已用掉青／藍／綠／橘／紫，
+   第 6 個再加彩度會變成彩虹，所以用低彩度板岩色收尾。 */
+.scenario-handover {
+  --scenario-accent: #5f7486;
+  --scenario-tint: #eef2f6;
+  --scenario-strong: #33465a;
+}
+
 .scenario-photo {
   position: absolute;
   inset: 0;
@@ -1119,7 +1127,7 @@ body:has(#areas:target) .nav-areas {
   transition: opacity .24s ease, transform .28s ease;
 }
 
-/* 2026-09-12：這五張原本是 CSS background-image。loading="lazy" 只對 <img>
+/* 2026-09-12：這些原本是 CSS background-image。loading="lazy" 只對 <img>
    有效，所以五張（實測位置在 top 1625–2537px，全部在首屏之下）每次都跟著
    開頁一起載，佔首屏 949 KB。改成真正的 <img> 之後才延後載入。
    視覺與原本等價：圖片在下、白色漸層蓋在上、整層 opacity .34 + saturate(.9)。 */
@@ -3040,11 +3048,6 @@ select {
     min-height: 230px;
   }
 
-  .scenario-card:nth-child(4),
-  .scenario-card:nth-child(5) {
-    grid-column: span 3;
-  }
-
   .case-grid {
     grid-template-columns: minmax(320px, .8fr) minmax(0, 1.2fr);
     align-items: start;
@@ -3237,12 +3240,10 @@ select {
   }
 
   .scenario-grid {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-  .scenario-card,
-  .scenario-card:nth-child(4),
-  .scenario-card:nth-child(5) {
+  .scenario-card {
     grid-column: span 1;
     min-height: 220px;
     padding: 22px;

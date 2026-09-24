@@ -1,3 +1,7 @@
+# ⚠️ 這支與 scripts/generate-og.py 是同一張圖的兩個產生器，**必須同步修改**。
+#    generate-og.ps1：Windows / System.Drawing，需要 %WINDIR%\Fonts\NotoSansTC-VF.ttf。
+#    generate-og.py ：跨平台 / Pillow，沙盒與 CI 用，字型從 Google Fonts 取同一家族。
+#    改了文案只改其中一支，下一個人重跑另一支就會把改動蓋掉。見 AI-README 陷阱 14。
 Add-Type -AssemblyName System.Drawing
 
 $ErrorActionPreference = 'Stop'
@@ -91,7 +95,7 @@ $purple = New-Brush '#6f5cc5'
 
 $fontBrand = New-Font 82 ([System.Drawing.FontStyle]::Bold)
 $fontSub = New-Font 44 ([System.Drawing.FontStyle]::Bold)
-$fontArea = New-Font 50 ([System.Drawing.FontStyle]::Bold)
+$fontArea = New-Font 44 ([System.Drawing.FontStyle]::Bold)
 $fontBody = New-Font 35 ([System.Drawing.FontStyle]::Bold)
 $fontChip = New-Font 31 ([System.Drawing.FontStyle]::Bold)
 $fontSmall = New-Font 26 ([System.Drawing.FontStyle]::Bold)
@@ -100,17 +104,21 @@ $g.DrawString((U '6F54 6DE8 574A'), $fontBrand, $primary, 104, 268)
 $g.DrawString((U '6E05 6F54 5DE5 4F5C 5BA4'), $fontSub, $primary, 108, 364)
 $g.DrawString((U '4E7E 6DE8 FF0C 8B93 751F 6D3B 66F4 7F8E 597D FF01'), $fontBody, $secondary, 108, 438)
 
-Fill-RoundRect $g 104 520 574 118 32 (New-Brush '#dff3ef')
-$g.DrawString((U '57FA 9686 FF5C 53F0 5317 FF5C 65B0 5317 FF5C 6843 5712'), $fontArea, $primary, 124, 553)
+# 2026-09-24 業主要求服務地區改為 林口、龜山、基隆、雙北、桃園（原為 基隆｜台北｜新北｜桃園）。
+# 五個地區排單行會把字級從 50px 壓到 38px，反而弱化業主最在意的這一行，所以改兩行 44px，
+# 膠囊高度 118 → 140，以下元素整體下移 22px。
+Fill-RoundRect $g 104 520 574 140 34 (New-Brush '#dff3ef')
+$g.DrawString((U '6797 53E3 FF5C 9F9C 5C71 FF5C 57FA 9686'), $fontArea, $primary, 124, 536)
+$g.DrawString((U '96D9 5317 FF5C 6843 5712'), $fontArea, $primary, 124, 596)
 
-$g.DrawString((U '670D 52D9 5167 5BB9'), $fontSmall, $muted, 108, 684)
+$g.DrawString((U '670D 52D9 5167 5BB9'), $fontSmall, $muted, 108, 706)
 
 $chips = @(
-  @{ Text = (U '5C45 5BB6 6E05 6F54'); X = 108; Y = 738; W = 250; C = $secondary; Bg = '#e6f7f2' },
-  @{ Text = (U '88DD 6F62 7D30 6E05'); X = 382; Y = 738; W = 250; C = $blue; Bg = '#e8f5fb' },
-  @{ Text = (U '9000 79DF 5165 4F4F'); X = 108; Y = 816; W = 250; C = $orange; Bg = '#fff3e5' },
-  @{ Text = (U '91CD 6CB9 6C59'); X = 382; Y = 816; W = 250; C = $purple; Bg = '#f0edff' },
-  @{ Text = (U '7279 6B8A 6E05 6F54'); X = 108; Y = 894; W = 250; C = $primary; Bg = '#edf8e8' }
+  @{ Text = (U '5C45 5BB6 6E05 6F54'); X = 108; Y = 760; W = 250; C = $secondary; Bg = '#e6f7f2' },
+  @{ Text = (U '88DD 6F62 7D30 6E05'); X = 382; Y = 760; W = 250; C = $blue; Bg = '#e8f5fb' },
+  @{ Text = (U '9000 79DF 5165 4F4F'); X = 108; Y = 838; W = 250; C = $orange; Bg = '#fff3e5' },
+  @{ Text = (U '91CD 6CB9 6C59'); X = 382; Y = 838; W = 250; C = $purple; Bg = '#f0edff' },
+  @{ Text = (U '7279 6B8A 6E05 6F54'); X = 108; Y = 916; W = 250; C = $primary; Bg = '#edf8e8' }
 )
 
 foreach ($chip in $chips) {
@@ -118,8 +126,8 @@ foreach ($chip in $chips) {
   $g.DrawString($chip.Text, $fontChip, $chip.C, ($chip.X + 27), ($chip.Y + 9))
 }
 
-Fill-RoundRect $g 104 1000 574 82 28 $lineGreen
-$g.DrawString((U '004C 0049 004E 0045 0020 50B3 7167 7247 5148 78BA 8A8D'), $fontBody, $white, 155, 1017)
+Fill-RoundRect $g 104 1022 574 82 28 $lineGreen
+$g.DrawString((U '004C 0049 004E 0045 0020 50B3 7167 7247 5148 78BA 8A8D'), $fontBody, $white, 155, 1039)
 
 $photoCard = New-Brush '#ffffff' 245
 Fill-RoundRect $g 790 704 338 276 30 $photoCard
