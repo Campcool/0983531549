@@ -7,7 +7,8 @@
 > 4. **所有時間戳一律台灣時間（Asia/Taipei, UTC+8）**。
 > 5. **不要把「已完成」寫在沒有實測的項目上**。未驗的事項寫進「本輪明確未驗」。
 
-最後更新：2026-09-24（Claude）— 依業主要求把 OG 服務地區改為「林口・龜山・基隆・雙北・桃園」（三頁 meta ＋ 重產 OG 圖），並新增具名的「退租入住」需求情境卡。
+最後更新：2026-09-28（Claude）— 新增 38 張一般居家清潔＋退租入住清潔照片（LINE 拼圖），並修正拼圖被 object-fit:cover 裁切的問題（isComposite 旗標 + contain 完整顯示）。
+（前一輪 2026-09-24 Claude）— 依業主要求把 OG 服務地區改為「林口・龜山・基隆・雙北・桃園」（三頁 meta ＋ 重產 OG 圖），並新增具名的「退租入住」需求情境卡。
 （前一輪 2026-09-13 Codex）— 依業主要求做整體 UI/UX 高質感強化：首頁首屏改為價值主張優先、補 67 張實拍／11 個相簿／31 則評論等數字錨點，並把數字錨點補成 4 個吸睛彩色數據磚；加入詢問前風險逆轉三句，案例頁首屏補相簿統計並同步 DESIGN.md／sitemap。
 （前一輪 2026-09-12 Claude 上架前全站稽核並修正 P1×5／P2×10；同日 Codex 補入「油漆清潔」完工照，案例頁為 11 個相簿／67 張照片／2 支影片。）
 
@@ -337,7 +338,31 @@ Measurement ID 會出現在前端原始碼裡，這是 GA4 的正常設計，**�
 
 ## 6. 進度紀錄（倒序）
 
-### 2026-09-28 新增一般居家清潔＋退租入住清潔相簿（Claude）— ⚠️ 請 Codex 覆審
+### 2026-09-28（二）拼圖照片改為完整顯示（Claude）— ⚠️ 請 Codex 覆審
+
+**問題根源**：`general-home-cleaning` 與 `move-in-cleaning` 的照片均為 LINE 匯出的拼圖（每檔含 2×2 或 2×3 子圖，左欄=清潔前、右欄=清潔後）。原本 `.album-photo-card img` 的 `height: clamp(230px, 62vw, 360px)` + `object-fit: cover` 會把拼圖裁切，消費者看不到完整的前後對比格子。
+
+**修正內容**：
+
+1. **`src/cases.jsx`**：在 `general-home-cleaning` 與 `move-in-cleaning` 兩個相簿 entry 各加 `isComposite: true` 旗標。於 photo card render 加入 `${album.isComposite ? ' is-composite' : ''}` class。
+2. **`src/style.css`**：新增規則：
+   ```css
+   .album-photo-card.is-composite img {
+     height: auto;
+     object-fit: contain;
+     background: var(--color-surface);
+   }
+   ```
+   覆寫有旗標相簿的圖片顯示方式，其他 11 個既有相簿不受影響。
+
+**驗證**：
+- 語法目視確認（JSX class 拼接、CSS 選取器正確）。
+- **未跑 `pnpm lint` 與 `pnpm build`**，請 Codex 覆審。
+- **未在瀏覽器實測拼圖顯示效果**，部署後請開 `/cases/#general-home-cleaning` 與 `/cases/#move-in-cleaning` 確認照片完整不裁切。
+
+---
+
+### 2026-09-28（一）新增一般居家清潔＋退租入住清潔相簿（Claude）— ⚠️ 請 Codex 覆審
 
 **業主需求**：提供 38 張清潔前後對比照，要求在案例頁新增前後對比圖片展示區（一般清潔、退租入住各一類）。
 
