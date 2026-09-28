@@ -367,11 +367,14 @@ JSON-LD 13 相簿／105 張，以及 `isComposite` 只套用兩個新相簿的�
 - 線上部署複驗在修正前重現：一般居家 11 張皆為 `clientHeight=0`、`complete=false`，證實非單純網速慢。
 - 其他 11 個相簿沒有 `isComposite`，原本固定高度與 `object-fit:cover` 規則不變。
 
-**本輪明確未驗**：
+**正式站複驗**：
 
-- 修正與壓縮資產推上 `main` 後，仍需等待 GitHub Pages 部署完成，再以
-  `/cases/#general-home-cleaning` 與 `/cases/#move-in-cleaning` 做最終線上截圖與尺寸複驗。
-- 未新增浮水印；維持業主原始拼圖內容，避免重跑既有一對一浮水印腳本造成陷阱 12 的分類問題。
+- `ef32c0b` 推上 `main` 並完成部署後，`/cases/#general-home-cleaning` 11/11 張、
+  `/cases/#move-in-cleaning` 27/27 張皆成功載入；零高度 0、破圖 0、CSS 為 `contain`，
+  實際顯示比例與原圖比例一致，確認沒有裁切。
+- 舊的 `/cases/#general-cleaning` 仍只有 `album-photo-card`，10 張皆維持 `object-fit:cover`。
+
+**本輪明確未驗**：未新增浮水印；維持業主原始拼圖內容，避免重跑既有一對一浮水印腳本造成陷阱 12 的分類問題。
 
 ### 2026-09-28（二）拼圖照片改為完整顯示（Claude）— ⚠️ 請 Codex 覆審
 
