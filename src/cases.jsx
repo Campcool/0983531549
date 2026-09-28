@@ -285,6 +285,7 @@ export function CasesApp() {
             width="480"
             height="237"
           />
+          <span className="brand-back-label">← 回首頁</span>
         </a>
         <div className="header-actions">
           <a className="header-action line-action" href={lineUrl} target="_blank" rel="noreferrer" aria-label="用 LINE 詢問潔淨坊">

@@ -381,6 +381,14 @@ export function App() {
             <span>LINE</span>
           </a>
           <a
+            className="header-action phone-action"
+            href={phoneUrl}
+            aria-label="撥打潔淨坊電話"
+          >
+            <Phone size={22} aria-hidden="true" />
+            <span>電話</span>
+          </a>
+          <a
             className="header-action facebook-action"
             href={facebookPageUrl}
             target="_blank"
