@@ -13,9 +13,11 @@ import {
   Phone,
   ShieldAlert,
   Sparkles,
+  Tags,
   Trash2,
   Utensils,
   Warehouse,
+  X,
 } from 'lucide-react'
 import './style.css'
 import { useClickTracking, trackAlbum } from './analytics.js'
@@ -49,6 +51,7 @@ const albums = [
     category: '裝潢細清',
     icon: Sparkles,
     copy: '裝修後粉塵、櫃體表面與細節收尾，依現場照片確認清潔範圍與優先順序。',
+    tags: ['裝潢', '全室', '粉塵'],
     photos: generatedPhotos('general-cleaning', 'general-cleaning', 10),
   },
   {
@@ -60,6 +63,7 @@ const albums = [
     category: '特殊清潔',
     icon: Trash2,
     copy: '垃圾屋、囤積物與退租清空，先確認物品量、搬運動線與可處理範圍，再安排清運方式。',
+    tags: ['退租入住', '全室', '清運', '特殊處理'],
     photos: generatedPhotos('garbage-clearance', 'garbage-clearance', 5),
   },
   {
@@ -68,6 +72,7 @@ const albums = [
     category: '特殊清潔',
     icon: ShieldAlert,
     copy: '霉斑與潮濕區域需先確認材質、範圍與通風條件，再安排處理方式。',
+    tags: ['居家', '衛浴', '除霉', '特殊處理'],
     photos: generatedPhotos('mold-removal', 'mold-removal', 6),
   },
   {
@@ -76,6 +81,7 @@ const albums = [
     category: '特殊清潔',
     icon: PaintRoller,
     copy: '牆面、天花板與燈具周邊油漆整理，先確認材質、施工範圍與現場保護條件。',
+    tags: ['裝潢', '油漆', '特殊處理'],
     photos: generatedPhotos('paint-cleaning', 'paint-cleaning', 9),
     videos: [
       assetPath('cases/paint-cleaning/paint-cleaning-video.mp4'),
@@ -87,6 +93,7 @@ const albums = [
     category: '重點清潔',
     icon: Utensils,
     copy: '爐台、牆面、設備周邊與長期油垢，先用近照判斷厚度與可作業位置。',
+    tags: ['廚房', '重油污'],
     photos: generatedPhotos('grease-kitchen', 'grease-kitchen', 3),
   },
   {
@@ -95,6 +102,7 @@ const albums = [
     category: '重點清潔',
     icon: Droplets,
     copy: '浴廁、玻璃、五金與檯面水垢，依材質與水垢程度確認處理期待。',
+    tags: ['居家', '衛浴', '水垢'],
     photos: generatedPhotos('scale-removal', 'scale-removal', 4),
   },
   {
@@ -103,6 +111,7 @@ const albums = [
     category: '重點清潔',
     icon: Droplets,
     copy: '雨棚、採光罩與戶外覆蓋面，先確認高度、材質與可安全施工的位置。',
+    tags: ['居家', '門窗戶外'],
     photos: generatedPhotos('awning-cleaning', 'awning-cleaning', 2),
   },
   {
@@ -111,6 +120,7 @@ const albums = [
     category: '特殊清潔',
     icon: ShieldAlert,
     copy: '地板殘膠、施工痕跡與局部髒污，依材質判斷處理方式，前後照片放在同一組查看。',
+    tags: ['裝潢', '地板', '除膠', '特殊處理'],
     photos: floorAdhesivePhotos,
     beforeAfter: [
       {
@@ -133,6 +143,7 @@ const albums = [
     category: '重點清潔',
     icon: LayoutGrid,
     copy: '木紋地板的長期髒污、水漬與表面沉積，先確認板材狀況與可用的清潔方式，再決定處理程度。',
+    tags: ['居家', '地板', '木地板'],
     photos: woodFloorPhotos,
     beforeAfter: [
       {
@@ -152,6 +163,7 @@ const albums = [
     category: '重點清潔',
     icon: BrushCleaning,
     copy: '停車位、磁磚與地面清洗打蠟需求，先確認材質、面積、設備動線與可施工時間。',
+    tags: ['商用', '地板', '洗地打蠟'],
     photos: generatedPhotos('floor-waxing', 'floor-waxing', 5),
   },
   {
@@ -162,6 +174,7 @@ const albums = [
     category: '重點清潔',
     icon: Home,
     copy: '日常居家深層清潔，包含浴廁玻璃水垢、通風扇濾網、廚房設備與地板細節，拍照對齊現況再安排到府。',
+    tags: ['居家', '全室', '廚房', '衛浴', '地板'],
     photos: generatedPhotos('general-home-cleaning', 'general-home-cleaning', 11),
     isComposite: true,
   },
@@ -173,6 +186,7 @@ const albums = [
     category: '重點清潔',
     icon: KeyRound,
     copy: '點交前後整室清潔，從地板、廚房、浴廁到門窗細節全面到位，先用照片確認空間狀況再安排作業。',
+    tags: ['退租入住', '全室', '廚房', '衛浴', '地板', '門窗戶外'],
     photos: generatedPhotos('move-in-cleaning', 'move-in-cleaning', 27),
     isComposite: true,
   },
@@ -182,6 +196,7 @@ const albums = [
     category: '商業廚房',
     icon: Warehouse,
     copy: '營業空間、設備周邊、地面油汙與清潔動線，先確認可施工時間與現場安全。',
+    tags: ['商用', '廚房', '重油污'],
     photos: generatedPhotos('commercial-kitchen', 'commercial-kitchen', 14),
     videos: [
       assetPath('cases/commercial-kitchen/commercial-kitchen-video.mp4'),
@@ -189,30 +204,19 @@ const albums = [
   },
 ]
 
-// 四大分類的顯示順序與圖示。張數、相簿數與跳轉目標全部從 albums 推算，
-// 不要再硬編碼——過去寫死的「15/14/13/16 張」與點開後實際看到的張數對不上
-// （例如標「重點清潔 14 張」，點進去只有洗地打蠟的 5 張）。
-// target 省略時預設跳該分類第一個相簿；業主指定要跳特定相簿時才明寫。
-const featuredCategoryMeta = [
-  { title: '裝潢細清', icon: Sparkles },
-  { title: '重點清潔', icon: Droplets, target: 'floor-waxing' },
-  { title: '特殊清潔', icon: ShieldAlert },
-  { title: '商業廚房', icon: Warehouse },
+// 複合式速查採「同群單選、跨群交集」：例如「退租入住＋廚房」會只留下
+// 同時符合兩個條件的案例。新增相簿時只需補 tags，不需要另外維護張數或結果清單。
+const filterGroups = [
+  { id: 'context', label: '服務情境', options: ['居家', '裝潢', '退租入住', '商用', '特殊處理'] },
+  { id: 'space', label: '空間部位', options: ['全室', '廚房', '衛浴', '地板', '門窗戶外'] },
+  { id: 'need', label: '處理需求', options: ['重油污', '水垢', '除霉', '除膠', '清運', '油漆', '木地板', '洗地打蠟', '粉塵'] },
 ]
 
-const featuredCategories = featuredCategoryMeta.map(({ title, icon, target }) => {
-  const inCategory = albums.filter((album) => album.category === title)
-  const photoCount = inCategory.reduce((sum, album) => sum + album.photos.length, 0)
-  const videoCount = inCategory.reduce((sum, album) => sum + (album.videos?.length ?? 0), 0)
-
-  return {
-    title,
-    icon,
-    target: target ?? inCategory[0]?.slug ?? '',
-    countLabel: `${photoCount} 張${videoCount ? '＋影片' : ''}`,
-    albumCount: inCategory.length,
-  }
-})
+const quickFindTags = ['廚房', '衛浴', '裝潢', '退租入住', '商用']
+const emptyFilters = Object.fromEntries(filterGroups.map((group) => [group.id, '']))
+const tagGroupId = (tag) => filterGroups.find((group) => group.options.includes(tag))?.id ?? ''
+const matchesFilters = (album, filters) =>
+  Boolean(album) && Object.values(filters).filter(Boolean).every((tag) => album.tags.includes(tag))
 
 const caseStats = [
   { value: String(albums.length), label: '個案場相簿' },
@@ -231,6 +235,10 @@ const scrollAlbumIntoView = (slug) => {
 
 export function CasesApp() {
   const [openAlbum, setOpenAlbum] = React.useState(getAlbumFromHash)
+  const [selectedFilters, setSelectedFilters] = React.useState(emptyFilters)
+
+  const activeFilters = Object.values(selectedFilters).filter(Boolean)
+  const filteredAlbums = albums.filter((album) => matchesFilters(album, selectedFilters))
 
   // 一個事件委派接管全站 <a> 的點擊追蹤；相簿開闔另外明確記錄（見下方）
   useClickTracking()
@@ -274,6 +282,33 @@ export function CasesApp() {
     window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}`)
   }
 
+  const updateFilter = (groupId, tag) => {
+    const nextFilters = {
+      ...selectedFilters,
+      [groupId]: selectedFilters[groupId] === tag ? '' : tag,
+    }
+
+    setSelectedFilters(nextFilters)
+
+    if (openAlbum && !matchesFilters(albums.find((album) => album.slug === openAlbum), nextFilters)) {
+      setOpenAlbum('')
+      window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}`)
+    }
+  }
+
+  const startQuickFind = (tag) => {
+    const groupId = tagGroupId(tag)
+    const nextFilters = { ...emptyFilters, [groupId]: tag }
+    setSelectedFilters(nextFilters)
+    setOpenAlbum('')
+    window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}`)
+    document.getElementById('album-finder')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
+  const clearFilters = () => {
+    setSelectedFilters(emptyFilters)
+  }
+
   return (
     <div className="site-shell cases-page">
       <header className="site-header" aria-label="案例頁主選單">
@@ -307,9 +342,9 @@ export function CasesApp() {
         <section className="cases-hero">
           <div>
             <p className="eyebrow">案場相簿</p>
-            <h1>實際案場照片</h1>
+            <h1>快速找到相近案例</h1>
             <p>
-              依類型整理實拍相簿，先看接近的現場，再用 LINE 傳照片確認。
+              依服務情境、空間與清潔問題交叉篩選，先看接近的現場，再用 LINE 傳照片確認。
             </p>
             <dl className="case-hero-stats" aria-label="案例相簿統計">
               {caseStats.map((stat) => (
@@ -330,30 +365,69 @@ export function CasesApp() {
               </a>
             </div>
           </div>
-          <ul className="case-cover-stack case-category-stack" aria-label="案場照片分類與張數">
-            {featuredCategories.map((item) => {
-              const Icon = item.icon
-              return (
-                <li className="hero-category-card" key={item.title}>
-                  <button type="button" onClick={() => openAlbumSection(item.target)}>
-                    <Icon size={28} aria-hidden="true" />
-                    <strong>{item.title}</strong>
-                    <span>{item.countLabel}</span>
-                    <small>{item.albumCount > 1 ? `共 ${item.albumCount} 個相簿` : '點開相簿'}</small>
-                  </button>
-                </li>
-              )
-            })}
-          </ul>
+          <aside className="case-quick-find" aria-label="熱門案例快速入口">
+            <div className="case-quick-find-heading">
+              <Tags size={24} aria-hidden="true" />
+              <div>
+                <strong>熱門速查</strong>
+                <span>先選一個方向，再到下方交叉篩選</span>
+              </div>
+            </div>
+            <div className="case-quick-find-list">
+              {quickFindTags.map((tag) => (
+                <button type="button" key={tag} onClick={() => startQuickFind(tag)}>
+                  <span>{tag}</span>
+                  <small>{albums.filter((album) => album.tags.includes(tag)).length} 個相簿</small>
+                </button>
+              ))}
+            </div>
+          </aside>
         </section>
 
-        <section className="section album-index" aria-label="案例相簿列表">
+        <section className="section album-index" id="album-finder" aria-label="案例相簿速查">
           <div className="album-index-heading">
-            <p className="eyebrow">Album Index</p>
-            <h2>案場相簿索引</h2>
-            <p>選擇接近的現場類型，進入相簿查看照片。</p>
+            <p className="eyebrow">Case Finder</p>
+            <h2>複合標籤速查</h2>
+            <p>每列可選一項，跨列組合會縮小結果；再點一次即可取消。</p>
           </div>
-          {albums.map((album) => {
+          <div className="case-filter-panel">
+            {filterGroups.map((group) => (
+              <fieldset className="case-filter-group" key={group.id}>
+                <legend>{group.label}</legend>
+                <div className="case-filter-options">
+                  {group.options.map((tag) => {
+                    const isSelected = selectedFilters[group.id] === tag
+                    const count = albums.filter((album) => album.tags.includes(tag)).length
+                    return (
+                      <button
+                        type="button"
+                        key={tag}
+                        className={isSelected ? 'is-selected' : ''}
+                        aria-pressed={isSelected}
+                        onClick={() => updateFilter(group.id, tag)}
+                      >
+                        {tag}
+                        <span>{count}</span>
+                      </button>
+                    )
+                  })}
+                </div>
+              </fieldset>
+            ))}
+          </div>
+          <div className="case-filter-result" aria-live="polite">
+            <p>
+              <strong>{filteredAlbums.length}</strong> 個相簿符合
+              {activeFilters.length > 0 && <span> · {activeFilters.join(' ＋ ')}</span>}
+            </p>
+            {activeFilters.length > 0 && (
+              <button type="button" onClick={clearFilters}>
+                <X size={16} aria-hidden="true" />
+                清除篩選
+              </button>
+            )}
+          </div>
+          {filteredAlbums.map((album) => {
             const Icon = album.icon
             return (
               <a
@@ -374,16 +448,26 @@ export function CasesApp() {
                   </span>
                 </div>
                 <div>
-                  <span>{album.category}</span>
+                  <span className="album-index-category">{album.category}</span>
                   <strong>{album.title}</strong>
-                  <small>點開相簿</small>
+                  <div className="album-index-tags" aria-label={`${album.title}標籤`}>
+                    {album.tags.slice(0, 3).map((tag) => <span key={tag}>{tag}</span>)}
+                    {album.tags.length > 3 && <span>＋{album.tags.length - 3}</span>}
+                  </div>
                 </div>
               </a>
             )
           })}
+          {filteredAlbums.length === 0 && (
+            <div className="case-filter-empty">
+              <strong>目前沒有完全符合的相簿</strong>
+              <p>可取消一個條件，或直接用 LINE 傳現場照片詢問。</p>
+              <button type="button" onClick={clearFilters}>查看全部案例</button>
+            </div>
+          )}
         </section>
 
-        {albums.map((album) => {
+        {filteredAlbums.map((album) => {
           const Icon = album.icon
           const isOpen = openAlbum === album.slug
           return (

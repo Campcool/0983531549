@@ -68,9 +68,13 @@ motion:
 
 手機優先：首屏保留 Logo、服務主張、LINE 行動與實拍數字錨點，再接詢問前承諾、實際案場紀錄、情境、流程、細節、地區與 FAQ。桌面版轉為左右首屏構圖，Hero 圖片使用實拍案場而非生成居家照；其他段落使用寬版 grid 與 full-width band，不把每個區塊都包成大型卡片。
 
+案例頁使用「服務情境 × 空間部位 × 處理需求」三層複合標籤。每層一次選一項、跨層取交集，讓訪客可以用「退租入住＋廚房」或「商用＋廚房」快速縮小結果。首頁區只保留五個熱門入口，完整篩選與結果數集中在同一區，避免重複導覽與五花八門的分類色塊。
+
 ## Components
 
 按鈕至少 44px 高，圖示使用 lucide-react 或既有品牌 SVG。LINE CTA 使用高對比深綠，白字必須通過 AA。首頁品牌使用 `public/brand/logo-horizontal-transparent.png`，分頁小圖使用 `public/brand/favicon-transparent.png`，社群預覽使用 `public/og-cleaning-area-services-20260910.jpg`。卡片只用於單一情境、相簿索引或案場照片項目；信任承諾、統計與商家資訊用 full-width band 或自然分隔，不做卡片包卡片。所有可操作元素需有明確 focus-visible 狀態。
+
+案例索引卡採一致的青綠色階，不再依排列位置套不同顏色。每張卡顯示最多三個關鍵標籤，其餘以數量收合；新增相簿時在資料項目補 `tags` 即可進入速查，不另建硬編碼分類清單或張數。
 
 ## Motion
 
