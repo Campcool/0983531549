@@ -19,7 +19,7 @@
 1. **G1｜Google 商家的「網站」欄位仍指向 FB，不是 `jjf.tw`** — 5 分鐘可改，是整份清單投報最高的一項。
 2. **G6｜GA4 Measurement ID 尚未填入** — 埋點已完成但還沒開始收數據。
 
-**📋 給 Codex：與「案例相簿分類（E2）」一起完成的項目**（2026-09-28 深夜 Claude 記錄，業主指定併入同一輪）
+**📋 給 Codex：與「案例相簿分類（E2）」一起完成的項目（H1–H3、H5、H6、H8）**（2026-09-28 深夜 Claude 記錄，業主指定併入同一輪）
 
 Claude 本輪只做記錄、未動程式碼，避免與 Codex 正在改的 `src/cases.jsx`／`src/style.css` 衝突。
 請 Codex 在 E2 收尾時一併處理，做完在下表與第 6 節各自標記：
@@ -32,6 +32,7 @@ Claude 本輪只做記錄、未動程式碼，避免與 Codex 正在改的 `src/
 | H4 | ✅ Claude 已覆審 E2 標籤（見第 6 節「2026-09-28（六）」）。**Codex 請一併處理 H5、H6；H7 等業主決定** | `src/cases.jsx` `tags` | — |
 | H5 | `grease-kitchen` 的 `tags` 補「居家」與「商用」兩個（**業主 2026-09-28 確認：住家、店面案場都有**） | `src/cases.jsx:96` | 「居家＋廚房」與「商用＋廚房」都會出現廚房重油汙 |
 | H6 | 用字統一：標籤「重油污」改為「重油汙」（首頁 `src/main.jsx` 與相簿標題都用「汙」） | `src/cases.jsx` | 全站同一寫法 |
+| H8 | 壓縮最長邊 >1600px 的 23 張案例照片（清單見待辦表 H8），規格比照 `move-in-cleaning`：最長邊 1600px、JPEG quality 82。其餘照片**不必重壓**（見第 6 節（七）量測） | `public/cases/` | 23 張皆 ≤1600px；檔名不變，不需改 `cases.jsx` |
 
 **G4（CSR 對 AI 檢索不可見）業主指定三方決議**：業主、Codex、Claude 都同意才做。我的立場見該待辦說明。
 
@@ -282,7 +283,7 @@ intrinsic size 的 `loading="lazy"` 圖片高度為 0；IntersectionObserver 永
 | C1 | 🟠 高 | `handleFiles` 補 `try/finally`；移除硬編碼密碼 | `src/caseAdmin.jsx:88`、`:6` | 30 分 | ✅ |
 | C2 | 🟡 待決策 | LINE 標誌換官方素材（現為自繪，違反自家 DESIGN.md） | `public/brand/icon-line.svg` | 待業主 | ⬜ |
 | C3 | 🟢 中 | ~~刪死資產~~、~~同步 DESIGN.md~~、~~CI 加 `pnpm lint`~~ 已完成；**只剩圖片轉 WebP** | 多處 | 2 小時 | 🟨 **部分完成** |
-| B6 | 🟢 中 | `commercial-kitchen-video.mp4` **14.7 MB** 未壓縮，是全站最大單一檔案。720p H.264 CRF 26 通常可到 2–3 MB。沙盒無 ffmpeg，需在本機做 | `public/cases/commercial-kitchen/` | 30 分 | ⬜ |
+| B6 | 🟢 中 | 兩支影片未壓縮：`commercial-kitchen-video.mp4` **14.7 MB**（全站最大單一檔）、`paint-cleaning-video.mp4` **3.8 MB**。720p H.264 CRF 26 通常可到 2–3 MB。`<video preload="metadata">` 所以只在客人按播放時才整支下載，不影響開相簿速度，但手機網路播放會卡。沙盒無 ffmpeg，**業主在本機做** | `public/cases/commercial-kitchen/`、`public/cases/paint-cleaning/` | 30 分 | ⬜ **業主本機** |
 | B7 | 🟢 中 | hero 與 scenario 另外輸出手機用小圖。現在首屏仍有 `garbage-clearance-01.jpg`(376KB)＋`site-cleaning-hero.jpg`(291KB)＋`room-after-work`(183KB)＝850 KB，這三張是 1108×1477 原圖卻只渲染成 ~350px 寬（scenario 還只有 34% 不透明度）。輸出 5+1 張 ~720px 寬的衍生圖可再省約 600 KB | `public/cases/` | 1 小時 | ⬜ |
 | C4 | 🟡 **待業主確認** | 粉專網址不一致：站上三個入口用 `facebook.com/share/1GMwVQdp7J/?mibextid=wwXIfr`（帶追蹤參數的分享短連結），首頁 JSON-LD 的 `sameAs` 用 `facebook.com/chenli0775/`。`sameAs` 是給搜尋引擎做實體消歧用的，指到兩個不同 URL 會削弱訊號。**請業主到 FB 後台確認現行正式網址**，再把兩處一起改 | `src/main.jsx:40`、`src/cases.jsx:24`、`index.html:40` | 10 分 | ⬜ |
 | C5 | 🟢 中 | 手機版 6 顆導覽膠囊高 32px，低於 Google 行動友善建議的 48px（WCAG 2.5.8 的 24px 已通過）。**本輪刻意不改**：header 是固定 96px、膠囊排成 3×2，拉到 44px 會撐破 header，要連 `--header-height` 與依賴它的 `[id]{scroll-margin-top}` 一起調，風險不小（陷阱 9、10 都是 header 改動出的事），不適合上架前做 | `src/style.css:169` | 1 小時 | ⬜ |
@@ -300,6 +301,7 @@ intrinsic size 的 `loading="lazy"` 圖片高度為 0；IntersectionObserver 永
 | H4 | 🟢 中 | 覆審 E2 標籤語意 | `src/cases.jsx` | 30 分 | ✅ **2026-09-28 Claude 覆審完成** |
 | H5 | 🟠 高 | `grease-kitchen` 沒有任何服務情境標籤，選任一情境就會消失；業主確認住家、店面都有 → 補「居家」「商用」 | `src/cases.jsx:96` | 5 分 | ⬜ **排給 Codex（業主已確認）** |
 | H6 | 🟢 低 | 「重油污」（標籤）與「廚房重油汙」（標題）用字不一 | `src/cases.jsx` | 5 分 | ⬜ 排給 Codex |
+| H8 | 🟢 中 | 壓縮 23 張最長邊 >1600px 的舊照片（共 7.31 MB）：commercial-kitchen 6 張（3.56 MB）、paint-cleaning 7 張（1.50 MB）、grease-kitchen 3 張（0.73 MB）、scale-removal 4 張（0.68 MB）、floor-waxing 2 張（0.48 MB）、general-cleaning 1 張（0.36 MB）。找檔方式：讀 JPEG 尺寸，最長邊 >1600 者 | `public/cases/` | 30 分 | ⬜ **排給 Codex** |
 | H7 | 🟡 **待業主決定** | 「洗地打蠟」只標「商用」，但內容是停車位／磁磚地面，社區大樓客戶選「居家」找不到 | `src/cases.jsx:166` | 5 分 | ⬜ **需業主** |
 | E2 | 🟢 中 | 案例頁以 `tags` 建立三層複合速查：服務情境、空間部位、處理需求；結果數、熱門入口與卡片標籤皆從 `albums` 推算，新增相簿不需重做分類版面 | `src/cases.jsx`、`src/style.css`、`DESIGN.md` | — | ✅ **2026-09-28 本機實測，待 Claude 覆審** |
 | D1 | 🟡 待討論 | 設計回流機制（定期清潔提醒、老客推薦）— 五段檢查第 5 段完全空白 | — | 需先討論 | ⬜ |
@@ -372,6 +374,32 @@ Measurement ID 會出現在前端原始碼裡，這是 GA4 的正常設計，**�
 ---
 
 ## 6. 進度紀錄（倒序）
+
+### 2026-09-28（七）Claude 量測案例頁載入量，決定只壓部分照片（H8）
+
+**業主問題**：是否要把所有照片壓縮，加快案例頁讀取？**結論：不需要全部壓，只壓 23 張大圖（H8）＋影片（B6）。**
+
+**量測**（`pnpm build` 後 `pnpm preview`，Playwright Chromium，記錄所有 response body 大小）：
+
+| 情境 | 下載量 |
+|---|---|
+| 打開 `/cases/`（375 與 1280 相同） | **0.32 MB**，圖片 2 張 0.05 MB，影片 0 |
+| 手機開 `#commercial-kitchen` 並捲到底 | 追加 2.95 MB（影片未下載，`preload="metadata"`） |
+
+相簿照片只在展開抽屜時才載入，首屏已經很輕。
+
+**照片現況**（`public/cases/` 105 張，共 30.07 MB）：
+
+| | 張數 | 大小 | 平均 |
+|---|---|---|---|
+| 已壓縮（move-in／general-home） | 38 | 9.45 MB | 254 KB |
+| 未壓縮（其餘 11 相簿） | 67 | 20.62 MB | 315 KB |
+| 其中最長邊 >1600px | 23 | 7.31 MB | 約 325 KB（commercial-kitchen 部分達 900 KB） |
+
+未壓縮的 67 張平均只比已壓縮的多約 60 KB，全部重壓估計只省約 4 MB，且分散在 11 個相簿，
+每次開相簿的體感差異小。效益集中在 >1600px 的 23 張（尤其商業廚房 1350×1800），故只排 H8。
+
+**本輪明確未驗**：H8 壓縮後的實際節省量（沙盒無 PIL／ImageMagick，未試壓）；真實手機網路下的開相簿時間。
 
 ### 2026-09-28（六）Claude 覆審 E2 案例頁標籤語意（H4）
 
