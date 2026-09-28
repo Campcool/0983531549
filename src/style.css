@@ -2451,6 +2451,9 @@ details p {
 }
 
 .album-photo-card.is-composite img {
+  /* Keep lazy-loaded images observable before their intrinsic size is known.
+     Once loaded, `auto` switches to each image's real ratio without cropping. */
+  aspect-ratio: auto 3 / 4;
   height: auto;
   object-fit: contain;
   background: var(--color-surface);

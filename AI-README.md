@@ -7,7 +7,8 @@
 > 4. **所有時間戳一律台灣時間（Asia/Taipei, UTC+8）**。
 > 5. **不要把「已完成」寫在沒有實測的項目上**。未驗的事項寫進「本輪明確未驗」。
 
-最後更新：2026-09-28（Claude）— 新增 38 張一般居家清潔＋退租入住清潔照片（LINE 拼圖），並修正拼圖被 object-fit:cover 裁切的問題（isComposite 旗標 + contain 完整顯示）。
+最後更新：2026-09-28（Codex）— 覆審兩個新相簿：修正 `height:auto` 導致 lazy 圖片零高度不載入，並將 38 張部署照片縮至最長邊 1600px、JPEG quality 82（20.43→9.45 MB）。
+（前一輪 2026-09-28 Claude）— 新增 38 張一般居家清潔＋退租入住清潔照片（LINE 拼圖），並加入 isComposite 旗標與 contain 顯示。
 （前一輪 2026-09-24 Claude）— 依業主要求把 OG 服務地區改為「林口・龜山・基隆・雙北・桃園」（三頁 meta ＋ 重產 OG 圖），並新增具名的「退租入住」需求情境卡。
 （前一輪 2026-09-13 Codex）— 依業主要求做整體 UI/UX 高質感強化：首頁首屏改為價值主張優先、補 67 張實拍／11 個相簿／31 則評論等數字錨點，並把數字錨點補成 4 個吸睛彩色數據磚；加入詢問前風險逆轉三句，案例頁首屏補相簿統計並同步 DESIGN.md／sitemap。
 （前一輪 2026-09-12 Claude 上架前全站稽核並修正 P1×5／P2×10；同日 Codex 補入「油漆清潔」完工照，案例頁為 11 個相簿／67 張照片／2 支影片。）
@@ -54,7 +55,7 @@
 | 入口 | 進入點 | 用途 |
 |---|---|---|
 | `index.html` | `src/main.jsx` | 首頁 |
-| `cases/index.html` | `src/cases.jsx` | 案場相簿（11 相簿／67 張照片／2 支影片） |
+| `cases/index.html` | `src/cases.jsx` | 案場相簿（13 相簿／105 張照片／2 支影片） |
 | `cases/manage/index.html` | `src/caseAdmin.jsx` | 內部照片壓縮工具（已 noindex） |
 | `share/index.html` | 無 jsx，純轉址頁 | LINE 分享預覽用 |
 
@@ -230,12 +231,20 @@ cp950 主控台跑 Python 輸出繁中會 `UnicodeEncodeError`，前面加 `PYTH
 **教訓**：症狀出現的 commit 不一定是問題的來源。只看單一 commit 的 diff 找不到這種 bug，
 要用 `git log -S'<關鍵字>'` 追出宣告的完整生命週期。已於 `e9fd7d4` 移除該規則。
 
+**15. 拼圖照片使用 `height:auto` 時，lazy image 必須先有可觀察高度。**
+2026-09-28 線上複驗發現，`.album-photo-card.is-composite img { height:auto }` 會讓尚未取得
+intrinsic size 的 `loading="lazy"` 圖片高度為 0；IntersectionObserver 永遠看不到圖片，11 張一般居家
+照片全數停在 `complete=false / naturalWidth=0 / clientHeight=0`，畫面只剩 caption。
+修正是在同一規則加 `aspect-ratio: auto 3 / 4`：圖片未載入前用 3:4 預留高度，載入後 `auto`
+切回每張實際比例；`object-fit:contain` 仍保證拼圖不裁切。日後不要單獨把 lazy image 改成 `height:auto`。
+
 ---
 
 ## 5. 待辦清單（2026-09-10 稽核產出，依施工順序排列）
 
 狀態圖例：`⬜ 未開始` / `🟨 進行中` / `✅ 已完成並實測`
 
+2026-09-28 Codex 覆審並修正拼圖 lazy-load 零高度；38 張部署照片已壓縮 20.43→9.45 MB，lint/build 通過。
 2026-09-28 業主提供 38 張實拍照片，新增「一般居家清潔」（11 張）與「退租入住清潔」（27 張）兩個相簿；C6、E1 部分結案。
 2026-09-24 業主需求：OG 服務地區改五個地區、新增「退租入住」情境卡，皆已完成；新增 C6（退租入住相簿待業主給照片）。
 2026-09-12 上架前稽核：B1 已完成；C3 完成三項之二（死資產、DESIGN.md、CI lint），只剩圖片轉 WebP。
@@ -265,7 +274,7 @@ cp950 主控台跑 Python 輸出繁中會 `UnicodeEncodeError`，前面加 `PYTH
 | G4 | 🟠 高 | **全站是 CSR，爬蟲看到的 `<body>` 是 0 字**。Googlebot 會渲染 JS，但多數 AI 爬蟲（GPTBot／ClaudeBot／PerplexityBot）不執行 JS，等於整站內容對 AI 搜尋不可見 | 需架構決策 | 需討論 | 🟡 **業主指定三方決議**：業主、Codex、Claude 三方都同意才做 |
 | G5 | 🟢 中 | 案例頁已補 `BreadcrumbList` ＋ `ImageGallery`（11 個相簿、代表圖與張數），並以 `about` 指回首頁的 business `@id` | `cases/index.html` | 30 分 | ✅ 已完成 |
 | **G6** | 🔴 **需業主帳號** | **填入 GA4 Measurement ID 才會開始收數據**。埋點已完成，`src/analytics.js` 的 `GA_MEASUREMENT_ID` 目前是空字串（安全 no-op）。到 GA 建資源拿到 `G-XXXXXXXXXX` 後填入、推 main 即生效 | `src/analytics.js` | 5 分 | ⬜ |
-| C6 | 🟡 **已開相簿** | 2026-09-28 業主提供 27 張退租入住清潔照片，新增 `move-in-cleaning` 相簿（重點清潔）；`public/cases/move-in-cleaning/` 共 27 張。⚠️ 照片為 LINE 匯出原圖，尚未過浮水印腳本。 | `src/cases.jsx`、`public/cases/move-in-cleaning/` | — | ✅ **2026-09-28 完成** |
+| C6 | 🟡 **已開相簿** | 2026-09-28 業主提供 27 張退租入住清潔照片，新增 `move-in-cleaning` 相簿（重點清潔）；`public/cases/move-in-cleaning/` 共 27 張。照片已縮至最長邊 1600px、JPEG quality 82；尚未過浮水印腳本。 | `src/cases.jsx`、`public/cases/move-in-cleaning/` | — | ✅ **2026-09-28 完成並覆審** |
 | E1 | 🟡 **部分完成** | 2026-09-28 新增 `general-home-cleaning`（11 張）與 `move-in-cleaning`（27 張）兩個相簿，首頁「一般清潔」在案例頁現在有對應。裝潢清潔 vs 裝潢細清名稱差異仍存在，待業主決定是否更名 | `src/main.jsx:164`、`src/cases.jsx` | 需確認 | 🟨 **部分完成** |
 | D1 | 🟡 待討論 | 設計回流機制（定期清潔提醒、老客推薦）— 五段檢查第 5 段完全空白 | — | 需先討論 | ⬜ |
 
@@ -337,6 +346,32 @@ Measurement ID 會出現在前端原始碼裡，這是 GA4 的正常設計，**�
 ---
 
 ## 6. 進度紀錄（倒序）
+
+### 2026-09-28（三）Codex 覆審兩個新相簿、修正 lazy-load 並壓縮照片
+
+**覆審結論**：Claude 的相簿資料、`generatedPhotos()` 參數、`Home`／`KeyRound` 使用、
+JSON-LD 13 相簿／105 張，以及 `isComposite` 只套用兩個新相簿的範圍皆正確；但線上行為有一個
+阻斷問題：`height:auto` 讓 lazy 圖片在載入前高度為 0，導致照片完全不載入。
+
+**修正內容**：
+
+1. `src/style.css` 的 `.album-photo-card.is-composite img` 加入 `aspect-ratio: auto 3 / 4`，
+   未載入前先保留 3:4 高度，載入後使用每張照片的實際比例，仍以 `contain` 完整顯示拼圖。
+2. 38 張新增照片依管理工具既有規格縮到最長邊 1600px、JPEG quality 82；方向皆為 Orientation 1。
+   總量由 20.43 MB 降到 9.45 MB（減少 53.7%），一般居家 11 張、退租入住 27 張，缺檔 0。
+
+**驗證**：
+
+- `pnpm lint` exit 0、`pnpm build` exit 0；`dist/` 產生 135 個檔案。
+- GitHub connector 確認 `90d22da` 與 `f87753e` 的遠端內容和本機一致。
+- 線上部署複驗在修正前重現：一般居家 11 張皆為 `clientHeight=0`、`complete=false`，證實非單純網速慢。
+- 其他 11 個相簿沒有 `isComposite`，原本固定高度與 `object-fit:cover` 規則不變。
+
+**本輪明確未驗**：
+
+- 修正與壓縮資產推上 `main` 後，仍需等待 GitHub Pages 部署完成，再以
+  `/cases/#general-home-cleaning` 與 `/cases/#move-in-cleaning` 做最終線上截圖與尺寸複驗。
+- 未新增浮水印；維持業主原始拼圖內容，避免重跑既有一對一浮水印腳本造成陷阱 12 的分類問題。
 
 ### 2026-09-28（二）拼圖照片改為完整顯示（Claude）— ⚠️ 請 Codex 覆審
 
