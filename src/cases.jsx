@@ -6,6 +6,8 @@ import {
   Camera,
   ChevronDown,
   Droplets,
+  Home,
+  KeyRound,
   LayoutGrid,
   PaintRoller,
   Phone,
@@ -151,6 +153,26 @@ const albums = [
     icon: BrushCleaning,
     copy: '停車位、磁磚與地面清洗打蠟需求，先確認材質、面積、設備動線與可施工時間。',
     photos: generatedPhotos('floor-waxing', 'floor-waxing', 5),
+  },
+  {
+    // 2026-09-28 業主提供 11 張居家清潔前後對比照（LINE 匯出拼圖），
+    // 新開相簿歸重點清潔；解決待辦 E1「首頁一般清潔在案例頁無對應相簿」。
+    slug: 'general-home-cleaning',
+    title: '一般居家清潔',
+    category: '重點清潔',
+    icon: Home,
+    copy: '日常居家深層清潔，包含浴廁玻璃水垢、通風扇濾網、廚房設備與地板細節，拍照對齊現況再安排到府。',
+    photos: generatedPhotos('general-home-cleaning', 'general-home-cleaning', 11),
+  },
+  {
+    // 2026-09-28 業主提供 27 張退租入住清潔前後對比照，解決待辦 C6。
+    // 含各空間整理（臥室地板、廚房、浴廁、門窗、家電）與全室完工實景。
+    slug: 'move-in-cleaning',
+    title: '退租入住清潔',
+    category: '重點清潔',
+    icon: KeyRound,
+    copy: '點交前後整室清潔，從地板、廚房、浴廁到門窗細節全面到位，先用照片確認空間狀況再安排作業。',
+    photos: generatedPhotos('move-in-cleaning', 'move-in-cleaning', 27),
   },
   {
     slug: 'commercial-kitchen',

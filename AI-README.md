@@ -235,6 +235,7 @@ cp950 主控台跑 Python 輸出繁中會 `UnicodeEncodeError`，前面加 `PYTH
 
 狀態圖例：`⬜ 未開始` / `🟨 進行中` / `✅ 已完成並實測`
 
+2026-09-28 業主提供 38 張實拍照片，新增「一般居家清潔」（11 張）與「退租入住清潔」（27 張）兩個相簿；C6、E1 部分結案。
 2026-09-24 業主需求：OG 服務地區改五個地區、新增「退租入住」情境卡，皆已完成；新增 C6（退租入住相簿待業主給照片）。
 2026-09-12 上架前稽核：B1 已完成；C3 完成三項之二（死資產、DESIGN.md、CI lint），只剩圖片轉 WebP。
 新增 B6（影片壓縮）、B7（scenario／hero 專用小圖）、C4（粉專網址待業主確認）、C5（手機導覽觸控高度）。
@@ -263,8 +264,8 @@ cp950 主控台跑 Python 輸出繁中會 `UnicodeEncodeError`，前面加 `PYTH
 | G4 | 🟠 高 | **全站是 CSR，爬蟲看到的 `<body>` 是 0 字**。Googlebot 會渲染 JS，但多數 AI 爬蟲（GPTBot／ClaudeBot／PerplexityBot）不執行 JS，等於整站內容對 AI 搜尋不可見 | 需架構決策 | 需討論 | 🟡 **業主指定三方決議**：業主、Codex、Claude 三方都同意才做 |
 | G5 | 🟢 中 | 案例頁已補 `BreadcrumbList` ＋ `ImageGallery`（11 個相簿、代表圖與張數），並以 `about` 指回首頁的 business `@id` | `cases/index.html` | 30 分 | ✅ 已完成 |
 | **G6** | 🔴 **需業主帳號** | **填入 GA4 Measurement ID 才會開始收數據**。埋點已完成，`src/analytics.js` 的 `GA_MEASUREMENT_ID` 目前是空字串（安全 no-op）。到 GA 建資源拿到 `G-XXXXXXXXXX` 後填入、推 main 即生效 | `src/analytics.js` | 5 分 | ⬜ |
-| C6 | 🟡 **待業主提供素材** | 業主 2026-09-24 要求「再增加一項退租入住的內容」。首頁已新增具名的「退租入住」需求情境卡，但**案例頁仍沒有退租入住相簿**。現有 `garbage-clearance` 是業主親自指正過分類的「垃圾屋清運」，不要自行改掛到退租入住底下。要開相簿請先跟業主要退租入住的案場照片 | `src/cases.jsx`、`public/cases/` | 需素材 | ⬜ |
-| E1 | 🟡 **待業主決定** | 首頁與案例頁的服務分類不對應：首頁「一般清潔」（退租入住／大掃除／清運）在案例頁**沒有任何對應相簿**；首頁大類叫「裝潢清潔」、案例頁相簿叫「裝潢細清」 | `src/main.jsx:164`、`src/cases.jsx` | 需先確認 | ⬜ |
+| C6 | 🟡 **已開相簿** | 2026-09-28 業主提供 27 張退租入住清潔照片，新增 `move-in-cleaning` 相簿（重點清潔）；`public/cases/move-in-cleaning/` 共 27 張。⚠️ 照片為 LINE 匯出原圖，尚未過浮水印腳本。 | `src/cases.jsx`、`public/cases/move-in-cleaning/` | — | ✅ **2026-09-28 完成** |
+| E1 | 🟡 **部分完成** | 2026-09-28 新增 `general-home-cleaning`（11 張）與 `move-in-cleaning`（27 張）兩個相簿，首頁「一般清潔」在案例頁現在有對應。裝潢清潔 vs 裝潢細清名稱差異仍存在，待業主決定是否更名 | `src/main.jsx:164`、`src/cases.jsx` | 需確認 | 🟨 **部分完成** |
 | D1 | 🟡 待討論 | 設計回流機制（定期清潔提醒、老客推薦）— 五段檢查第 5 段完全空白 | — | 需先討論 | ⬜ |
 
 ### 待辦細節（施工時展開看）
@@ -335,6 +336,37 @@ Measurement ID 會出現在前端原始碼裡，這是 GA4 的正常設計，**�
 ---
 
 ## 6. 進度紀錄（倒序）
+
+### 2026-09-28 新增一般居家清潔＋退租入住清潔相簿（Claude）— ⚠️ 請 Codex 覆審
+
+**業主需求**：提供 38 張清潔前後對比照，要求在案例頁新增前後對比圖片展示區（一般清潔、退租入住各一類）。
+
+**動手前先查到的事**：
+- 待辦 C6（退租入住相簿等素材）、E1（首頁一般清潔無對應相簿）皆與本輪直接相關。
+- 照片已由業主放入 `C:\AI\網站\清潔網站-潔淨坊\案例圖片\一般清潔-退租入住\` 資料夾，共 38 張 LINE 匯出格式。
+
+**修正內容**：
+
+1. **新增 `public/cases/general-home-cleaning/`**（11 張）：原始批次 S__230604819～S__230604829，命名為 `general-home-cleaning-01.jpg`～`general-home-cleaning-11.jpg`。
+2. **新增 `public/cases/move-in-cleaning/`**（27 張）：原始批次 S__230612998～S__230613023 共 24 張，加上 S__231047186～S__231047188 共 3 張（全室完工實景），命名為 `move-in-cleaning-01.jpg`～`move-in-cleaning-27.jpg`。
+3. **`src/cases.jsx`**：新增 `Home, KeyRound` 圖示匯入；在 `commercial-kitchen` 前插入兩個新相簿（`general-home-cleaning` 和 `move-in-cleaning`），分類皆為「重點清潔」，解決待辦 C6 與 E1。
+4. **`cases/index.html` JSON-LD**：更新 `description` 為 13 個相簿、105 張照片；新增兩個 `ImageGallery` 節點（`#general-home-cleaning`、`#move-in-cleaning`）；更新 meta `description` 補入一般居家清潔與退租入住。
+
+**⚠️ 照片注意事項**：
+- 本輪照片直接複製自業主 LINE 匯出，**尚未過 `tools/watermark-cases.ps1` 浮水印腳本**。
+- 照片本身部分已帶有工作背心（寫有「專業清潔 0983531549」）等品牌識別，短期可先上線。
+- 若業主後續要統一浮水印風格，需在 `watermark-cases.ps1` 的 mapping 加入這兩個相簿的來源路徑，並注意陷阱 12。
+- 照片為 LINE 原圖（約 2160×2880px），尺寸偏大；建議 Codex 跑一次調整大小，或使用 `cases/manage/` 工具壓縮。
+
+**驗證**：
+- 38 張照片複製完成，`general-home-cleaning` 11 張 / `move-in-cleaning` 27 張，filename 逐一確認。
+- `src/cases.jsx` 語法人工目視確認（兩個新相簿 entry 格式與現有相簿一致，`generatedPhotos()` 呼叫參數正確）。
+- JSON-LD 節點計數：原 11 個 `hasPart` → 現 13 個，數字標注已更新。
+
+**本輪明確未驗**：
+- **未跑 `pnpm lint` 與 `pnpm build`**（本機未安裝 pnpm，沙盒限制）。請 Codex 在推 main 前跑一次。
+- **未在本機 preview 確認相簿抽屜展開與照片載入**。
+- 照片未壓縮，檔案大小視覺影響未測。
 
 ### 2026-09-24 OG 服務地區改五個地區＋新增「退租入住」情境卡（Claude）— ⚠️ 請 Codex 覆審
 
