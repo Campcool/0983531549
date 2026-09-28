@@ -163,6 +163,7 @@ const albums = [
     icon: Home,
     copy: '日常居家深層清潔，包含浴廁玻璃水垢、通風扇濾網、廚房設備與地板細節，拍照對齊現況再安排到府。',
     photos: generatedPhotos('general-home-cleaning', 'general-home-cleaning', 11),
+    isComposite: true,
   },
   {
     // 2026-09-28 業主提供 27 張退租入住清潔前後對比照，解決待辦 C6。
@@ -173,6 +174,7 @@ const albums = [
     icon: KeyRound,
     copy: '點交前後整室清潔，從地板、廚房、浴廁到門窗細節全面到位，先用照片確認空間狀況再安排作業。',
     photos: generatedPhotos('move-in-cleaning', 'move-in-cleaning', 27),
+    isComposite: true,
   },
   {
     slug: 'commercial-kitchen',
@@ -452,7 +454,7 @@ export function CasesApp() {
                     </figure>
                   ))}
                   {(album.detailPhotos ?? album.photos).map((photo, index) => (
-                    <figure className="album-photo-card" key={photo}>
+                    <figure className={`album-photo-card${album.isComposite ? ' is-composite' : ''}`} key={photo}>
                       {/* 相簿照片共 13 種長寬比（直式為主），宣告單一 width/height 必然
                           與多數照片不符；版面由 .album-photo-card img 的固定高 +
                           object-fit: cover 決定，實測 CLS 為 0，所以不宣告尺寸。 */}
