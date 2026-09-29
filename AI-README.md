@@ -396,7 +396,7 @@ Measurement ID 會出現在前端原始碼裡，這是 GA4 的正常設計，**�
 - Chromium 實測 375／768／882／1280：`documentElement.scrollWidth` 與 body 寬度一致，無水平溢出；篩選按鈕最小高度 44px。882px 顯示兩欄＋第三組橫跨整列，1280px 顯示三等欄。
 - 互動實測：「居家＋廚房」只顯示廚房重油汙與一般居家清潔；可個別取消、取消全部；「廚房＋水垢」無結果時可用「查看全部案例」回復；抽屜可展開並載入照片。
 - Console 無 warning／error。
-- 功能變更 commit `65da6be` 已推至 `main`；GitHub Pages run `36507335321` 成功。線上 `https://jjf.tw/cases/` 與本輪 CSS asset 均回應 HTTP 200（Last-Modified 2026-09-29 01:19:55 UTC）。
+- 基礎功能 commit `65da6be`、UI/UX 收斂 commit `797999c` 均已推至 `main`；GitHub Pages run `36508050506` 成功。線上 `https://jjf.tw/cases/` 與 CSS asset `style-BC9ShQZQ.css` 均回應 HTTP 200（Last-Modified 2026-09-29 01:28:47 UTC）。
 
 **本輪明確未驗**：尚未在真實 iOS／Android 與 LINE 內建瀏覽器實測；尚未用螢幕閱讀器完整走讀；H2、H3、H8 未在本輪處理；H7 仍待業主決定。
 
