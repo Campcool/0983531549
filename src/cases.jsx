@@ -173,13 +173,15 @@ const albums = [
     // 新開相簿歸重點清潔；解決待辦 E1「首頁一般清潔在案例頁無對應相簿」。
     // 2026-09-29 業主認為「重水地區水垢處理」與本相簿內容重複，整本併入：
     // 原 scale-removal-01..04 改名為本相簿 12..15（非拼圖，contain 顯示只多留白）。
+    // 2026-09-29 業主指出冰箱照重複：原 04／05 為同一檔案（md5 相同），刪 05、後續往前補號，
+    // 水垢照因此變成 11..14。
     slug: 'general-home-cleaning',
     title: '一般居家清潔',
     category: '重點清潔',
     icon: Home,
     copy: '日常居家深層清潔，包含浴廁玻璃水垢、通風扇濾網、廚房設備與地板細節，拍照對齊現況再安排到府。',
     tags: ['居家', '全室', '廚房', '衛浴', '地板', '水垢'],
-    photos: generatedPhotos('general-home-cleaning', 'general-home-cleaning', 15),
+    photos: generatedPhotos('general-home-cleaning', 'general-home-cleaning', 14),
     isComposite: true,
   },
   {
