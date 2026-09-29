@@ -2014,9 +2014,7 @@ details p {
   gap: 18px;
   padding-top: 58px;
   padding-bottom: 58px;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, .94), rgba(239, 249, 244, .74)),
-    var(--color-surface);
+  background: #f7faf8;
 }
 
 .album-index-heading {
@@ -2031,8 +2029,10 @@ details p {
 
 .album-index-heading h2 {
   margin: 0;
-  font-size: clamp(40px, 8vw, 68px);
-  line-height: 1.08;
+  max-width: 780px;
+  font-size: clamp(36px, 6vw, 58px);
+  line-height: 1.1;
+  text-wrap: balance;
 }
 
 .album-index-heading p {
@@ -2043,75 +2043,76 @@ details p {
 .case-filter-panel {
   grid-column: 1 / -1;
   display: grid;
-  gap: 12px;
+  gap: 14px;
 }
 
 .case-filter-group {
   --filter-accent: var(--color-primary-strong);
-  --filter-soft: var(--color-primary-soft);
   display: grid;
   min-width: 0;
   gap: 12px;
   margin: 0;
-  padding: 20px;
-  border: 1px solid color-mix(in srgb, var(--filter-accent) 20%, white);
-  border-radius: var(--radius-lg);
-  background: var(--filter-soft);
-  box-shadow: 0 14px 34px color-mix(in srgb, var(--filter-accent) 9%, transparent);
+  padding: 18px;
+  border: 1px solid #dce6e3;
+  border-top: 4px solid var(--filter-accent);
+  border-radius: 14px;
+  background: var(--color-surface);
+  box-shadow: 0 10px 28px rgba(18, 63, 73, .06);
 }
 
 .case-filter-group:nth-child(1) {
   --filter-accent: #256f70;
-  --filter-soft: #e3f4ef;
 }
 
 .case-filter-group:nth-child(2) {
   --filter-accent: #376f8c;
-  --filter-soft: #e8f2f7;
 }
 
 .case-filter-group:nth-child(3) {
   --filter-accent: #875c2d;
-  --filter-soft: #f8efe2;
 }
 
 .case-filter-group legend {
   float: left;
   width: 100%;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   color: var(--filter-accent);
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 950;
 }
 
 .case-filter-options {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
 }
 
+.case-filter-group:nth-child(3) .case-filter-options {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 .case-filter-options button {
-  display: inline-flex;
+  display: flex;
+  width: 100%;
   align-items: center;
   min-height: 44px;
   justify-content: center;
-  gap: 7px;
-  padding: 8px 14px;
-  border: 1px solid color-mix(in srgb, var(--filter-accent) 22%, white);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, .74);
+  gap: 6px;
+  padding: 8px 7px;
+  border: 1px solid #d6e2df;
+  border-radius: 10px;
+  background: #fbfdfc;
   color: var(--color-ink);
   font: inherit;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 850;
   cursor: pointer;
-  transition: background .18s ease, border-color .18s ease, color .18s ease, transform .18s ease;
+  transition: background .18s ease, border-color .18s ease, color .18s ease;
 }
 
 .case-filter-options button:hover {
-  border-color: color-mix(in srgb, var(--filter-accent) 50%, white);
-  background: white;
-  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--filter-accent) 48%, white);
+  background: color-mix(in srgb, var(--filter-accent) 5%, white);
 }
 
 .case-filter-options button.is-selected {
@@ -3185,7 +3186,7 @@ select {
   }
 
   .case-filter-panel {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     align-items: start;
     gap: 16px;
   }
@@ -3193,6 +3194,14 @@ select {
   .case-filter-group {
     height: 100%;
     padding: 22px;
+  }
+
+  .case-filter-group:nth-child(3) {
+    grid-column: 1 / -1;
+  }
+
+  .case-filter-group:nth-child(3) .case-filter-options {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 
   .album-drawer .case-album-heading {
@@ -3235,6 +3244,20 @@ select {
   .site-footer {
     flex-direction: row;
     justify-content: space-between;
+  }
+}
+
+@media (min-width: 1180px) {
+  .case-filter-panel {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .case-filter-group:nth-child(3) {
+    grid-column: auto;
+  }
+
+  .case-filter-group:nth-child(3) .case-filter-options {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
