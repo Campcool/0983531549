@@ -235,6 +235,16 @@ img {
   --nav-bg: #e8f6f5;
 }
 
+.desktop-nav a[aria-current='page'] {
+  border-color: color-mix(in srgb, var(--nav-color) 72%, white);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--nav-color) 18%, white), color-mix(in srgb, var(--nav-color) 9%, white)),
+    white;
+  box-shadow:
+    inset 0 -9px 18px color-mix(in srgb, var(--nav-color) 18%, transparent),
+    0 14px 30px color-mix(in srgb, var(--nav-color) 18%, transparent);
+}
+
 .header-action {
   display: inline-flex;
   align-items: center;
@@ -261,76 +271,8 @@ img {
   gap: 8px;
 }
 
-/* 案例頁不放相簿導覽：下方「案場相簿索引」已經負責導覽，而且資訊更完整
-   （分類＋張數＋圖示）。header 收成單列 logo + 聯絡入口，各斷點一致。
-   2026-09-10 移除，原本是 9 個等重膠囊排 3×3，配色借自首頁區塊導覽、
-   與相簿內容無關，且在 375px 下文字重疊溢出。 */
-.cases-page {
-  --header-height: 64px;
-}
-
-.cases-page .site-header {
-  grid-template-columns: minmax(104px, 1fr) auto;
-  grid-template-areas: "brand actions";
-  min-height: 64px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-}
-
-.cases-page .header-actions {
-  display: grid;
-  grid-template-columns: repeat(3, 46px);
-  gap: 5px;
-}
-
-.cases-page .header-action {
-  width: 46px;
-  min-width: 0;
-  min-height: 46px;
-  gap: 1px;
-  padding: 4px 3px;
-  font-size: 10px;
-}
-
-.cases-page .header-action .brand-social-icon {
-  width: 22px;
-  height: 22px;
-}
-
-.cases-page .phone-action svg {
-  width: 21px;
-  height: 21px;
-}
-
 .cases-page .mobile-contact-dock {
   display: none;
-}
-
-.cases-page .brand {
-  min-height: 46px;
-}
-
-.cases-page .brand-logo {
-  width: clamp(96px, 26vw, 118px);
-  max-height: 46px;
-}
-
-.cases-page .brand-back-label {
-  display: block;
-  font-size: 11px;
-  line-height: 1;
-  margin-top: 2px;
-  color: var(--color-text-muted);
-  text-align: center;
-  letter-spacing: .01em;
-  white-space: nowrap;
-}
-
-@media (min-width: 820px) {
-  .cases-page .brand-logo {
-    width: clamp(130px, 11.5vw, 160px);
-    max-height: 52px;
-  }
 }
 
 .header-action:hover {
@@ -3079,32 +3021,6 @@ select {
     padding-left: clamp(8px, .82vw, 12px);
     font-size: clamp(14px, 1.3vw, 17px);
     white-space: nowrap;
-  }
-
-  .cases-page {
-    --header-height: 84px;
-  }
-
-  .cases-page .site-header {
-    min-height: 84px;
-    padding-top: 8px;
-    padding-bottom: 8px;
-  }
-
-  .cases-page .brand {
-    justify-self: start;
-    width: fit-content;
-    min-height: 50px;
-  }
-
-  .cases-page .brand-logo {
-    width: clamp(146px, 13vw, 184px);
-    max-height: 64px;
-  }
-
-  .cases-page .header-actions {
-    align-self: center;
-    justify-self: end;
   }
 
   .hero {

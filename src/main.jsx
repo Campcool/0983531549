@@ -32,6 +32,7 @@ import {
 } from 'lucide-react'
 import './style.css'
 import { useClickTracking } from './analytics.js'
+import { SiteHeader } from './SiteHeader.jsx'
 
 const assetPath = (path) => `${import.meta.env.BASE_URL}${path.replace(/^\/+/, '')}`
 
@@ -353,55 +354,7 @@ export function App() {
     <div className="site-shell">
       <a className="skip-link" href="#main-content">跳到主要內容</a>
 
-      <header className="site-header" aria-label="主選單">
-        <a className="brand" href="#top" aria-label="潔淨坊清潔工作室首頁">
-          <img
-            className="brand-logo"
-            src={assetPath('brand/logo-horizontal-transparent.png')}
-            alt="潔淨坊清潔服務"
-            width="480"
-            height="237"
-          />
-        </a>
-        <nav className="desktop-nav" aria-label="頁面段落">
-          <a className="nav-needs" href="#needs">需求情境</a>
-          <a className="nav-services" href="#services">清潔項目</a>
-          <a className="nav-cases" href={`${import.meta.env.BASE_URL}cases/`}>案例相簿</a>
-          <a className="nav-process" href="#process">服務流程</a>
-          <a className="nav-details" href="#details">清潔細節</a>
-          <a className="nav-areas" href="#areas">服務地區</a>
-        </nav>
-        <div className="header-actions">
-          <a
-            className="header-action line-action"
-            href={lineUrl}
-            target="_blank"
-            rel="noreferrer"
-            aria-label="LINE 詢問"
-          >
-            <SocialBrandIcon type="line" size={20} />
-            <span>LINE</span>
-          </a>
-          <a
-            className="header-action phone-action"
-            href={phoneUrl}
-            aria-label="撥打潔淨坊電話"
-          >
-            <Phone size={22} aria-hidden="true" />
-            <span>電話</span>
-          </a>
-          <a
-            className="header-action facebook-action"
-            href={facebookPageUrl}
-            target="_blank"
-            rel="noreferrer"
-            aria-label="Facebook 粉專"
-          >
-            <SocialBrandIcon type="facebook" size={19} />
-            <span>粉專</span>
-          </a>
-        </div>
-      </header>
+      <SiteHeader />
 
       <main id="main-content" tabIndex={-1}>
         <section className="hero" id="top" aria-labelledby="hero-title">

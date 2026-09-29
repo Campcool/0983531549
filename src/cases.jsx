@@ -12,7 +12,6 @@ import {
   KeyRound,
   LayoutGrid,
   PaintRoller,
-  Phone,
   ShieldAlert,
   Sparkles,
   Trash2,
@@ -22,11 +21,10 @@ import {
 } from 'lucide-react'
 import './style.css'
 import { useClickTracking, trackAlbum } from './analytics.js'
+import { SiteHeader } from './SiteHeader.jsx'
 
 const assetPath = (path) => `${import.meta.env.BASE_URL}${path.replace(/^\/+/, '')}`
 const lineUrl = 'https://line.me/R/ti/p/~chenli0775'
-const phoneUrl = 'tel:0983531549'
-const facebookPageUrl = 'https://www.facebook.com/share/1GMwVQdp7J/?mibextid=wwXIfr'
 const lineIcon = assetPath('brand/icon-line.svg')
 const facebookIcon = assetPath('brand/icon-facebook.svg')
 
@@ -302,34 +300,10 @@ export function CasesApp() {
 
   return (
     <div className="site-shell cases-page">
-      <header className="site-header" aria-label="案例頁主選單">
-        <a className="brand" href={import.meta.env.BASE_URL} aria-label="回到潔淨坊首頁">
-          <img
-            className="brand-logo"
-            src={assetPath('brand/logo-horizontal-transparent.png')}
-            alt="潔淨坊清潔服務"
-            width="480"
-            height="237"
-          />
-          <span className="brand-back-label">← 回首頁</span>
-        </a>
-        <div className="header-actions">
-          <a className="header-action line-action" href={lineUrl} target="_blank" rel="noreferrer" aria-label="用 LINE 詢問潔淨坊">
-            <SocialBrandIcon type="line" size={20} />
-            <span>LINE</span>
-          </a>
-          <a className="header-action phone-action" href={phoneUrl} aria-label="撥打潔淨坊電話">
-            <Phone size={22} aria-hidden="true" />
-            <span>電話</span>
-          </a>
-          <a className="header-action facebook-action" href={facebookPageUrl} target="_blank" rel="noreferrer" aria-label="開啟潔淨坊 Facebook 粉專">
-            <SocialBrandIcon type="facebook" size={19} />
-            <span>粉專</span>
-          </a>
-        </div>
-      </header>
+      <a className="skip-link" href="#main-content">跳到主要內容</a>
+      <SiteHeader currentPage="cases" />
 
-      <main>
+      <main id="main-content" tabIndex={-1}>
         <section className="cases-hero">
           <div>
             <p className="eyebrow">案場相簿</p>
