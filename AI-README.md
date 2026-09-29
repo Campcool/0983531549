@@ -428,7 +428,7 @@ P3 = H12（aria-label）、H13（無結果缺 LINE）、H14（375 h2>h1）。另
 
 **H15｜業主需求：「重水地區水垢處理」併入「一般居家清潔」**（業主 2026-09-29 決定，理由：內容重複）
 
-Claude 的解讀是「合併相簿」：不再有獨立的水垢相簿，4 張照片移到一般居家清潔。若 Codex 動工前業主另有說法，以業主為準。步驟：
+**業主 2026-09-29 已確認為「合併相簿」**：不再有獨立的水垢相簿，4 張照片移到一般居家清潔。步驟：
 
 1. **搬照片（不刪）**：`public/cases/scale-removal/scale-removal-01..04.jpg` → `public/cases/general-home-cleaning/general-home-cleaning-12..15.jpg`（`git mv`），刪空資料夾。
 2. **`src/cases.jsx`**：刪 `scale-removal` 相簿物件；`general-home-cleaning` 的 `generatedPhotos(...)` 張數 11→15；`tags` 補「水垢」（成為 `['居家','全室','廚房','衛浴','地板','水垢']`，仍 ≤6 個，卡片兩列不變）。
