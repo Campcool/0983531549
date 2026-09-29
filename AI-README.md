@@ -7,7 +7,8 @@
 > 4. **所有時間戳一律台灣時間（Asia/Taipei, UTC+8）**。
 > 5. **不要把「已完成」寫在沒有實測的項目上**。未驗的事項寫進「本輪明確未驗」。
 
-最後更新：2026-09-29（Claude）— 唯讀審查 `f18a808...5bc9b74` 案例頁改版（結論：維持上線，P2×3、P3×4 排給 Codex 為 H9–H14），並記錄業主要求把「重水地區水垢處理」併入「一般居家清潔」（H15）。本輪只改文件。
+最後更新：2026-09-29 晚（Claude）— 依審查結果實作 H3、H7–H15：水垢相簿併入一般居家（12 相簿）、案例卡改用縮圖（375px 捲完 3.76→0.72 MB）、23 張大圖壓縮（7.31→4.22 MB）、色章對比、`#album-finder` 捲動、無障礙與無結果 LINE。**請 Codex 覆審（H2）**。
+（前一輪 2026-09-29 Claude）— 唯讀審查 `f18a808...5bc9b74` 案例頁改版（結論：維持上線，P2×3、P3×4 排給 Codex 為 H9–H14），並記錄業主要求把「重水地區水垢處理」併入「一般居家清潔」（H15）。本輪只改文件。
 （前一輪 2026-09-29 Codex）— 重設案例頁標籤與案例卡視覺：三組篩選改為白底卡面搭配三色上緣識別線與規整分段按鈕，分類改深色方角色章、複合標籤改淺色圓膠囊，移除前台案件／照片／影片數字並完成互動與四種寬度（375／768／882／1280）驗證。
 （前一輪 2026-09-28 Claude）— 修正首頁與案例頁 header 三處不一致（首頁加電話鈕、案例頁加「← 回首頁」、案例頁 logo 尺寸對齊首頁），並補量測 1280／1366／1440 無重疊。
 （前一輪 2026-09-28 Codex）— 案例頁改為「服務情境 × 空間部位 × 處理需求」複合標籤速查，13 個相簿可交叉篩選，並收斂原本四大分類與多色索引造成的視覺雜訊。
@@ -21,7 +22,7 @@
 1. **G1｜Google 商家的「網站」欄位仍指向 FB，不是 `jjf.tw`** — 5 分鐘可改，是整份清單投報最高的一項。
 2. **G6｜GA4 Measurement ID 尚未填入** — 埋點已完成但還沒開始收數據。
 
-**📋 給 Codex 的待辦（H2、H3、H8、H9–H15）**（2026-09-29 Claude 更新：H1、H5、H6 已完成；H9–H15 來自 Claude 對 `5bc9b74` 的審查與業主新需求，細節與證據見第 6 節「2026-09-29（二）」）
+**📋 H 系列待辦**（2026-09-29 Claude 更新：H1、H3–H15 已完成；**只剩 H2 請 Codex 覆審（含本輪 Claude 的改動）**，H16 待業主）
 
 Claude 本輪只做記錄、未動程式碼，避免與 Codex 正在改的 `src/cases.jsx`／`src/style.css` 衝突。
 請 Codex 在 E2 收尾時一併處理，做完在下表與第 6 節各自標記：
@@ -30,18 +31,20 @@ Claude 本輪只做記錄、未動程式碼，避免與 Codex 正在改的 `src/
 |---|---|---|---|
 | H1 | ✅ 案例頁「← 回首頁」字級已由 9px 調為 11px；未改 header 高度，375／768／1280 皆無水平溢出 | `src/style.css`（`.cases-page .brand-back-label`） | 2026-09-29 完成 |
 | H2 | 覆審 `5740012` header 修正：首頁 LINE／電話／粉專三鈕、案例頁 logo 尺寸對齊 | `src/main.jsx`、`src/style.css` | 1280／1366 首頁導覽與聯絡鈕不重疊（Claude 實測間距約 128px，見第 6 節） |
-| H3 | 820–1279px 首頁底部 dock 的電話鈕行為重新量測（Claude 本輪未驗） | `src/style.css` 820–1279 media query | dock 顯示 LINE／電話／粉專、header 聯絡鈕收起 |
+| H3 | ✅ 2026-09-29 Claude 實測：819／820／1024／1279 首頁底部 dock 顯示 LINE／電話／粉專（皆 48px 高）、header 聯絡鈕收起；1280 起 header 顯示三鈕、dock 隱藏；皆無水平溢出 | `src/style.css` | 2026-09-29 完成 |
 | H4 | ✅ Claude 已覆審 E2 標籤（見第 6 節「2026-09-28（六）」）。**Codex 請一併處理 H5、H6；H7 等業主決定** | `src/cases.jsx` `tags` | — |
 | H5 | ✅ `grease-kitchen` 的 `tags` 已補「居家」與「商用」；「居家＋廚房」實測會出現廚房重油汙 | `src/cases.jsx:96` | 2026-09-29 完成 |
 | H6 | ✅ 標籤用字已統一為「重油汙」 | `src/cases.jsx` | 2026-09-29 完成 |
-| H8 | 壓縮最長邊 >1600px 的 23 張案例照片（清單見待辦表 H8），規格比照 `move-in-cleaning`：最長邊 1600px、JPEG quality 82。其餘照片**不必重壓**（見第 6 節（七）量測）。⚠️ 若 H15 先做，`scale-removal` 的 4 張會改名搬到 `general-home-cleaning/` | `public/cases/` | 23 張皆 ≤1600px；檔名不變，不需改 `cases.jsx` |
-| H9 | 🟠 **P2** 案例卡縮圖改用小圖：目前 `album.photos[0]` 直接載入原檔（1108×1477，顯示 336×210），375px 捲完卡片列表下載 **3.76 MB**（改版前整頁 0.32 MB）。每個相簿產一張約 480px 寬、JPEG q80 的縮圖（建議檔名 `<slug>-thumb.jpg`，放在同相簿資料夾），`albums` 加 `thumb` 欄位，卡片改用它。可與 H8 同批處理 | `src/cases.jsx:442`、`public/cases/*/` | 375px 捲完卡片列表的圖片總量 < 0.8 MB；卡片畫面不變 |
-| H10 | 🟠 **P2** 分類色章白字對比 **4.41:1**（13px/950 屬一般字，需 4.5:1）。把 `.album-index-category` 背景改成 `var(--color-primary-strong)`（約 9:1），或 `color-mix(in srgb, var(--album-accent) 70%, #12353e)` | `src/style.css`（`.album-index-category`，約 2272 行） | 實測 ≥ 4.5:1，深色方角外觀不變 |
-| H11 | 🟠 **P2（改版前既有）** `/cases/#album-finder` 開啟後停在頂端（scrollY 0），與相簿深連結同一個陷阱：React 還沒 render 時瀏覽器已放棄錨點捲動。在既有 hash `useEffect` 內，`location.hash === '#album-finder'` 時同樣呼叫 `scrollIntoView`。手機首屏已無篩選入口，此項影響變大 | `src/cases.jsx`（`getAlbumFromHash` 與掛載時的 `useEffect`） | 375／1280 開 `#album-finder`，篩選區標題落在 header 下方 |
-| H12 | 🟢 P3 移除 `.album-index-tags` 與 `.album-drawer-tags` 上的 `aria-label`：它讓整張卡的無障礙名稱變成「…廚房重油汙標籤…」，實際標籤（居家、商用…）不會被讀出 | `src/cases.jsx:448`、`:484` | 卡片 accessible name 含實際標籤文字 |
-| H13 | 🟢 P3 無結果畫面文案寫「用 LINE 傳現場照片詢問」卻沒有 LINE 按鈕；在「查看全部案例」旁加 `href={lineUrl}` 的 LINE 按鈕（沿用 `line-primary`） | `src/cases.jsx:457-461` | 無結果時可直接點 LINE |
-| H14 | 🟢 P3 375px 區塊標題 h2（36px）大於頁面 h1（34px）。`.album-index-heading h2` 下限由 36px 降到 30–32px | `src/style.css`（`.album-index-heading h2`，約 2030 行） | 375px 時 h2 < h1 |
-| H15 | 🟠 **業主需求** 「重水地區水垢處理」併入「一般居家清潔」：業主認為與一般居家清潔內容重複（一般居家 `copy` 已含「浴廁玻璃水垢」）。**只搬照片與入口，不刪照片**；做法見第 6 節「2026-09-29（二）」H15 步驟 | `src/cases.jsx`、`src/main.jsx`、`cases/index.html`、`tools/watermark-cases.ps1`、`public/cases/` | 見 H15 完成條件 |
+| H8 | ✅ 2026-09-29 Claude 以 sharp（mozjpeg）將 23 張最長邊 >1600px 照片縮至 1600px、q82：7.31→4.22 MB；檔名不變。含 H15 搬入的 general-home-cleaning-12..15 | `public/cases/` | 2026-09-29 完成 |
+| H9 | ✅ 2026-09-29 Claude：每相簿第一張另存 720×450 `-01-thumb.jpg`（q78，12 張共 0.55 MB），卡片改用 `thumbOf()`；375px 捲完卡片列表圖片 3.76→0.72 MB（含首屏大圖） | `src/cases.jsx`、`public/cases/*/*-01-thumb.jpg` | 2026-09-29 完成 |
+| H10 | ✅ 2026-09-29 Claude：色章背景 `color-mix` 88%→70%，白字 4.41→5.46:1 | `src/style.css` `.album-index-category` | 2026-09-29 完成 |
+| H11 | ✅ 2026-09-29 Claude：掛載時 `#album-finder` 補 `scrollIntoView`；375／768／882／1280／1440 標題皆落在 header 下方 | `src/cases.jsx` | 2026-09-29 完成 |
+| H12 | ✅ 2026-09-29 Claude：移除兩處 `aria-label`；卡片名稱實測為「重點清潔 洗地打蠟 居家 商用 地板 洗地打蠟 查看現場照片」 | `src/cases.jsx` | 2026-09-29 完成 |
+| H13 | ✅ 2026-09-29 Claude：無結果畫面加「LINE 傳照片詢問」（`line-primary`，50px）＋原「查看全部案例」 | `src/cases.jsx`、`src/style.css` `.case-filter-empty-actions` | 2026-09-29 完成 |
+| H14 | ✅ 2026-09-29 Claude：h2 改 `clamp(30px, 5vw, 58px)`；375 為 30<34、768 為 38.4<42 | `src/style.css` | 2026-09-29 完成 |
+| H15 | ✅ 2026-09-29 Claude 依業主確認完成合併：12 個相簿，一般居家清潔 15 張並加「水垢」標籤，`#scale-removal` 自動開啟一般居家清潔 | 見第 6 節「2026-09-29（三）」 | 2026-09-29 完成 |
+| H7 | ✅ 2026-09-29 業主決定「洗地打蠟」標「居家＋商用」，Claude 已改 | `src/cases.jsx` | 2026-09-29 完成 |
+| H16 | ⬜ **待業主決定**：首頁數字錨點仍是 67 張／11 個相簿（實際 105／12），更新或移除？ | `src/main.jsx:275` | 業主回覆後處理 |
 
 **G4（CSR 對 AI 檢索不可見）業主指定三方決議**：業主、Codex、Claude 都同意才做。我的立場見該待辦說明。
 
@@ -81,7 +84,7 @@ Claude 本輪只做記錄、未動程式碼，避免與 Codex 正在改的 `src/
 | 入口 | 進入點 | 用途 |
 |---|---|---|
 | `index.html` | `src/main.jsx` | 首頁 |
-| `cases/index.html` | `src/cases.jsx` | 案場相簿（13 相簿／105 張照片／2 支影片） |
+| `cases/index.html` | `src/cases.jsx` | 案場相簿（12 相簿／105 張照片／2 支影片） |
 | `cases/manage/index.html` | `src/caseAdmin.jsx` | 內部照片壓縮工具（已 noindex） |
 | `share/index.html` | 無 jsx，純轉址頁 | LINE 分享預覽用 |
 
@@ -257,6 +260,12 @@ cp950 主控台跑 Python 輸出繁中會 `UnicodeEncodeError`，前面加 `PYTH
 **教訓**：症狀出現的 commit 不一定是問題的來源。只看單一 commit 的 diff 找不到這種 bug，
 要用 `git log -S'<關鍵字>'` 追出宣告的完整生命週期。已於 `e9fd7d4` 移除該規則。
 
+**16. 案例卡縮圖是另外產生的檔案，換相簿第一張照片時要重產。**
+2026-09-29 起卡片用 `thumbOf(album.photos[0])`，也就是 `<slug>-01-thumb.jpg`（720×450、16:10 置中裁切、q78）。
+新增相簿、或 `-01.jpg` 換了照片，必須重產縮圖，否則卡片破圖或顯示舊照片。`-thumb.jpg` 不算死資產（由程式組字串引用，
+grep 檔名找不到），掃描死資產時不要刪。產生方式（sharp）：
+`sharp(src).resize(720, 450, { fit: 'cover', position: 'centre' }).jpeg({ quality: 78, mozjpeg: true })`。
+
 **15. 拼圖照片使用 `height:auto` 時，lazy image 必須先有可觀察高度。**
 2026-09-28 線上複驗發現，`.album-photo-card.is-composite img { height:auto }` 會讓尚未取得
 intrinsic size 的 `loading="lazy"` 圖片高度為 0；IntersectionObserver 永遠看不到圖片，11 張一般居家
@@ -270,6 +279,7 @@ intrinsic size 的 `loading="lazy"` 圖片高度為 0；IntersectionObserver 永
 
 狀態圖例：`⬜ 未開始` / `🟨 進行中` / `✅ 已完成並實測`
 
+2026-09-29 晚 Claude 完成 H3、H7–H15；新增 H16（首頁數字錨點過時，待業主）；只剩 H2 待 Codex 覆審。
 2026-09-29 Claude 唯讀審查 `5bc9b74`：維持上線；新增 H9–H14（P2×3、P3×3）與業主需求 H15（水垢處理併入一般居家清潔）。
 2026-09-29 Codex 重設案例頁標籤與卡片視覺；移除前台數量、完成 H1／H5／H6，並通過 375／768／1280 與實際篩選互動驗證。
 2026-09-28 深夜 Claude 修正首頁／案例頁 header 三處不一致；新增 H1–H4，H1–H3 排給 Codex 併入 E2 一起做（見檔案開頭清單）。
@@ -308,19 +318,20 @@ intrinsic size 的 `loading="lazy"` 圖片高度為 0；IntersectionObserver 永
 | E1 | 🟡 **部分完成** | 2026-09-28 新增 `general-home-cleaning`（11 張）與 `move-in-cleaning`（27 張）兩個相簿，首頁「一般清潔」在案例頁現在有對應。裝潢清潔 vs 裝潢細清名稱差異仍存在，待業主決定是否更名 | `src/main.jsx:164`、`src/cases.jsx` | 需確認 | 🟨 **部分完成** |
 | H1 | 🟢 中 | 案例頁 logo 下方「← 回首頁」字級由 9px 調為 11px；未改 header 高度 | `src/style.css:318` | 15 分 | ✅ **2026-09-29 完成並實測** |
 | H2 | 🟢 中 | 覆審 `5740012` header 三處修正 | `src/main.jsx`、`src/style.css` | 15 分 | ⬜ **已排給 Codex** |
-| H3 | 🟢 中 | 重新量測 820–1279px 首頁底部 dock 電話鈕 | `src/style.css` | 15 分 | ⬜ **已排給 Codex** |
+| H3 | 🟢 中 | 重新量測 820–1279px 首頁底部 dock 電話鈕 | `src/style.css` | 15 分 | ✅ **2026-09-29 Claude 實測通過** |
 | H4 | 🟢 中 | 覆審 E2 標籤語意 | `src/cases.jsx` | 30 分 | ✅ **2026-09-28 Claude 覆審完成** |
 | H5 | 🟠 高 | `grease-kitchen` 已補「居家」「商用」，住家與店面篩選都可找到 | `src/cases.jsx:96` | 5 分 | ✅ **2026-09-29 完成並實測** |
 | H6 | 🟢 低 | 標籤與標題已統一使用「重油汙」 | `src/cases.jsx` | 5 分 | ✅ **2026-09-29 完成** |
-| H8 | 🟢 中 | 壓縮 23 張最長邊 >1600px 的舊照片（共 7.31 MB）：commercial-kitchen 6 張（3.56 MB）、paint-cleaning 7 張（1.50 MB）、grease-kitchen 3 張（0.73 MB）、scale-removal 4 張（0.68 MB）、floor-waxing 2 張（0.48 MB）、general-cleaning 1 張（0.36 MB）。找檔方式：讀 JPEG 尺寸，最長邊 >1600 者 | `public/cases/` | 30 分 | ⬜ **排給 Codex** |
-| H9 | 🟠 高 | 案例卡縮圖載入原檔，375px 捲完列表 3.76 MB | `src/cases.jsx:442` | 1 小時 | ⬜ **排給 Codex**（可併 H8） |
-| H10 | 🟠 高 | 分類色章白字對比 4.41:1，未達 AA | `src/style.css` `.album-index-category` | 5 分 | ⬜ **排給 Codex** |
-| H11 | 🟠 高 | `#album-finder` 深連結不捲動（改版前既有） | `src/cases.jsx` | 15 分 | ⬜ **排給 Codex** |
-| H12 | 🟢 低 | 標籤容器 `aria-label` 蓋掉實際標籤的讀出 | `src/cases.jsx:448`、`:484` | 5 分 | ⬜ **排給 Codex** |
-| H13 | 🟢 低 | 無結果畫面缺 LINE 按鈕 | `src/cases.jsx:457` | 10 分 | ⬜ **排給 Codex** |
-| H14 | 🟢 低 | 375px h2 大於 h1 | `src/style.css` `.album-index-heading h2` | 5 分 | ⬜ **排給 Codex** |
-| H15 | 🟠 高 | **業主需求**：「重水地區水垢處理」併入「一般居家清潔」 | 多檔，見第 6 節（二） | 1 小時 | ⬜ **排給 Codex（業主已決定）** |
-| H7 | 🟡 **待業主決定** | 「洗地打蠟」只標「商用」，但內容是停車位／磁磚地面，社區大樓客戶選「居家」找不到 | `src/cases.jsx:166` | 5 分 | ⬜ **需業主** |
+| H8 | 🟢 中 | 23 張最長邊 >1600px 照片壓縮：7.31→4.22 MB | `public/cases/` | 30 分 | ✅ **2026-09-29 Claude 完成** |
+| H9 | 🟠 高 | 案例卡改用 720×450 縮圖：375px 捲完列表圖片 3.76→0.72 MB | `src/cases.jsx` | 1 小時 | ✅ **2026-09-29 Claude 完成** |
+| H10 | 🟠 高 | 分類色章白字對比 4.41→5.46:1 | `src/style.css` | 5 分 | ✅ **2026-09-29 Claude 完成** |
+| H11 | 🟠 高 | `#album-finder` 深連結補捲動 | `src/cases.jsx` | 15 分 | ✅ **2026-09-29 Claude 完成** |
+| H12 | 🟢 低 | 移除標籤容器 `aria-label` | `src/cases.jsx` | 5 分 | ✅ **2026-09-29 Claude 完成** |
+| H13 | 🟢 低 | 無結果畫面補 LINE 按鈕 | `src/cases.jsx` | 10 分 | ✅ **2026-09-29 Claude 完成** |
+| H14 | 🟢 低 | 手機 h2 不再大於 h1 | `src/style.css` | 5 分 | ✅ **2026-09-29 Claude 完成** |
+| H15 | 🟠 高 | 「重水地區水垢處理」併入「一般居家清潔」 | 多檔 | 1 小時 | ✅ **2026-09-29 Claude 完成** |
+| H7 | 🟢 中 | 「洗地打蠟」業主 2026-09-29 決定標「居家」＋「商用」 | `src/cases.jsx` | 5 分 | ✅ **2026-09-29 完成** |
+| H16 | 🟡 **待業主決定** | 首頁數字錨點（`src/main.jsx` `proofMetrics`）仍寫「67 張實拍照片／11 個案場相簿」，實際已是 105 張／12 個相簿。案例頁已依業主要求移除數字；首頁要**更新為 105／12**，還是**比照案例頁移除**？ | `src/main.jsx:275` | 5 分 | ⬜ **需業主** |
 | E2 | 🟢 中 | 案例頁以 `tags` 建立三組複合速查；三組採一致白底與三色上緣識別線，選項為低圓角分段按鈕。分類用深色方角色章、標籤用淺色圓膠囊。前台不顯示案件／照片／影片數字，只保留全部案例、已選標籤與取消全部 | `src/cases.jsx`、`src/style.css`、`DESIGN.md` | — | ✅ **2026-09-29 重設並完成互動實測** |
 | D1 | 🟡 待討論 | 設計回流機制（定期清潔提醒、老客推薦）— 五段檢查第 5 段完全空白 | — | 需先討論 | ⬜ |
 
@@ -392,6 +403,46 @@ Measurement ID 會出現在前端原始碼裡，這是 GA4 的正常設計，**�
 ---
 
 ## 6. 進度紀錄（倒序）
+
+### 2026-09-29（三）Claude 依審查結果實作 H3、H7–H15 ⚠️ 請 Codex 覆審（H2 一併）
+
+業主指示「能先做的就先改」，H7 決定「居家＋商用」都標，H15 確認為合併相簿。
+
+**改動**：
+
+| # | 檔案 | 內容 |
+|---|---|---|
+| H15 | `public/cases/` | `git mv` `scale-removal/scale-removal-01..04.jpg` → `general-home-cleaning/general-home-cleaning-12..15.jpg`，刪空資料夾 |
+| H15 | `src/cases.jsx` | 刪 `scale-removal` 相簿；一般居家 11→15 張、`tags` 加「水垢」；新增 `albumAliases`，`#scale-removal` → `general-home-cleaning` |
+| H15 | `src/main.jsx` | 「局部加強需求」圖改指 `general-home-cleaning-12.jpg`（同一張）；重點清潔 `items` 移除「重水地區水垢處理」、`copy` 移除「水垢」 |
+| H15 | `cases/index.html` | JSON-LD 刪 `#scale-removal`（`hasPart` 12 筆，JSON 可解析）；一般居家描述 11→15 張；總述 13→12 個相簿；同步註解日期 |
+| H15 | `tools/watermark-cases.ps1` | 移除 `scale-removal` mapping，改為註解說明（陷阱 11、12） |
+| H7 | `src/cases.jsx` | `floor-waxing` 的 `tags` 補「居家」 |
+| H8 | `public/cases/` | 23 張 >1600px 以 sharp mozjpeg 縮至 1600px、q82（7.31→4.22 MB）；事前確認 105 張 EXIF orientation 皆為 1 |
+| H9 | `src/cases.jsx`、`public/cases/*/` | 新增 `thumbOf()`；12 張 `-01-thumb.jpg`（720×450，共 0.55 MB）；`<img>` 補 `width/height`。見陷阱 16 |
+| H10 | `src/style.css` | `.album-index-category` 背景 88%→70% |
+| H11 | `src/cases.jsx` | 掛載時 hash 為 `album-finder` 也補捲動；抽出 `getHash()` |
+| H12 | `src/cases.jsx` | 移除 `.album-index-tags`、`.album-drawer-tags` 的 `aria-label` |
+| H13 | `src/cases.jsx`、`src/style.css` | 無結果畫面加 LINE 按鈕，新增 `.case-filter-empty-actions` |
+| H14 | `src/style.css` | `.album-index-heading h2` 改 `clamp(30px, 5vw, 58px)` |
+
+**驗證**（`pnpm build` 後 `pnpm preview`，Playwright Chromium）：
+
+- `pnpm lint` exit 0；`pnpm build` 成功；`git diff --check` 通過。
+- 375／768／882／1280／1440：水平溢出 0；12 張卡片；篩選按鈕最小 44px；卡片標籤一致 96／96／113／108／126×32；h2 < h1（30<34、38.4<42、44.1<70.56、58<76、58<76）。
+- `#album-finder`：五個寬度皆捲到位，標題 top 144／144／164／202／202，header 底 64／64／84／84／84。
+- 流量（375）：首載 0.52 MB；捲完卡片列表圖片 13 張 0.72 MB（縮圖 12 張 0.55 MB），改前 3.76 MB；12 張縮圖皆載入且 naturalWidth 720。
+- 篩選：居家＋地板 → 木地板清潔、洗地打蠟、一般居家清潔；衛浴＋水垢、居家＋衛浴＋水垢 → 一般居家清潔；
+  廚房＋水垢**現在會找到一般居家清潔**（合併後正確）；商用＋水垢 → 無結果，LINE 按鈕 50px、連到 `line.me/R/ti/p/~chenli0775`，「查看全部案例」回到 12 個。
+- 色章白字對比 5.46:1。卡片無障礙名稱：「重點清潔 洗地打蠟 居家 商用 地板 洗地打蠟 查看現場照片」。
+- `/cases/#scale-removal`（375）：一般居家清潔展開，15 張；捲完 15 張全載入、無零高度。第 13 張（原水垢照）以 contain 完整顯示。
+- 首頁：「局部加強需求」圖片 `general-home-cleaning-12.jpg` 正常載入；全頁文字已無「重水地區水垢處理」。
+- H3：819／820／1024／1279 dock 顯示 LINE／電話／粉專（48px）且 header 聯絡鈕收起；1280 反之；皆無溢出。
+- Console：案例頁五寬度 × 四種 hash，warning／error／HTTP≥400 皆 0。首頁 Google 地圖 iframe 在沙盒被代理擋（非程式問題）。
+
+**本輪明確未驗**：正式站 `jjf.tw`（沙盒連不到）；iOS／Android／LINE 內建瀏覽器；螢幕閱讀器實際走讀；
+H8 壓縮後照片只抽看 1 張（`general-home-cleaning-13`）畫質，其餘未逐張目視；水垢 4 張照片上的浮水印文字仍是「重水地區水垢處理」（燒在圖上，未處理）。
+**未做**：H2（覆審本身應由 Codex 做）；B6 影片壓縮（仍需業主本機 ffmpeg）；H16 待業主。
 
 ### 2026-09-29（二）Claude 唯讀審查 `f18a808...5bc9b74` 案例頁改版＋業主新需求 H15
 

@@ -38,11 +38,21 @@ const generatedPhotos = (folder, prefix, count) =>
 const floorAdhesivePhotos = generatedPhotos('floor-adhesive-removal', 'floor-adhesive-removal', 5)
 const woodFloorPhotos = generatedPhotos('wood-floor-cleaning', 'wood-floor-cleaning', 4)
 
-const getAlbumFromHash = () => {
-  if (typeof window === 'undefined') return ''
+// 案例卡縮圖：每個相簿第一張另存 720×450（16:10，與 .album-index-media 同比例）的 -thumb.jpg，
+// 避免卡片列表載入每個相簿的原檔（375px 捲完原本要 3.76 MB）。換相簿第一張時要重產縮圖（陷阱 16）。
+const thumbOf = (photo) => photo.replace(/\.jpg$/, '-thumb.jpg')
 
-  const hash = decodeURIComponent(window.location.hash.replace('#', ''))
-  return albums.some((album) => album.slug === hash) ? hash : ''
+// 已併入其他相簿的舊 slug，外部或 LINE 分享過的舊連結仍要能打開對應相簿。
+const albumAliases = {
+  'scale-removal': 'general-home-cleaning',
+}
+
+const getHash = () => (typeof window === 'undefined' ? '' : decodeURIComponent(window.location.hash.replace('#', '')))
+
+const getAlbumFromHash = () => {
+  const hash = getHash()
+  const slug = albumAliases[hash] ?? hash
+  return albums.some((album) => album.slug === slug) ? slug : ''
 }
 
 const albums = [
@@ -96,15 +106,6 @@ const albums = [
     copy: '爐台、牆面、設備周邊與長期油垢，先用近照判斷厚度與可作業位置。',
     tags: ['居家', '商用', '廚房', '重油汙'],
     photos: generatedPhotos('grease-kitchen', 'grease-kitchen', 3),
-  },
-  {
-    slug: 'scale-removal',
-    title: '重水地區水垢處理',
-    category: '重點清潔',
-    icon: Droplets,
-    copy: '浴廁、玻璃、五金與檯面水垢，依材質與水垢程度確認處理期待。',
-    tags: ['居家', '衛浴', '水垢'],
-    photos: generatedPhotos('scale-removal', 'scale-removal', 4),
   },
   {
     slug: 'awning-cleaning',
@@ -164,19 +165,21 @@ const albums = [
     category: '重點清潔',
     icon: BrushCleaning,
     copy: '停車位、磁磚與地面清洗打蠟需求，先確認材質、面積、設備動線與可施工時間。',
-    tags: ['商用', '地板', '洗地打蠟'],
+    tags: ['居家', '商用', '地板', '洗地打蠟'],
     photos: generatedPhotos('floor-waxing', 'floor-waxing', 5),
   },
   {
     // 2026-09-28 業主提供 11 張居家清潔前後對比照（LINE 匯出拼圖），
     // 新開相簿歸重點清潔；解決待辦 E1「首頁一般清潔在案例頁無對應相簿」。
+    // 2026-09-29 業主認為「重水地區水垢處理」與本相簿內容重複，整本併入：
+    // 原 scale-removal-01..04 改名為本相簿 12..15（非拼圖，contain 顯示只多留白）。
     slug: 'general-home-cleaning',
     title: '一般居家清潔',
     category: '重點清潔',
     icon: Home,
     copy: '日常居家深層清潔，包含浴廁玻璃水垢、通風扇濾網、廚房設備與地板細節，拍照對齊現況再安排到府。',
-    tags: ['居家', '全室', '廚房', '衛浴', '地板'],
-    photos: generatedPhotos('general-home-cleaning', 'general-home-cleaning', 11),
+    tags: ['居家', '全室', '廚房', '衛浴', '地板', '水垢'],
+    photos: generatedPhotos('general-home-cleaning', 'general-home-cleaning', 15),
     isComposite: true,
   },
   {
@@ -244,9 +247,12 @@ export function CasesApp() {
     // 瀏覽器的原生錨點捲動發生在解析 HTML 當下，那時 React 還沒 render，
     // #slug 對應的 <section> 尚不存在，之後瀏覽器也不會重試。
     // 抽屜本身靠 useState 初始值就已展開，這裡只補捲動。
+    // #album-finder 等頁內區塊同理，React render 後才存在，要一併補捲動。
     const initialAlbum = getAlbumFromHash()
     if (initialAlbum) {
       scrollAlbumIntoView(initialAlbum)
+    } else if (getHash() === 'album-finder') {
+      scrollAlbumIntoView('album-finder')
     }
 
     window.addEventListener('hashchange', syncAlbumFromHash)
@@ -439,13 +445,13 @@ export function CasesApp() {
                 }}
               >
                 <figure className="album-index-media">
-                  <img src={album.photos[0]} alt={`${album.title}案場縮圖`} loading="lazy" />
+                  <img src={thumbOf(album.photos[0])} alt={`${album.title}案場縮圖`} width="720" height="450" loading="lazy" />
                   <span aria-hidden="true"><Icon size={22} /></span>
                 </figure>
                 <div className="album-index-body">
                   <span className="album-index-category">{album.category}</span>
                   <strong>{album.title}</strong>
-                  <div className="album-index-tags" aria-label={`${album.title}標籤`}>
+                  <div className="album-index-tags">
                     {album.tags.map((tag) => <span key={tag}>{tag}</span>)}
                   </div>
                   <span className="album-index-link">查看現場照片 <ArrowRight size={17} aria-hidden="true" /></span>
@@ -457,7 +463,13 @@ export function CasesApp() {
             <div className="case-filter-empty">
               <strong>目前沒有完全符合的相簿</strong>
               <p>可取消一個條件，或直接用 LINE 傳現場照片詢問。</p>
-              <button type="button" onClick={clearFilters}>查看全部案例</button>
+              <div className="case-filter-empty-actions">
+                <a className="button line-primary" href={lineUrl} target="_blank" rel="noreferrer">
+                  <SocialBrandIcon type="line" size={20} />
+                  LINE 傳照片詢問
+                </a>
+                <button type="button" onClick={clearFilters}>查看全部案例</button>
+              </div>
             </div>
           )}
         </section>
@@ -481,7 +493,7 @@ export function CasesApp() {
                   <p className="eyebrow">{album.category}</p>
                   <h2>{album.title}</h2>
                   <p>{album.copy}</p>
-                  <div className="album-drawer-tags" aria-label={`${album.title}標籤`}>
+                  <div className="album-drawer-tags">
                     {album.tags.map((tag) => <span key={tag}>{tag}</span>)}
                   </div>
                 </div>

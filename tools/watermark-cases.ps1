@@ -55,7 +55,10 @@ $albums = @(
   # 不在本 mapping 的 D 槽來源資料夾內；重跑後需另行補回或先移入來源端。
   @{ Folder = (U 0x6cb9, 0x6f06, 0x6e05, 0x6f54); Slug = "paint-cleaning"; Prefix = "paint-cleaning"; Label = (U 0x6cb9, 0x6f06, 0x6e05, 0x6f54); Recursive = $true; RotateClockwiseIndexes = @(7, 8) },
   @{ Folder = (U 0x5eda, 0x623f, 0x91cd, 0x6cb9, 0x6c59); Slug = "grease-kitchen"; Prefix = "grease-kitchen"; Label = (U 0x5eda, 0x623f, 0x91cd, 0x6cb9, 0x6c59) },
-  @{ Folder = (U 0x6c34, 0x57a2, 0x8655, 0x7406); Slug = "scale-removal"; Prefix = "scale-removal"; Label = (U 0x91cd, 0x6c34, 0x5730, 0x5340, 0x6c34, 0x57a2, 0x8655, 0x7406) },
+  # 2026-09-29 業主決定「重水地區水垢處理」併入「一般居家清潔」：前台已無 scale-removal 相簿，
+  # 原 4 張改名為 general-home-cleaning-12..15.jpg（照片上的浮水印仍是「重水地區水垢處理」）。
+  # general-home-cleaning 是 LINE 拼圖、不走本腳本，所以這裡直接移除 mapping；
+  # 若要重跑水垢來源，輸出須改到 general-home-cleaning 並從 12 起編號，不可再輸出 scale-removal。
   @{ Folder = (U 0x6d17, 0x96e8, 0x68da); Slug = "awning-cleaning"; Prefix = "awning-cleaning"; Label = (U 0x6d17, 0x96e8, 0x68da); Recursive = $true },
   @{ Folder = (U 0x7279, 0x6b8a, 0x6e05, 0x6f54, 0x0020, 0x5730, 0x677f, 0x9664, 0x81a0); Slug = "floor-adhesive-removal"; Prefix = "floor-adhesive-removal"; Label = (U 0x7279, 0x6b8a, 0x6e05, 0x6f54, 0x0020, 0x5730, 0x677f, 0x9664, 0x81a0); Recursive = $true },
   # 來源資料夾仍是業主本機的「停車位與地板清潔」，但前台相簿已於 2026-09-10

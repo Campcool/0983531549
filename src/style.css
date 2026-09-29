@@ -2030,7 +2030,8 @@ details p {
 .album-index-heading h2 {
   margin: 0;
   max-width: 780px;
-  font-size: clamp(36px, 6vw, 58px);
+  /* 下限與斜率壓低，375–819px 才不會大於頁面 h1（clamp(34px, 9vw, 42px)）。 */
+  font-size: clamp(30px, 5vw, 58px);
   line-height: 1.1;
   text-wrap: balance;
 }
@@ -2276,7 +2277,8 @@ details p {
   min-height: 30px;
   padding: 5px 10px;
   border-radius: var(--radius-sm);
-  background: color-mix(in srgb, var(--album-accent) 88%, #12353e);
+  /* 88% 時白字只有 4.41:1（13px 非大字需 4.5:1），70% 約 5.4:1，色相不變。 */
+  background: color-mix(in srgb, var(--album-accent) 70%, #12353e);
   color: white;
   font-size: 13px;
   font-weight: 950;
@@ -2351,9 +2353,16 @@ details p {
   color: var(--color-muted);
 }
 
+.case-filter-empty-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
+}
+
 .case-filter-empty button {
   min-height: 44px;
-  margin-top: 4px;
   padding: 8px 12px;
   border: 1px solid rgba(47, 143, 143, .3);
   border-radius: var(--radius-sm);

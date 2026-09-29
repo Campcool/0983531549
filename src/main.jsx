@@ -159,7 +159,7 @@ const scenarios = [
     icon: Bath,
     tag: '局部處理',
     tone: 'detail',
-    image: assetPath('cases/scale-removal/scale-removal-01.jpg'),
+    image: assetPath('cases/general-home-cleaning/general-home-cleaning-12.jpg'),
   },
 ]
 
@@ -198,10 +198,10 @@ const serviceGroups = [
   },
   {
     title: '重點清潔',
-    copy: '針對廚房重油汙、水垢、雨棚與洗地打蠟，先確認油垢厚度、材質與施工動線。',
+    copy: '針對廚房重油汙、雨棚與洗地打蠟，先確認油垢厚度、材質與施工動線。',
     icon: CookingPot,
     tone: 'focus',
-    items: ['廚房重油汙', '商業廚房清潔', '重水地區水垢處理', '洗雨棚', '洗地打蠟'],
+    items: ['廚房重油汙', '商業廚房清潔', '洗雨棚', '洗地打蠟'],
   },
   {
     title: '特殊清潔',
