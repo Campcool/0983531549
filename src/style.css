@@ -701,6 +701,8 @@ p strong {
 .hero-proof-list div {
   --proof-accent: var(--color-primary);
   --proof-soft: var(--color-primary-soft);
+  /* 讓 dt 依磚寬（cqi）縮放；見下方 dt 註解。 */
+  container-type: inline-size;
   display: grid;
   min-width: 0;
   min-height: 88px;
@@ -741,6 +743,10 @@ p strong {
 .hero-proof-list dt {
   color: color-mix(in srgb, var(--proof-accent) 82%, #12353e);
   font-size: clamp(34px, 10vw, 58px);
+  /* 2026-09-29 照片數到 105 變三位數：vw 只看視窗不看磚寬，375px 貼邊、
+     820–1279px 首屏雙欄時磚更窄，連兩位數都會溢出。加上 46cqi 上限，
+     三位數粗體（約 1.9em）也能放進磚內；不支援 cqi 的瀏覽器會沿用上一行。 */
+  font-size: min(clamp(34px, 10vw, 58px), 46cqi);
   font-weight: 1000;
   line-height: .88;
   font-variant-numeric: tabular-nums;
