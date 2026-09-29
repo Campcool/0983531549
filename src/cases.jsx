@@ -2,8 +2,10 @@ import React from 'react'
 import { createRoot } from 'react-dom/client'
 import {
   ArrowLeft,
+  ArrowRight,
   BrushCleaning,
   Camera,
+  Check,
   ChevronDown,
   Droplets,
   Home,
@@ -13,7 +15,6 @@ import {
   Phone,
   ShieldAlert,
   Sparkles,
-  Tags,
   Trash2,
   Utensils,
   Warehouse,
@@ -93,7 +94,7 @@ const albums = [
     category: '重點清潔',
     icon: Utensils,
     copy: '爐台、牆面、設備周邊與長期油垢，先用近照判斷厚度與可作業位置。',
-    tags: ['廚房', '重油污'],
+    tags: ['居家', '商用', '廚房', '重油汙'],
     photos: generatedPhotos('grease-kitchen', 'grease-kitchen', 3),
   },
   {
@@ -196,7 +197,7 @@ const albums = [
     category: '商業廚房',
     icon: Warehouse,
     copy: '營業空間、設備周邊、地面油汙與清潔動線，先確認可施工時間與現場安全。',
-    tags: ['商用', '廚房', '重油污'],
+    tags: ['商用', '廚房', '重油汙'],
     photos: generatedPhotos('commercial-kitchen', 'commercial-kitchen', 14),
     videos: [
       assetPath('cases/commercial-kitchen/commercial-kitchen-video.mp4'),
@@ -209,22 +210,13 @@ const albums = [
 const filterGroups = [
   { id: 'context', label: '服務情境', options: ['居家', '裝潢', '退租入住', '商用', '特殊處理'] },
   { id: 'space', label: '空間部位', options: ['全室', '廚房', '衛浴', '地板', '門窗戶外'] },
-  { id: 'need', label: '處理需求', options: ['重油污', '水垢', '除霉', '除膠', '清運', '油漆', '木地板', '洗地打蠟', '粉塵'] },
+  { id: 'need', label: '處理需求', options: ['重油汙', '水垢', '除霉', '除膠', '清運', '油漆', '木地板', '洗地打蠟', '粉塵'] },
 ]
 
-const quickFindTags = ['廚房', '衛浴', '裝潢', '退租入住', '商用']
 const emptyFilters = Object.fromEntries(filterGroups.map((group) => [group.id, '']))
-const tagGroupId = (tag) => filterGroups.find((group) => group.options.includes(tag))?.id ?? ''
 const matchesFilters = (album, filters) =>
   Boolean(album) && Object.values(filters).filter(Boolean).every((tag) => album.tags.includes(tag))
-
-const caseStats = [
-  { value: String(albums.length), label: '個案場相簿' },
-  { value: String(albums.reduce((sum, album) => sum + album.photos.length, 0)), label: '張實拍照片' },
-  { value: String(albums.reduce((sum, album) => sum + (album.videos?.length ?? 0), 0)), label: '支現場影片' },
-]
-
-const albumCountLabel = (album) => `${album.photos.length} 張${album.videos?.length ? '＋影片' : ''}`
+const heroCasePhoto = albums.find((album) => album.slug === 'general-cleaning')?.photos[0]
 
 // 不依賴任何元件狀態，放在模組層級，useEffect 才不必把它列進依賴。
 const scrollAlbumIntoView = (slug) => {
@@ -296,15 +288,6 @@ export function CasesApp() {
     }
   }
 
-  const startQuickFind = (tag) => {
-    const groupId = tagGroupId(tag)
-    const nextFilters = { ...emptyFilters, [groupId]: tag }
-    setSelectedFilters(nextFilters)
-    setOpenAlbum('')
-    window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}`)
-    document.getElementById('album-finder')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
-
   const clearFilters = () => {
     setSelectedFilters(emptyFilters)
   }
@@ -344,16 +327,8 @@ export function CasesApp() {
             <p className="eyebrow">案場相簿</p>
             <h1>快速找到相近案例</h1>
             <p>
-              依服務情境、空間與清潔問題交叉篩選，先看接近的現場，再用 LINE 傳照片確認。
+              先選服務情境、空間與清潔問題，看看與您需求接近的實際現場，再用 LINE 傳照片確認。
             </p>
-            <dl className="case-hero-stats" aria-label="案例相簿統計">
-              {caseStats.map((stat) => (
-                <div key={stat.label}>
-                  <dt>{stat.value}</dt>
-                  <dd>{stat.label}</dd>
-                </div>
-              ))}
-            </dl>
             <div className="hero-actions">
               <a className="button secondary" href={import.meta.env.BASE_URL}>
                 <ArrowLeft size={19} aria-hidden="true" />
@@ -365,30 +340,24 @@ export function CasesApp() {
               </a>
             </div>
           </div>
-          <aside className="case-quick-find" aria-label="熱門案例快速入口">
-            <div className="case-quick-find-heading">
-              <Tags size={24} aria-hidden="true" />
-              <div>
-                <strong>熱門速查</strong>
-                <span>先選一個方向，再到下方交叉篩選</span>
-              </div>
-            </div>
-            <div className="case-quick-find-list">
-              {quickFindTags.map((tag) => (
-                <button type="button" key={tag} onClick={() => startQuickFind(tag)}>
-                  <span>{tag}</span>
-                  <small>{albums.filter((album) => album.tags.includes(tag)).length} 個相簿</small>
-                </button>
-              ))}
-            </div>
-          </aside>
+          <figure className="case-hero-visual">
+            <img
+              src={heroCasePhoto}
+              alt="潔淨坊裝潢細清實際案場"
+              fetchPriority="high"
+            />
+            <figcaption>
+              <Camera size={18} aria-hidden="true" />
+              自家案場實拍，先看相近現場
+            </figcaption>
+          </figure>
         </section>
 
         <section className="section album-index" id="album-finder" aria-label="案例相簿速查">
           <div className="album-index-heading">
-            <p className="eyebrow">Case Finder</p>
-            <h2>複合標籤速查</h2>
-            <p>每列可選一項，跨列組合會縮小結果；再點一次即可取消。</p>
+            <p className="eyebrow">依需求找案例</p>
+            <h2>您的現場，接近哪一種？</h2>
+            <p>每一類可選一項；把不同類別組合起來，就能看到更接近需求的案例。</p>
           </div>
           <div className="case-filter-panel">
             {filterGroups.map((group) => (
@@ -397,7 +366,6 @@ export function CasesApp() {
                 <div className="case-filter-options">
                   {group.options.map((tag) => {
                     const isSelected = selectedFilters[group.id] === tag
-                    const count = albums.filter((album) => album.tags.includes(tag)).length
                     return (
                       <button
                         type="button"
@@ -407,7 +375,7 @@ export function CasesApp() {
                         onClick={() => updateFilter(group.id, tag)}
                       >
                         {tag}
-                        <span>{count}</span>
+                        {isSelected && <Check size={16} aria-hidden="true" />}
                       </button>
                     )
                   })}
@@ -415,17 +383,47 @@ export function CasesApp() {
               </fieldset>
             ))}
           </div>
-          <div className="case-filter-result" aria-live="polite">
-            <p>
-              <strong>{filteredAlbums.length}</strong> 個相簿符合
-              {activeFilters.length > 0 && <span> · {activeFilters.join(' ＋ ')}</span>}
-            </p>
+          <div className="case-filter-selection" aria-live="polite">
+            <span className="case-filter-selection-label">目前查看</span>
+            <div className="case-filter-selection-tags">
+              <button
+                type="button"
+                className={activeFilters.length === 0 ? 'is-active' : ''}
+                aria-pressed={activeFilters.length === 0}
+                onClick={clearFilters}
+              >
+                全部案例
+              </button>
+              {filterGroups.map((group) => {
+                const tag = selectedFilters[group.id]
+                if (!tag) return null
+                return (
+                  <button
+                    type="button"
+                    className="is-selected"
+                    key={group.id}
+                    onClick={() => updateFilter(group.id, tag)}
+                    aria-label={`取消${tag}條件`}
+                  >
+                    {tag}
+                    <X size={15} aria-hidden="true" />
+                  </button>
+                )
+              })}
+            </div>
             {activeFilters.length > 0 && (
-              <button type="button" onClick={clearFilters}>
-                <X size={16} aria-hidden="true" />
-                清除篩選
+              <button className="case-filter-clear" type="button" onClick={clearFilters}>
+                取消全部
               </button>
             )}
+          </div>
+          <div className="case-results-heading">
+            <h3>{activeFilters.length > 0 ? '符合這組需求的案例' : '全部案例'}</h3>
+            <p>
+              {activeFilters.length > 0
+                ? '以下案例同時符合您選定的標籤。'
+                : '選擇上方標籤，可快速縮小到更相近的現場。'}
+            </p>
           </div>
           {filteredAlbums.map((album) => {
             const Icon = album.icon
@@ -440,20 +438,17 @@ export function CasesApp() {
                   openAlbumSection(album.slug, 'index_card')
                 }}
               >
-                <div className="album-index-icon-panel">
-                  <Icon size={30} aria-hidden="true" />
-                  <span>
-                    <Icon size={19} aria-hidden="true" />
-                    {albumCountLabel(album)}
-                  </span>
-                </div>
-                <div>
+                <figure className="album-index-media">
+                  <img src={album.photos[0]} alt={`${album.title}案場縮圖`} loading="lazy" />
+                  <span aria-hidden="true"><Icon size={22} /></span>
+                </figure>
+                <div className="album-index-body">
                   <span className="album-index-category">{album.category}</span>
                   <strong>{album.title}</strong>
                   <div className="album-index-tags" aria-label={`${album.title}標籤`}>
-                    {album.tags.slice(0, 3).map((tag) => <span key={tag}>{tag}</span>)}
-                    {album.tags.length > 3 && <span>＋{album.tags.length - 3}</span>}
+                    {album.tags.map((tag) => <span key={tag}>{tag}</span>)}
                   </div>
+                  <span className="album-index-link">查看現場照片 <ArrowRight size={17} aria-hidden="true" /></span>
                 </div>
               </a>
             )
@@ -486,14 +481,16 @@ export function CasesApp() {
                   <p className="eyebrow">{album.category}</p>
                   <h2>{album.title}</h2>
                   <p>{album.copy}</p>
+                  <div className="album-drawer-tags" aria-label={`${album.title}標籤`}>
+                    {album.tags.map((tag) => <span key={tag}>{tag}</span>)}
+                  </div>
                 </div>
-                <span className="album-drawer-meta">{albumCountLabel(album)}</span>
                 <ChevronDown className="album-drawer-chevron" size={26} aria-hidden="true" />
               </button>
               <div className="album-photo-grid" id={`${album.slug}-photos`} hidden={!isOpen}>
                 {isOpen && (
                   <>
-                  {album.videos?.map((video, index) => (
+                  {album.videos?.map((video) => (
                     <figure className="album-photo-card album-video-card" key={video}>
                       <video
                         src={video}
@@ -504,7 +501,7 @@ export function CasesApp() {
                       />
                       <figcaption>
                         <Camera size={16} aria-hidden="true" />
-                        案場影片 {String(index + 1).padStart(2, '0')}
+                        現場影片
                       </figcaption>
                     </figure>
                   ))}
@@ -550,7 +547,7 @@ export function CasesApp() {
                       />
                       <figcaption>
                         <Camera size={16} aria-hidden="true" />
-                        案場照片 {String(index + 1).padStart(2, '0')}
+                        案場實拍
                       </figcaption>
                     </figure>
                   ))}
