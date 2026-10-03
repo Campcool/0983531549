@@ -1,0 +1,15 @@
+﻿output_file,source_file,ratio,width,height,upscale_factor,service,edits
+landscape-commercial-kitchen-01.jpg,public/cases/commercial-kitchen/commercial-kitchen-02.jpg,1.91:1,1200,628,1.148,commercial-kitchen,裁切、拉正（原圖已水平）、曝光+0.06EV、對比+3%、飽和-2%
+square-commercial-kitchen-01.jpg,public/cases/commercial-kitchen/commercial-kitchen-02.jpg,1:1,1200,1200,1.148,commercial-kitchen,裁切、拉正（原圖已水平）、曝光+0.06EV、對比+3%、飽和-2%
+landscape-floor-waxing-02.jpg,public/cases/floor-waxing/floor-waxing-03.jpg,1.91:1,1200,628,1.148,floor-waxing,裁切、曝光+0.06EV、對比+3%、飽和-2%、臉部局部模糊
+square-floor-waxing-02.jpg,public/cases/floor-waxing/floor-waxing-03.jpg,1:1,1200,1200,1.148,floor-waxing,裁切、曝光+0.06EV、對比+3%、飽和-2%、臉部局部模糊
+landscape-floor-adhesive-removal-03.jpg,public/cases/floor-adhesive-removal/floor-adhesive-removal-05.jpg,1.91:1,1200,628,1.148,floor-adhesive-removal,裁切、拉正（原圖已垂直）、曝光+0.06EV、對比+3%、飽和-2%
+square-floor-adhesive-removal-03.jpg,public/cases/floor-adhesive-removal/floor-adhesive-removal-05.jpg,1:1,1200,1200,1.148,floor-adhesive-removal,裁切、拉正（原圖已垂直）、曝光+0.06EV、對比+3%、飽和-2%
+landscape-wood-floor-cleaning-04.jpg,public/cases/wood-floor-cleaning/wood-floor-cleaning-02.jpg,1.91:1,1200,628,1.148,wood-floor-cleaning,裁切、拉正（原圖已垂直）、曝光+0.06EV、對比+3%、飽和-2%
+square-wood-floor-cleaning-04.jpg,public/cases/wood-floor-cleaning/wood-floor-cleaning-02.jpg,1:1,1200,1200,1.148,wood-floor-cleaning,裁切、拉正（原圖已垂直）、曝光+0.06EV、對比+3%、飽和-2%
+landscape-awning-cleaning-05.jpg,public/cases/awning-cleaning/awning-cleaning-02.jpg,1.91:1,1200,628,0.861,awning-cleaning,裁切、曝光+0.06EV、對比+3%、飽和-2%
+square-awning-cleaning-05.jpg,public/cases/awning-cleaning/awning-cleaning-02.jpg,1:1,1200,1200,1.148,awning-cleaning,裁切、曝光+0.06EV、對比+3%、飽和-2%
+portrait-commercial-kitchen-01.jpg,public/cases/commercial-kitchen/commercial-kitchen-02.jpg,4:5,960,1200,0.919,commercial-kitchen,裁切、拉正（原圖已水平）、曝光+0.06EV、對比+3%、飽和-2%
+portrait-floor-waxing-02.jpg,public/cases/floor-waxing/floor-waxing-03.jpg,4:5,960,1200,0.919,floor-waxing,裁切、曝光+0.06EV、對比+3%、飽和-2%、臉部局部模糊
+logo-square-1200.png,public/brand/logo-mark-transparent.png,1:1,1200,1200,1.000,brand-logo,白底置中、維持原始像素尺寸、不變形、不重畫
+logo-landscape-1200x300.png,public/brand/logo-horizontal-transparent.png,4:1,1200,300,1.000,brand-logo,白底置中、維持原始像素尺寸、不變形、不重畫
