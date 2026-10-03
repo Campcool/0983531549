@@ -7,7 +7,8 @@
 > 4. **所有時間戳一律台灣時間（Asia/Taipei, UTC+8）**。
 > 5. **不要把「已完成」寫在沒有實測的項目上**。未驗的事項寫進「本輪明確未驗」。
 
-最後更新：2026-09-29 晚（Codex）— H2 覆審結案；首頁與案例頁已改用共用 `SiteHeader`，commit `bba5150` 已部署正式站並由業主確認。
+最後更新：2026-10-03（Claude）— 新增 `ads/google-ads/` Google Ads 規劃：Chrome 插件分段提示詞（每日 NT$50 搜尋廣告）與 Codex 實拍照出圖提示詞；未動網站程式。見第 6 節與待辦 G7／G8。
+（前一筆 2026-09-29 晚 Codex）— H2 覆審結案；首頁與案例頁已改用共用 `SiteHeader`，commit `bba5150` 已部署正式站並由業主確認。
 （前一筆 2026-09-29 晚 Claude）— 依業主指示移除一般居家清潔重複的冰箱照（原 04／05 同檔），照片總數 105→104、首頁數字同步。
 （前一筆 2026-09-29 晚 Claude）— H16 首頁數字錨點更新為 105 張／12 相簿並修正三位數溢出；前一筆為依審查結果實作 H3、H7–H15：水垢相簿併入一般居家（12 相簿）、案例卡改用縮圖（375px 捲完 3.76→0.72 MB）、23 張大圖壓縮（7.31→4.22 MB）、色章對比、`#album-finder` 捲動、無障礙與無結果 LINE。**H2 已由 Codex 覆審結案，現況見第 6 節（六）**。
 （前一輪 2026-09-29 Claude）— 唯讀審查 `f18a808...5bc9b74` 案例頁改版（結論：維持上線，P2×3、P3×4 排給 Codex 為 H9–H14），並記錄業主要求把「重水地區水垢處理」併入「一般居家清潔」（H15）。本輪只改文件。
@@ -317,6 +318,8 @@ intrinsic size 的 `loading="lazy"` 圖片高度為 0；IntersectionObserver 永
 | G4 | 🟠 高 | **全站是 CSR，爬蟲看到的 `<body>` 是 0 字**。Googlebot 會渲染 JS，但多數 AI 爬蟲（GPTBot／ClaudeBot／PerplexityBot）不執行 JS，等於整站內容對 AI 搜尋不可見 | 需架構決策 | 需討論 | 🟡 **業主指定三方決議**：業主、Codex、Claude 三方都同意才做 |
 | G5 | 🟢 中 | 案例頁已補 `BreadcrumbList` ＋ `ImageGallery`（11 個相簿、代表圖與張數），並以 `about` 指回首頁的 business `@id` | `cases/index.html` | 30 分 | ✅ 已完成 |
 | **G6** | 🔴 **需業主帳號** | **填入 GA4 Measurement ID 才會開始收數據**。埋點已完成，`src/analytics.js` 的 `GA_MEASUREMENT_ID` 目前是空字串（安全 no-op）。到 GA 建資源拿到 `G-XXXXXXXXXX` 後填入、推 main 即生效 | `src/analytics.js` | 5 分 | ⬜ |
+| **G7** | 🟠 高 | **Google Ads 搜尋廣告（每日 NT$50，林口／龜山）**：提示詞已備妥於 `ads/google-ads/chrome-extension-prompts.md`，由業主用 Chrome 插件分段執行，最後發布由業主本人按。上線前務必先做 G6，否則 Ads 沒有轉換資料 | Google Ads 後台 | 1–2 小時 | ⬜ **需業主帳號** |
+| G8 | 🟢 中 | Google Ads 圖片素材：交 Codex 依 `ads/google-ads/codex-image-prompt.md` 用實拍照裁切產出（禁 AI 生成、禁疊字、禁拼貼資料夾），輸出到 `ads/google-ads/images/` | `ads/google-ads/` | 1 小時 | ⬜ **待 Codex** |
 | C6 | 🟡 **已開相簿** | 2026-09-28 業主提供 27 張退租入住清潔照片，新增 `move-in-cleaning` 相簿（重點清潔）；`public/cases/move-in-cleaning/` 共 27 張。照片已縮至最長邊 1600px、JPEG quality 82；尚未過浮水印腳本。 | `src/cases.jsx`、`public/cases/move-in-cleaning/` | — | ✅ **2026-09-28 完成並覆審** |
 | E1 | 🟡 **部分完成** | `general-home-cleaning` 現為 14 張、`move-in-cleaning` 為 27 張，首頁「一般清潔」在案例頁已有對應。裝潢清潔 vs 裝潢細清名稱差異仍存在，待業主決定是否更名 | `src/main.jsx`、`src/cases.jsx` | 需確認 | 🟨 **部分完成** |
 | H1 | 🟢 中 | 案例頁原「← 回首頁」字級修正；後由共用 header 取代 | `src/SiteHeader.jsx`、`src/style.css` | 15 分 | ✅ **2026-09-29 完成並由業主確認** |
@@ -406,6 +409,24 @@ Measurement ID 會出現在前端原始碼裡，這是 GA4 的正常設計，**�
 ---
 
 ## 6. 進度紀錄（倒序）
+
+### 2026-10-03 Claude 規劃 Google Ads（提示詞）— 未動網站程式
+
+業主需求：準備投 Google Ads，後續由 Chrome 插件操作後台；費用每日 $50；精美圖片交 Codex。
+
+- 新增 `ads/google-ads/chrome-extension-prompts.md`：共同脈絡（事實來源＋內容紅線＋操作紅線）＋提示詞 0–4
+  （讀站 → 前置檢查 → 建活動 → RSA 文案 → 素材與最終檢閱）。插件不得碰付款、不得按發布。
+- 新增 `ads/google-ads/codex-image-prompt.md`：只用實拍照裁切調色出 1.91:1／1:1／4:5 圖與兩種標誌，
+  明文禁 AI 生成、疊字、拼貼（`general-home-cleaning`、`move-in-cleaning` 為 LINE 拼圖，排除）。
+- 預算假設 **NT$50／天**（≈ NT$1,520／月），故只投搜尋、只投林口區＋龜山區、盡可能爭取點擊上限 NT$25。
+  若業主實指 USD 50，文件第 5 節有擴編方案。
+- RSA 標題／說明／路徑／網站連結／宣傳詞皆已用全形算 2 的規則驗算字數，全部在 Google 上限內。
+- 文案遵守第 2 節內容邊界：無價格、無年資認證、無評論改寫、無星等標題。
+
+#### 本輪明確未驗
+- 未登入 Google Ads，未實測任何後台選項名稱（介面文字可能與提示詞略有差異，插件需依畫面對應）。
+- 關鍵字搜尋量與點擊單價（NT$10–40）為經驗估計，未用關鍵字規劃工具查證。
+- 首頁 `#areas`、`#process`、`#services` 與案例頁 hash 錨點取自原始碼，未在正式站點擊驗證。
 
 ### 2026-09-29（六）Codex 完成 H2 覆審並統一首頁／案例頁最上方導覽列 ✅ 結案
 
