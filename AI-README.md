@@ -7,7 +7,8 @@
 > 4. **所有時間戳一律台灣時間（Asia/Taipei, UTC+8）**。
 > 5. **不要把「已完成」寫在沒有實測的項目上**。未驗的事項寫進「本輪明確未驗」。
 
-最後更新：2026-10-03（Claude）— 新增 `ads/google-ads/` Google Ads 規劃：Chrome 插件分段提示詞（每日 NT$50 搜尋廣告）與 Codex 實拍照出圖提示詞；未動網站程式。見第 6 節與待辦 G7／G8。
+最後更新：2026-10-03（Claude）— 補 `generate_lead` 事件與 GA4 建立／Ads 轉換匯入的插件提示詞（GA4 ID 仍待業主提供）。
+（前一筆 2026-10-03 Claude）— 新增 `ads/google-ads/` Google Ads 規劃：Chrome 插件分段提示詞（每日 NT$50 搜尋廣告）與 Codex 實拍照出圖提示詞；未動網站程式。見第 6 節與待辦 G7／G8。
 （前一筆 2026-09-29 晚 Codex）— H2 覆審結案；首頁與案例頁已改用共用 `SiteHeader`，commit `bba5150` 已部署正式站並由業主確認。
 （前一筆 2026-09-29 晚 Claude）— 依業主指示移除一般居家清潔重複的冰箱照（原 04／05 同檔），照片總數 105→104、首頁數字同步。
 （前一筆 2026-09-29 晚 Claude）— H16 首頁數字錨點更新為 105 張／12 相簿並修正三位數溢出；前一筆為依審查結果實作 H3、H7–H15：水垢相簿併入一般居家（12 相簿）、案例卡改用縮圖（375px 捲完 3.76→0.72 MB）、23 張大圖壓縮（7.31→4.22 MB）、色章對比、`#album-finder` 捲動、無障礙與無結果 LINE。**H2 已由 Codex 覆審結案，現況見第 6 節（六）**。
@@ -317,7 +318,7 @@ intrinsic size 的 `loading="lazy"` 圖片高度為 0；IntersectionObserver 永
 | G3 | 🟠 高 | `public/CNAME` 已建立並確認進入 `dist` 產物 | `public/CNAME` | 10 分 | ✅ 已完成 |
 | G4 | 🟠 高 | **全站是 CSR，爬蟲看到的 `<body>` 是 0 字**。Googlebot 會渲染 JS，但多數 AI 爬蟲（GPTBot／ClaudeBot／PerplexityBot）不執行 JS，等於整站內容對 AI 搜尋不可見 | 需架構決策 | 需討論 | 🟡 **業主指定三方決議**：業主、Codex、Claude 三方都同意才做 |
 | G5 | 🟢 中 | 案例頁已補 `BreadcrumbList` ＋ `ImageGallery`（11 個相簿、代表圖與張數），並以 `about` 指回首頁的 business `@id` | `cases/index.html` | 30 分 | ✅ 已完成 |
-| **G6** | 🔴 **需業主帳號** | **填入 GA4 Measurement ID 才會開始收數據**。埋點已完成，`src/analytics.js` 的 `GA_MEASUREMENT_ID` 目前是空字串（安全 no-op）。到 GA 建資源拿到 `G-XXXXXXXXXX` 後填入、推 main 即生效 | `src/analytics.js` | 5 分 | ⬜ |
+| **G6** | 🔴 **需業主帳號** | **填入 GA4 Measurement ID 才會開始收數據**。埋點已完成，`src/analytics.js` 的 `GA_MEASUREMENT_ID` 目前是空字串（安全 no-op）。到 GA 建資源拿到 `G-XXXXXXXXXX` 後填入、推 main 即生效 | `src/analytics.js` | 5 分 | ⬜ 2026-10-03 已加 `generate_lead` 供 Ads 轉換；GA4 建立步驟見 `ads/google-ads/chrome-extension-prompts.md`「提示詞 1-GA4」 |
 | **G7** | 🟠 高 | **Google Ads 搜尋廣告（每日 NT$50，林口／龜山）**：提示詞已備妥於 `ads/google-ads/chrome-extension-prompts.md`，由業主用 Chrome 插件分段執行，最後發布由業主本人按。上線前務必先做 G6，否則 Ads 沒有轉換資料 | Google Ads 後台 | 1–2 小時 | ⬜ **需業主帳號** |
 | G8 | 🟢 中 | Google Ads 圖片素材：交 Codex 依 `ads/google-ads/codex-image-prompt.md` 用實拍照裁切產出（禁 AI 生成、禁疊字、禁拼貼資料夾），輸出到 `ads/google-ads/images/` | `ads/google-ads/` | 1 小時 | ⬜ **待 Codex** |
 | C6 | 🟡 **已開相簿** | 2026-09-28 業主提供 27 張退租入住清潔照片，新增 `move-in-cleaning` 相簿（重點清潔）；`public/cases/move-in-cleaning/` 共 27 張。照片已縮至最長邊 1600px、JPEG quality 82；尚未過浮水印腳本。 | `src/cases.jsx`、`public/cases/move-in-cleaning/` | — | ✅ **2026-09-28 完成並覆審** |
@@ -395,6 +396,7 @@ Measurement ID 會出現在前端原始碼裡，這是 GA4 的正常設計，**�
 | 事件 | 參數 | 說明 |
 |---|---|---|
 | `contact_click` | `method`（line／phone／facebook）、`area` | 所有聯絡按鈕點擊 |
+| `generate_lead` | `method`（line／phone）、`area` | **給 GA4 主要事件／Google Ads 轉換用**。只在 LINE 與電話點擊時與 `contact_click` 同時送出；FB 不送。主要事件請標這個，不要標 `contact_click` |
 | `album_open` | `album`（slug）、`source`（category_card／index_card／drawer） | 相簿開啟，可看出客戶對哪類清潔有興趣 |
 | `nav_click` | `target`、`area` | 站內導覽、前往案例頁、Google 地圖 |
 
@@ -409,6 +411,22 @@ Measurement ID 會出現在前端原始碼裡，這是 GA4 的正常設計，**�
 ---
 
 ## 6. 進度紀錄（倒序）
+
+### 2026-10-03（二）Claude 為 Google Ads 轉換準備 GA4 埋點 ⚠️ 請 Codex 覆審
+
+- `src/analytics.js`：`trackContact` 在 method 為 line／phone 時，另送 GA4 建議事件 `generate_lead`。
+  理由：GA4 主要事件只能整個事件名稱標記，直接標 `contact_click` 會把點 FB 粉專也算成廣告轉換。
+- `ads/google-ads/chrome-extension-prompts.md` 新增「提示詞 1-GA4」：插件建立 GA4 資源取得 ID →
+  （部署後）標 `generate_lead` 為主要事件 → 連結 Ads → 匯入轉換。
+- `GA_MEASUREMENT_ID` **仍為空字串**：建立 GA4 資源需要業主的 Google 帳號，Claude 無權限。業主拿到 G- ID 後填入即可（G6）。
+
+#### 驗證
+- `pnpm lint`、`pnpm build` 通過。
+- production preview 用 Playwright 在 `/` 與 `/cases/` 各點一次電話、LINE、FB：`__trackLog` 依序為
+  `contact_click:phone, generate_lead:phone, contact_click:line, generate_lead:line, contact_click:facebook`，FB 不產生 lead。
+
+#### 本輪明確未驗
+- 未填 GA ID，未實測事件真的送到 GA4（沙盒對 google.com 連線被拒）。
 
 ### 2026-10-03 Claude 規劃 Google Ads（提示詞）— 未動網站程式
 

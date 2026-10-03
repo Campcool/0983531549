@@ -57,9 +57,18 @@ export function track(action, params = {}) {
   }
 }
 
-/** 聯絡動作：LINE／電話／粉專。area 是按鈕所在的區塊。 */
+/**
+ * 聯絡動作：LINE／電話／粉專。area 是按鈕所在的區塊。
+ *
+ * LINE 與電話另外送一筆 GA4 建議事件 generate_lead，專門給「主要事件／Google Ads 轉換」用：
+ * GA4 標記主要事件只能整個事件名稱一起標，不能只挑 contact_click 裡 method=line 的那幾筆，
+ * 若直接標 contact_click，連點 FB 粉專也會被算成廣告轉換。
+ */
+const LEAD_METHODS = new Set(['line', 'phone'])
+
 export function trackContact(method, area) {
   track('contact_click', { method, area })
+  if (LEAD_METHODS.has(method)) track('generate_lead', { method, area })
 }
 
 /** 相簿開啟。source 區分是從四大分類卡、索引卡還是抽屜標題點開的。 */
