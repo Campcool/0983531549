@@ -1,7 +1,7 @@
 ---
 name: 潔淨坊清潔工作室 Design System
 colors:
-  background: "#F4FAF8"
+  background: "#FAF8F2"
   background-soft: "#EEF8F5"
   surface: "#FFFFFF"
   foreground: "#23424C"
@@ -81,6 +81,8 @@ motion:
 互動要像居家服務的柔和回饋，不像遊戲或科技展示。按鈕使用短暫果凍按壓，情境卡片 hover 時輕浮起，Hero 只保留低強度的工具圖示漂浮與光感。所有動畫必須支援 `prefers-reduced-motion`。
 
 ## Do's and Don'ts
+
+2026-10-06 實作補充：共用 header 在 1080px 以下使用六項可展開選單／底部全寬聯絡 dock，1080px 起為完整水平導覽與三顆聯絡鈕。首屏以暖白、深青、既有實拍為主，減少浮動裝飾；按鈕至少 44px，輸入 16px。詢問清單有複製失敗文字備援，網站不儲存或自動送出需求。首頁／案例由同一 React 元件預先輸出內容，無 JS 仍可讀相簿卡，篩選／相簿展開需 JS。六張照片使用衍生 WebP，來源與既有照片不變。
 
 - Do: 以照片、區域、需求範圍引導詢問。
 - Do: 未確認內容用保守文字說明。
