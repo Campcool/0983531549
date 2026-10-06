@@ -224,7 +224,7 @@ const heroCasePhoto = albums.find((album) => album.slug === 'general-cleaning')?
 // 不依賴任何元件狀態，放在模組層級，useEffect 才不必把它列進依賴。
 const scrollAlbumIntoView = (slug) => {
   window.setTimeout(() => {
-    document.getElementById(slug)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    document.getElementById(slug)?.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' })
   }, 0)
 }
 
@@ -304,6 +304,7 @@ export function CasesApp() {
       <SiteHeader currentPage="cases" />
 
       <main id="main-content" tabIndex={-1}>
+        <noscript><p className="section">您目前可閱讀案例摘要；篩選與相簿展開需啟用 JavaScript。也可直接用 LINE 或電話詢問。</p></noscript>
         <section className="cases-hero">
           <div>
             <p className="eyebrow">案場相簿</p>
@@ -585,7 +586,7 @@ function SocialBrandIcon({ type, size = 20 }) {
   )
 }
 
-createRoot(document.getElementById('root')).render(
+if (typeof document !== 'undefined') createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <CasesApp />
   </React.StrictMode>,

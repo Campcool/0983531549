@@ -5,6 +5,7 @@ on:
     branches:
       - main
   workflow_dispatch:
+  pull_request:
 
 permissions:
   contents: read
@@ -32,6 +33,7 @@ jobs:
           cache: pnpm
 
       - name: Configure Pages
+        if: github.event_name != 'pull_request'
         uses: actions/configure-pages@v5
 
       - name: Install dependencies
@@ -42,13 +44,31 @@ jobs:
 
       - name: Build
         run: pnpm build
+      - name: Verify albums and public artifact
+        run: node scripts/validate-artifact.mjs
+
+      - name: Install fixed browser engines
+        run: pnpm exec playwright install --with-deps chromium firefox webkit
+
+      - name: Verify production artifact core flows
+        run: pnpm test:browser
+
+      - name: Preserve browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cleaning-browser-evidence
+          path: browser-results
+          retention-days: 14
 
       - name: Upload artifact
+        if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v3
         with:
           path: dist
 
   deploy:
+    if: github.event_name != 'pull_request'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

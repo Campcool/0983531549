@@ -27,7 +27,7 @@ export function initAnalytics() {
   // 即使沒有 GA ID 也先備好 log，讓業主／開發者可以用 Console 驗證埋點
   window.__trackLog = window.__trackLog || []
 
-  if (initialised || !GA_MEASUREMENT_ID) return
+  if (initialised || !/^G-[A-Z0-9]+$/.test(GA_MEASUREMENT_ID)) return
   initialised = true
 
   const script = document.createElement('script')
@@ -41,7 +41,7 @@ export function initAnalytics() {
   }
   window.gtag = gtag
   gtag('js', new Date())
-  gtag('config', GA_MEASUREMENT_ID)
+  gtag('config', GA_MEASUREMENT_ID, { page_location: location.origin + location.pathname, page_path: location.pathname })
 }
 
 export function track(action, params = {}) {

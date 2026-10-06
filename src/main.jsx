@@ -33,8 +33,14 @@ import {
 import './style.css'
 import { useClickTracking } from './analytics.js'
 import { SiteHeader } from './SiteHeader.jsx'
+import { InquiryChecklist } from './InquiryChecklist.jsx'
 
 const assetPath = (path) => `${import.meta.env.BASE_URL}${path.replace(/^\/+/, '')}`
+
+const responsiveSrcSet = (url) => {
+  const name = url.split('/').pop().replace('.jpg', '')
+  return `${assetPath('responsive/' + name + '-480.webp')} 480w, ${assetPath('responsive/' + name + '-960.webp')} 960w`
+}
 
 const heroImage = assetPath('cases/site-cleaning-hero.jpg')
 const lineUrl = 'https://line.me/R/ti/p/~chenli0775'
@@ -172,7 +178,7 @@ const servicePrinciples = [
   },
   {
     title: '使用實拍案場',
-    copy: '照片只放已提供素材，不補假案例或評論。',
+    copy: '參考實際清潔現場，再確認您的需求。',
     icon: Camera,
   },
   {
@@ -361,8 +367,8 @@ export function App() {
           <div className="hero-copy">
             <p className="eyebrow">林口・龜山到府清潔</p>
             <h1 id="hero-title" className="hero-title">
-              <span className="hero-brand-name">照片先確認範圍</span>
-              <span className="hero-brand-service">再安排到府服務</span>
+              <span className="hero-brand-name">把清潔交給我們</span>
+              <span className="hero-brand-service">從一張現場照片開始</span>
             </h1>
             <p className="brand-slogan">潔淨坊清潔工作室｜專業・細心・值得信賴</p>
             <div className="hero-lede">
@@ -400,7 +406,7 @@ export function App() {
           </div>
           <figure className="hero-visual">
             <img
-              src={heroImage}
+              src={heroImage} srcSet={responsiveSrcSet(heroImage)} sizes="(min-width: 820px) 45vw, 100vw"
               alt="潔淨坊清潔工作室實際案場清潔照片"
               width="1108"
               height="1477"
@@ -452,7 +458,7 @@ export function App() {
               return (
                 <article className={`scenario-card scenario-${item.tone}`} key={item.title}>
                   <span className="scenario-photo" aria-hidden="true">
-                    <img src={item.image} alt="" loading="lazy" decoding="async" />
+                    <img src={item.image} srcSet={responsiveSrcSet(item.image)} sizes="(min-width: 820px) 33vw, 100vw" alt="" loading="lazy" decoding="async" />
                   </span>
                   <Icon className="scenario-watermark" size={138} aria-hidden="true" />
                   <div className="card-topline">
@@ -669,6 +675,7 @@ export function App() {
           </div>
         </section>
 
+        <section className="section checklist-section" aria-label="詢問需求清單"><InquiryChecklist /></section>
         <section className="final-cta" aria-labelledby="contact-title">
           <p className="eyebrow">Contact</p>
           <h2 id="contact-title">先把家裡的狀況說清楚，再安排清潔。</h2>
@@ -787,7 +794,7 @@ function CheckIconForService({ item }) {
   return <Sparkles size={17} aria-hidden="true" />
 }
 
-createRoot(document.getElementById('root')).render(
+if (typeof document !== 'undefined') createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <App />
   </React.StrictMode>,

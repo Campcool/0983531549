@@ -27,6 +27,7 @@ const SocialBrandIcon = ({ type, size }) => (
 )
 
 export function SiteHeader({ currentPage = 'home' }) {
+  const [menuOpen, setMenuOpen] = React.useState(false)
   const isCasesPage = currentPage === 'cases'
   const sectionHref = (id) => (isCasesPage ? `${import.meta.env.BASE_URL}#${id}` : `#${id}`)
 
@@ -46,7 +47,8 @@ export function SiteHeader({ currentPage = 'home' }) {
         />
       </a>
 
-      <nav className="desktop-nav" aria-label="頁面段落">
+      <button className="menu-toggle" type="button" aria-expanded={menuOpen} aria-controls="site-navigation" onClick={() => setMenuOpen(!menuOpen)}>選單 {menuOpen ? '−' : '+'}</button>
+      <nav id="site-navigation" className={`desktop-nav ${menuOpen ? 'is-open' : ''}`} aria-label="頁面段落" onClick={() => setMenuOpen(false)} onKeyDown={e => { if (e.key === 'Escape') { setMenuOpen(false); e.currentTarget.previousElementSibling.focus() } }}>
         {navItems.map((item) => {
           const isCurrent = isCasesPage && item.id === 'cases'
           const href = item.id === 'cases'
