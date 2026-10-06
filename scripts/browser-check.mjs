@@ -57,7 +57,14 @@ await run(async (page, base, width, output, browser) => {
     const video = page.locator('#' + slug + ' video')
     await video.waitFor()
     assert.match(await video.getAttribute('src'), /-video-web\.mp4$/)
-    await video.evaluate(async v => { v.muted = true; await v.play() })
+    console.log(`${browser}/${width}/${slug}: verifying playback`)
+    await video.evaluate(async v => {
+      v.muted = true
+      let timer
+      try {
+        await Promise.race([v.play(), new Promise((_, reject) => { timer = setTimeout(() => reject(new Error(`Video play did not settle: ${v.currentSrc}, readyState=${v.readyState}, error=${v.error?.code}`)), 10000) })])
+      } finally { clearTimeout(timer) }
+    })
     await page.waitForFunction(id => document.querySelector('#' + id + ' video').currentTime > 0.15, slug)
     const metadata = await video.evaluate(v => { v.pause(); return { duration:v.duration, width:v.videoWidth, height:v.videoHeight, error:v.error?.code } })
     assert(Math.abs(metadata.duration - duration) < 0.1, JSON.stringify(metadata))
