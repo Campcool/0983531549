@@ -292,14 +292,21 @@ const assuranceNotes = [
   {
     title: '依需求評估費用',
     copy: '提供坪數、空間照片與希望清潔的區域，方便了解清潔範圍與費用。',
+    href: '#inquiry-checklist',
+    action: '整理詢問需求',
   },
   {
     title: '傳照片詢問更方便',
     copy: '用 LINE 傳送空間全景與髒污近照，並告訴我們希望安排的時間。',
+    href: lineUrl,
+    action: '用 LINE 詢問',
+    external: true,
   },
   {
     title: '先看看清潔案例',
     copy: '瀏覽居家、裝潢與商用空間的清潔紀錄，找到與需求相近的案例。',
+    href: `${import.meta.env.BASE_URL}cases/`,
+    action: '查看清潔案例',
   },
 ]
 
@@ -327,18 +334,25 @@ const faqs = [
   {
     question: '詢問時要先準備什麼？',
     answer: '建議準備空間照片、地址行政區、希望清潔的區域、可安排時間，以及是否有特殊材質或寵物。',
+    links: [{ href: '#inquiry-checklist', label: '整理詢問需求' }],
   },
   {
     question: '可以直接在網站上看固定價格嗎？',
     answer: '提供空間照片與清潔需求後，我們會依坪數、髒污程度、材質、交通與可安排時間評估，再向您說明費用。',
+    links: [{ href: lineUrl, label: '用 LINE 詢問費用', external: true }],
   },
   {
     question: '有真實案例或評論嗎？',
     answer: '您可以到案例頁查看不同空間的清潔紀錄，也可以透過 Google 商家連結閱讀客戶評論，作為詢問服務前的參考。',
+    links: [
+      { href: `${import.meta.env.BASE_URL}cases/`, label: '查看清潔案例' },
+      { href: business.mapsUrl, label: '查看 Google 評論', external: true },
+    ],
   },
   {
     question: '服務地區是哪裡？',
     answer: '工作室在新北市林口區，林口與龜山是最常到府的範圍；台北、新北、桃園與基隆也可詢問。實際可到府地點仍以地址、日期與路程確認為準。',
+    links: [{ href: '#areas', label: '查看服務地區' }],
   },
 ]
 
@@ -439,11 +453,14 @@ export function App() {
           })}
         </section>
 
-        <section className="assurance-strip" aria-label="詢問前先講清楚">
+        <section className="assurance-strip" aria-label="詢問前先講清楚" data-track-area="assurance">
           {assuranceNotes.map((note) => (
             <article key={note.title}>
               <strong>{note.title}</strong>
               <p>{note.copy}</p>
+              <a className="context-link" href={note.href} target={note.external ? '_blank' : undefined} rel={note.external ? 'noreferrer' : undefined}>
+                {note.action}<ArrowRight size={17} aria-hidden="true" />
+              </a>
             </article>
           ))}
         </section>
@@ -661,7 +678,7 @@ export function App() {
           </div>
         </section>
 
-        <section className="section faq-section" aria-label="常見詢問">
+        <section className="section faq-section" aria-label="常見詢問" data-track-area="faq">
           <SectionIntro eyebrow="FAQ" title="常見詢問">
             以下先回答聯絡前最常需要確認的資訊，避免用不完整資料做承諾。
           </SectionIntro>
@@ -670,12 +687,19 @@ export function App() {
               <details key={faq.question}>
                 <summary>{faq.question}</summary>
                 <p>{faq.answer}</p>
+                <div className="context-links">
+                  {faq.links.map((link) => (
+                    <a className="context-link" key={link.href} href={link.href} target={link.external ? '_blank' : undefined} rel={link.external ? 'noreferrer' : undefined}>
+                      {link.label}<ArrowRight size={17} aria-hidden="true" />
+                    </a>
+                  ))}
+                </div>
               </details>
             ))}
           </div>
         </section>
 
-        <section className="section checklist-section" aria-label="詢問需求清單"><InquiryChecklist /></section>
+        <section className="section checklist-section" id="inquiry-checklist" aria-label="詢問需求清單"><InquiryChecklist /></section>
         <section className="final-cta" aria-labelledby="contact-title">
           <p className="eyebrow">Contact</p>
           <h2 id="contact-title">先把家裡的狀況說清楚，再安排清潔。</h2>

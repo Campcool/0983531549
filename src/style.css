@@ -909,6 +909,38 @@ p strong {
   line-height: 1.65;
 }
 
+.context-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+}
+
+.context-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  margin-top: 8px;
+  color: var(--color-ink-deep);
+  font-size: 15px;
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.context-link:hover {
+  text-decoration-thickness: 2px;
+}
+
+.context-link:focus-visible {
+  outline: 3px solid var(--color-ink-deep);
+  outline-offset: 4px;
+}
+
+#inquiry-checklist {
+  scroll-margin-top: 120px;
+}
+
 .section,
 .case-section,
 .split-section,
