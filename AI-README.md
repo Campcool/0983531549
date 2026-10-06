@@ -1,5 +1,16 @@
 # AI-README｜潔淨坊清潔工作室（0983531549）AI 協作交接文件
 
+## 2026-10-06 影音效能續優化（Codex）
+
+- 以 main `241d0d45e8703449cc99fb3fbf75f708016e3cdd` 接續，排除已完成的改版、預先輸出與手機導覽。
+- B6／A14：兩支既有案例影片新增 `-video-web.mp4`，H.264／yuv420p、原尺寸與 30fps、CRF 24、faststart；原 AAC 音軌直接複製。油漆 3,987,968 → 3,540,600 bytes；商用廚房 15,377,896 → 3,373,168 bytes；合計減少 64.30%。原影片與 104 張實拍完整保留。
+- 相簿仍展開才建立影片，`preload="metadata"`／playsInline／原生 controls 保留。metadata 不代表只在播放時下載媒體；瀏覽器可預先緩衝，須以實際請求判讀。
+- 新增原檔／衍生檔 SHA、MP4 moov 在 mdat 前的部署產物門禁；瀏覽器覆核兩支影片播放、長度、720px 寬與尾端跳轉；測試伺服器支援 Range 206，避免整檔 200 掩蓋跳轉問題。
+- 本機 lint、build、公開產物與 Chromium 375／768／1440 通過；三引擎 CI、PR／正式發布以中央 `PERFORMANCE-DELIVERY-2026-10-06.md` 最終證據為準。
+- 待辦：A14 壓縮已實作，正式影片查核仍需發布後完成；iOS／Android／LINE webview 真機、正式 LCP、GA4／成交率均未驗。GA4 ID 維持空白。
+- CI 追加：初批 Ubuntu WebKit 影片步驟停滯，已取消該舊 run，補 10 秒播放逾時與 15 分鐘 job 上限。依 Playwright 官方 browsers 文件，影片 codec 依 OS 而異，WebKit 播放建議 macOS；三引擎門禁改為 Ubuntu Chromium／Firefox 与 macOS-15 WebKit，各375／768／1440，全部通過才可部署。沒有跳過 WebKit 影片驗證，也不把它視為實體 Safari 驗收。
+- 重製方式、固定工具版本與來源／輸出 hashes 見 `docs/video-performance-2026-10-06.json`；還原可 revert 本批，原影片仍在原路徑。
+
 ## 2026-10-06 進度紀錄與待辦（Codex）
 
 - 讀取最新 main `34fe2ac75346d16c35025c46fde419c7008199e5` 與中央交接；H1–H16／既有廣告素材已完成，不重做。業主本輪已明確授權兩清潔站改版、PR 合併與既有 Pages 部署；下方歷史 G4 三方決議不再構成本輪阻擋。
@@ -9,7 +20,7 @@
 - 六張既有照片新增 480／960px WebP 衍生圖與 srcset；保留原始實拍及 104 張／12 相簿／2 支影片，不新增價格、評論、案例或營運承諾。
 - A07：PR 現在跑 lint、build、完整照片檔案門禁、Playwright 固定 1.63.0 三引擎 × 375／768／1440；PR 不部署。新增每日 Pages Source 自查，只讀本站設定，不使用跨倉庫 secret。
 - 本機 lint／build／104 張照片與縮圖門禁／Chromium 三寬度通過。CI 三引擎、合併 SHA、正式部署及線上驗證以中央 `CLEANING-DELIVERY-2026-10-06.md` 最終證據為準，未完成時不得引用為已驗。
-- **待辦／本輪明確未驗**：G1 商家网站欄位／GSC 後台；G6／A01 自有 GA4 ID 仍空，不借用其他品牌；GA4 DebugView／成效；iOS／Android／LINE webview 真機及實際客服收件；B6 影片壓縮仍未完成。A13 已實作公開內容預先輸出，不能推論搜尋排名／AI 收錄已改善。
+- **待辦／本輪明確未驗**：G1 商家网站欄位／GSC 後台；G6／A01 自有 GA4 ID 仍空，不借用其他品牌；GA4 DebugView／成效；iOS／Android／LINE webview 真機及實際客服收件；B6 影片壓縮已於下個同日效能批次完成，見上方續優化紀錄。A13 已實作公開內容預先輸出，不能推論搜尋排名／AI 收錄已改善。
 - 回復基準為上述 main；永久回復用 revert 並重新跑 CI／部署，保留真實照片與廣告素材。
 
 
@@ -325,7 +336,7 @@ intrinsic size 的 `loading="lazy"` 圖片高度為 0；IntersectionObserver 永
 | C1 | 🟠 高 | `handleFiles` 補 `try/finally`；移除硬編碼密碼 | `src/caseAdmin.jsx:88`、`:6` | 30 分 | ✅ |
 | C2 | 🟡 待決策 | LINE 標誌換官方素材（現為自繪，違反自家 DESIGN.md） | `public/brand/icon-line.svg` | 待業主 | ⬜ |
 | C3 | 🟢 中 | ~~刪死資產~~、~~同步 DESIGN.md~~、~~CI 加 `pnpm lint`~~ 已完成；**只剩圖片轉 WebP** | 多處 | 2 小時 | 🟨 **部分完成** |
-| B6 | 🟢 中 | 兩支影片未壓縮：`commercial-kitchen-video.mp4` **14.7 MB**（全站最大單一檔）、`paint-cleaning-video.mp4` **3.8 MB**。720p H.264 CRF 26 通常可到 2–3 MB。`<video preload="metadata">` 所以只在客人按播放時才整支下載，不影響開相簿速度，但手機網路播放會卡。沙盒無 ffmpeg，**業主在本機做** | `public/cases/commercial-kitchen/`、`public/cases/paint-cleaning/` | 30 分 | ⬜ **業主本機** |
+| B6 | 🟢 中 | 兩支既有影片新增 H.264 CRF24／faststart 衍生檔；原檔保留。合計 19,365,864 → 6,913,768 bytes，音軌與時長保留；展開後 metadata 仍可能預先緩衝 | src/cases.jsx、docs/video-performance-2026-10-06.json | — | ✅ 本機壓縮與播放完成；CI／部署見中央效能交付 |
 | B7 | 🟢 中 | hero 與 scenario 另外輸出手機用小圖。現在首屏仍有 `garbage-clearance-01.jpg`(376KB)＋`site-cleaning-hero.jpg`(291KB)＋`room-after-work`(183KB)＝850 KB，這三張是 1108×1477 原圖卻只渲染成 ~350px 寬（scenario 還只有 34% 不透明度）。輸出 5+1 張 ~720px 寬的衍生圖可再省約 600 KB | `public/cases/` | 1 小時 | ⬜ |
 | C4 | 🟡 **待業主確認** | 粉專網址不一致：站上三個入口用 `facebook.com/share/1GMwVQdp7J/?mibextid=wwXIfr`（帶追蹤參數的分享短連結），首頁 JSON-LD 的 `sameAs` 用 `facebook.com/chenli0775/`。`sameAs` 是給搜尋引擎做實體消歧用的，指到兩個不同 URL 會削弱訊號。**請業主到 FB 後台確認現行正式網址**，再把兩處一起改 | `src/main.jsx:40`、`src/cases.jsx:24`、`index.html:40` | 10 分 | ⬜ |
 | C5 | 🟢 中 | 手機版 6 顆導覽膠囊高 32px，低於 Google 行動友善建議的 48px（WCAG 2.5.8 的 24px 已通過）。**本輪刻意不改**：header 是固定 96px、膠囊排成 3×2，拉到 44px 會撐破 header，要連 `--header-height` 與依賴它的 `[id]{scroll-margin-top}` 一起調，風險不小（陷阱 9、10 都是 header 改動出的事），不適合上架前做 | `src/style.css:169` | 1 小時 | ⬜ |

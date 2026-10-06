@@ -52,4 +52,26 @@ await run(async (page, base, width, output, browser) => {
   await raw.goto(base + '/cases/')
   assert.equal(await raw.locator('.album-index-card').count(), 12)
   await noJs.close()
+  for (const [slug, duration] of [['paint-cleaning', 15], ['commercial-kitchen', 60.035]]) {
+    await page.goto(base + '/cases/#' + slug)
+    const video = page.locator('#' + slug + ' video')
+    await video.waitFor()
+    assert.match(await video.getAttribute('src'), /-video-web\.mp4$/)
+    console.log(`${browser}/${width}/${slug}: verifying playback`)
+    await video.evaluate(async v => {
+      v.muted = true
+      let timer
+      try {
+        await Promise.race([v.play(), new Promise((_, reject) => { timer = setTimeout(() => reject(new Error(`Video play did not settle: ${v.currentSrc}, readyState=${v.readyState}, error=${v.error?.code}`)), 10000) })])
+      } finally { clearTimeout(timer) }
+    })
+    await page.waitForFunction(id => document.querySelector('#' + id + ' video').currentTime > 0.15, slug)
+    const metadata = await video.evaluate(v => { v.pause(); return { duration:v.duration, width:v.videoWidth, height:v.videoHeight, error:v.error?.code } })
+    assert(Math.abs(metadata.duration - duration) < 0.1, JSON.stringify(metadata))
+    assert.equal(metadata.width, 720)
+    assert.equal(metadata.error, undefined)
+    await video.evaluate(v => { v.currentTime = Math.max(0, v.duration - 1) })
+    await page.waitForFunction(id => { const v = document.querySelector('#' + id + ' video'); return !v.seeking && Math.abs(v.currentTime - (v.duration - 1)) < 0.2 }, slug)
+    await page.screenshot({ path:`${output}/${browser}-${width}-${slug}-video.png` })
+  }
 }, ['/', '/cases/'], 'dist')

@@ -1,0 +1,113 @@
+{
+  "encoder": "ffmpeg version 6.1.1-essentials_build-www.gyan.dev Copyright (c) 2000-2023 the FFmpeg developers\r",
+  "videos": [
+    {
+      "source": "public/cases/paint-cleaning/paint-cleaning-video.mp4",
+      "output": "public/cases/paint-cleaning/paint-cleaning-video-web.mp4",
+      "sourceSha256": "284c8694a6e8ad459de1850ee45d148fe086e191f53475739bd70599a20a255d",
+      "outputSha256": "8522e7861c6f110f3b71dff38f6d52821b218076fa6bdba33b7ee669107b6d25",
+      "sourceBytes": 3987968,
+      "outputBytes": 3540600,
+      "sourceDuration": 15,
+      "outputDuration": 15,
+      "streams": [
+        {
+          "type": "video",
+          "codec": "h264",
+          "width": 720,
+          "height": 1280,
+          "pixelFormat": "yuv420p",
+          "frameRate": "30/1"
+        },
+        {
+          "type": "audio",
+          "codec": "aac",
+          "frameRate": "0/0"
+        }
+      ],
+      "args": [
+        "-hide_banner",
+        "-loglevel",
+        "error",
+        "-n",
+        "-i",
+        "work/0983531549/public/cases/paint-cleaning/paint-cleaning-video.mp4",
+        "-map",
+        "0:v:0",
+        "-map",
+        "0:a:0?",
+        "-c:v",
+        "libx264",
+        "-preset",
+        "slow",
+        "-crf",
+        "24",
+        "-pix_fmt",
+        "yuv420p",
+        "-c:a",
+        "copy",
+        "-map_metadata",
+        "-1",
+        "-movflags",
+        "+faststart",
+        "work/0983531549/public/cases/paint-cleaning/paint-cleaning-video-web.mp4"
+      ],
+      "ssim": "SSIM Y:0.989000 (19.585935) U:0.991031 (20.472355) V:0.991525 (20.718795) All:0.989759 (19.896615)",
+      "audioPacketHash": "SHA256=4cc14fdeb01b8fe710b1eef1e80def3b908c9239545d24abfb7ba4798587c612"
+    },
+    {
+      "source": "public/cases/commercial-kitchen/commercial-kitchen-video.mp4",
+      "output": "public/cases/commercial-kitchen/commercial-kitchen-video-web.mp4",
+      "sourceSha256": "31f8f311710246204cf7ab20d466126a23ff49059b8847347eb9448e0121c9f3",
+      "outputSha256": "b7d7da7ea5130b74126e69b11fa81e4209ae3665c7245e2ebb6936cb4fa9335d",
+      "sourceBytes": 15377896,
+      "outputBytes": 3373168,
+      "sourceDuration": 60.034014,
+      "outputDuration": 60.035,
+      "streams": [
+        {
+          "type": "video",
+          "codec": "h264",
+          "width": 720,
+          "height": 962,
+          "pixelFormat": "yuv420p",
+          "frameRate": "30/1"
+        },
+        {
+          "type": "audio",
+          "codec": "aac",
+          "frameRate": "0/0"
+        }
+      ],
+      "args": [
+        "-hide_banner",
+        "-loglevel",
+        "error",
+        "-n",
+        "-i",
+        "work/0983531549/public/cases/commercial-kitchen/commercial-kitchen-video.mp4",
+        "-map",
+        "0:v:0",
+        "-map",
+        "0:a:0?",
+        "-c:v",
+        "libx264",
+        "-preset",
+        "slow",
+        "-crf",
+        "24",
+        "-pix_fmt",
+        "yuv420p",
+        "-c:a",
+        "copy",
+        "-map_metadata",
+        "-1",
+        "-movflags",
+        "+faststart",
+        "work/0983531549/public/cases/commercial-kitchen/commercial-kitchen-video-web.mp4"
+      ],
+      "ssim": "SSIM Y:0.989062 (19.610440) U:0.994421 (22.534816) V:0.994874 (22.902573) All:0.990924 (20.420902)",
+      "audioPacketHash": "SHA256=48513284a7a270e2830e00857b532b6436a7ee87cbeecb4a9ba0357523f523d6"
+    }
+  ]
+}
