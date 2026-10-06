@@ -173,7 +173,7 @@ const scenarios = [
 const servicePrinciples = [
   {
     title: '價格先確認',
-    copy: '未看照片與現場條件前，不先寫死費用。',
+    copy: '傳照片說明需求，清潔範圍與費用一起確認。',
     icon: ShieldCheck,
   },
   {
@@ -233,7 +233,7 @@ const details = [
     icon: BrushCleaning,
   },
   {
-    text: '價格與工時不在未確認前寫死',
+    text: '費用與工時依清潔需求評估',
     icon: ShieldCheck,
   },
 ]
@@ -290,16 +290,16 @@ const proofMetrics = [
 
 const assuranceNotes = [
   {
-    title: '費用不先寫死',
-    copy: '坪數、髒污、材質與交通條件確認後再說明，避免用不完整資訊報價。',
+    title: '依需求評估費用',
+    copy: '提供坪數、空間照片與希望清潔的區域，方便了解清潔範圍與費用。',
   },
   {
-    title: '照片先對齊範圍',
-    copy: '先用 LINE 看整體空間與重點角落，再判斷是否需要現場確認。',
+    title: '傳照片詢問更方便',
+    copy: '用 LINE 傳送空間全景與髒污近照，並告訴我們希望安排的時間。',
   },
   {
-    title: '只放實際素材',
-    copy: '案例照片使用已提供案場素材，不補假評論、假客戶或未確認成果。',
+    title: '先看看清潔案例',
+    copy: '瀏覽居家、裝潢與商用空間的清潔紀錄，找到與需求相近的案例。',
   },
 ]
 
@@ -330,11 +330,11 @@ const faqs = [
   },
   {
     question: '可以直接在網站上看固定價格嗎？',
-    answer: '網站不放固定價格。實際費用會受坪數、髒污程度、工具耗材、交通與時間影響，需確認需求後再說明。',
+    answer: '提供空間照片與清潔需求後，我們會依坪數、髒污程度、材質、交通與可安排時間評估，再向您說明費用。',
   },
   {
     question: '有真實案例或評論嗎？',
-    answer: '案例頁已整理自家案場實拍相簿，方便先看不同清潔情境。評論只逐字引用 Google 商家上可公開查證的內容，標明作者與時間並附商家連結；不自行編寫或轉述客戶說法，也不放未確認的成果數字。前後對比只使用已確認可公開的素材。',
+    answer: '您可以到案例頁查看不同空間的清潔紀錄，也可以透過 Google 商家連結閱讀客戶評論，作為詢問服務前的參考。',
   },
   {
     question: '服務地區是哪裡？',
@@ -505,7 +505,7 @@ export function App() {
 
         <section className="case-section" id="cases">
           <SectionIntro eyebrow="Works" title="實際案場清潔紀錄">
-            使用已提供的案場照片，呈現櫃體、木作、裝修後粉塵與局部清潔情境；不加入未確認的客戶名稱或成果數字。
+            從櫃體與木作除塵，到裝修後整理與局部清潔，看看不同空間的現場清潔紀錄。
           </SectionIntro>
           <div className="section-actions">
             <a className="button secondary" href={`${import.meta.env.BASE_URL}cases/`}>
