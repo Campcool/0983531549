@@ -8,6 +8,7 @@
 - 新增原檔／衍生檔 SHA、MP4 moov 在 mdat 前的部署產物門禁；瀏覽器覆核兩支影片播放、長度、720px 寬與尾端跳轉；測試伺服器支援 Range 206，避免整檔 200 掩蓋跳轉問題。
 - 本機 lint、build、公開產物與 Chromium 375／768／1440 通過；三引擎 CI、PR／正式發布以中央 `PERFORMANCE-DELIVERY-2026-10-06.md` 最終證據為準。
 - 待辦：A14 壓縮已實作，正式影片查核仍需發布後完成；iOS／Android／LINE webview 真機、正式 LCP、GA4／成交率均未驗。GA4 ID 維持空白。
+- CI 追加：初批 Ubuntu WebKit 影片步驟停滯，已取消該舊 run，補 10 秒播放逾時與 15 分鐘 job 上限。依 Playwright 官方 browsers 文件，影片 codec 依 OS 而異，WebKit 播放建議 macOS；三引擎門禁改為 Ubuntu Chromium／Firefox 与 macOS-15 WebKit，各375／768／1440，全部通過才可部署。沒有跳過 WebKit 影片驗證，也不把它視為實體 Safari 驗收。
 - 重製方式、固定工具版本與來源／輸出 hashes 見 `docs/video-performance-2026-10-06.json`；還原可 revert 本批，原影片仍在原路徑。
 
 ## 2026-10-06 進度紀錄與待辦（Codex）
