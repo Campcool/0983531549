@@ -93,7 +93,7 @@ const albums = [
     tags: ['裝潢', '油漆', '特殊處理'],
     photos: generatedPhotos('paint-cleaning', 'paint-cleaning', 9),
     videos: [
-      assetPath('cases/paint-cleaning/paint-cleaning-video.mp4'),
+      assetPath('cases/paint-cleaning/paint-cleaning-video-web.mp4'),
     ],
   },
   {
@@ -203,7 +203,7 @@ const albums = [
     tags: ['商用', '廚房', '重油汙'],
     photos: generatedPhotos('commercial-kitchen', 'commercial-kitchen', 14),
     videos: [
-      assetPath('cases/commercial-kitchen/commercial-kitchen-video.mp4'),
+      assetPath('cases/commercial-kitchen/commercial-kitchen-video-web.mp4'),
     ],
   },
 ]

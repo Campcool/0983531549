@@ -12,8 +12,23 @@ export async function run(flow, pages, defaultRoot) {
       let file = resolve(root, '.' + decodeURIComponent(new URL(req.url, 'http://localhost').pathname))
       if (!file.startsWith(root + sep) && file !== root) throw new Error('Invalid path')
       if ((await stat(file)).isDirectory()) file = resolve(file, 'index.html')
-      res.setHeader('Content-Type', ({ '.html':'text/html', '.js':'text/javascript', '.css':'text/css', '.json':'application/json', '.jpg':'image/jpeg', '.webp':'image/webp', '.png':'image/png', '.svg':'image/svg+xml' })[extname(file)] || 'application/octet-stream')
-      res.end(await readFile(file))
+      res.setHeader('Content-Type', ({ '.html':'text/html', '.js':'text/javascript', '.css':'text/css', '.json':'application/json', '.jpg':'image/jpeg', '.webp':'image/webp', '.png':'image/png', '.svg':'image/svg+xml', '.mp4':'video/mp4' })[extname(file)] || 'application/octet-stream')
+      const body = await readFile(file)
+      res.setHeader('Accept-Ranges', 'bytes')
+      const range = req.headers.range
+      if (range) {
+        const match = /^bytes=(\d+)-(\d*)$/.exec(range)
+        const start = match ? Number(match[1]) : NaN
+        const end = match && match[2] ? Math.min(Number(match[2]), body.length - 1) : body.length - 1
+        if (!Number.isSafeInteger(start) || start < 0 || start > end) {
+          res.writeHead(416, { 'Content-Range': `bytes */${body.length}` }); res.end(); return
+        }
+        res.writeHead(206, { 'Content-Range': `bytes ${start}-${end}/${body.length}`, 'Content-Length': end - start + 1 })
+        res.end(body.subarray(start, end + 1))
+      } else {
+        res.setHeader('Content-Length', body.length)
+        res.end(body)
+      }
     } catch { res.writeHead(404); res.end('Not found') }
   })
   await new Promise(done => server.listen(0, '127.0.0.1', done))
