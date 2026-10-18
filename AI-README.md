@@ -329,7 +329,7 @@ intrinsic size 的 `loading="lazy"` 圖片高度為 0；IntersectionObserver 永
 | # | 項目 | 狀態／下一步 |
 |---|---|---|
 | J1 | 視覺、情境與服務入口、可填寫詢問清單、案例接續詢問、兩頁共用 dock | ✅ 已實作；最終整合版本本機兩引擎通過既有與新增流程，獨立覆審無 P1/P2 |
-| J2 | 最終整合回歸、PR 三引擎、main 部署與正式產物核對 | 🟨 最終本機整合通過；CI／部署進行中；以 PR／Actions 結果為準，不提前標記正式已驗 |
+| J2 | 最終整合回歸、PR 三引擎、main 部署與正式產物核對 | 本機最終整合通過。[PR #5](https://github.com/Campcool/0983531549/pull/5) 保存合併 SHA；[發布紀錄](https://github.com/Campcool/0983531549/actions/workflows/deploy.yml) 以該合併提交的 build、webkit-media、deploy 全成功為正式驗收依據 |
 | J3 | iOS／Android／LINE webview 與真實客服收件 | ⬜ 本輪未驗；需業主以真機確認複製、貼上、傳送及回到頁面的行為 |
 | J4 | G1 商家網站欄位／GSC、G6 自有 GA4 ID／成效量測 | ⬜ 延續未驗；GA4 ID 空白，不宣稱成交率或正式 LCP 改善 |
 
@@ -476,7 +476,7 @@ Measurement ID 會出現在前端原始碼裡，這是 GA4 的正常設計，**�
 - **內容與素材**：未新增價格、服務承諾、評論或成果。104 原圖／12 相簿／2 影片與原有前後配對保留；首頁 104／12／4／31 數字保留，評論快照明示 2026-09-11；案例頁不新增數量。地圖／電話／LINE／FB、FAQ 相鄰連結均保留。CSS 改為一致規範，保留管理工具樣式與拼貼圖比例，DESIGN.md 已同步。
 - **驗證與證據**：lint、build、104 張素材與 MP4 hash／faststart 門禁通過；既有 Chromium／Firefox × 375／768／1440（圖片、篩選、兩片播放／尾端跳轉）及新增詢問流程在最終整合版本全部通過。320／390／600／819／820／1079／1080／1440 兩頁無橫向溢出、無失效錨點，手機選單與 44px 控制通過。截圖、閱讀位置與首屏圖片 bytes 見 `docs/design/2026-10-18-review.md`。
 - **獨立覆審**：本輪 `jjf_review` 唯讀審查與獨立 Chromium 實測，含 320–1440 七寬度、跨案例帶入、保留草稿／隱私、clipboard 成功拒絕、鍵盤／無 JS 備援與三斷點截圖；未發現有證據的 P1／P2。不等同 Claude 或實體手機覆核。
-- **發布門禁**：保留 Ubuntu Chromium／Firefox 及 macOS WebKit 全套門禁。部署後新增 `verify-live.py`，下載同一 run Pages artifact，逐一核對正式首頁、案例、管理頁、首頁／案例直接引用的 CSS／JS 及代表實拍 SHA；只讀，不改 DNS／Pages 設定。PR／最終合併／正式結果待 J2 補實際證據。
+- **發布門禁**：保留 Ubuntu Chromium／Firefox 及 macOS WebKit 全套門禁。部署後新增 `verify-live.py`，下載同一 run Pages artifact，逐一核對正式首頁、案例、管理頁、首頁／案例直接引用的 CSS／JS 及代表實拍 SHA；只讀，不改 DNS／Pages 設定。PR／合併 SHA／三引擎與正式結果由 J2 的 PR #5 與對應合併提交 Actions 保存；deploy 最後核對步驟成功才代表正式產物吻合。腳本以匹配／不匹配 fixture 驗證成功與拒絕分支，不能把 fixture 當作正式站已驗。
 - **本輪明確未驗**：實體 iOS／Android／LINE webview、實際客服收件、GSC／商家後台、自有 GA4／成交率、正式 LCP。外部請求在本機測試中封鎖；沒有發送測試詢問或建立假訂單。若需回復，revert 本批並重新跑三引擎與既有部署，不改原素材。
 
 
