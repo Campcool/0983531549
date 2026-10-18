@@ -22,6 +22,9 @@ import {
 import './style.css'
 import { useClickTracking, trackAlbum } from './analytics.js'
 import { SiteHeader } from './SiteHeader.jsx'
+import { ContactDock } from './ContactDock.jsx'
+import { InquiryLink } from './InquiryLink.jsx'
+import { albumServices } from './inquiry.js'
 
 const assetPath = (path) => `${import.meta.env.BASE_URL}${path.replace(/^\/+/, '')}`
 const lineUrl = 'https://line.me/R/ti/p/~chenli0775'
@@ -307,7 +310,7 @@ export function CasesApp() {
         <noscript><p className="section">您目前可閱讀案例摘要；篩選與相簿展開需啟用 JavaScript。也可直接用 LINE 或電話詢問。</p></noscript>
         <section className="cases-hero">
           <div>
-            <p className="eyebrow">案場相簿</p>
+
             <h1>快速找到相近案例</h1>
             <p>
               先選服務情境、空間與清潔問題，看看與您需求接近的實際現場，再用 LINE 傳照片確認。
@@ -338,7 +341,6 @@ export function CasesApp() {
 
         <section className="section album-index" id="album-finder" aria-label="案例相簿速查">
           <div className="album-index-heading">
-            <p className="eyebrow">依需求找案例</p>
             <h2>您的現場，接近哪一種？</h2>
             <p>每一類可選一項；把不同類別組合起來，就能看到更接近需求的案例。</p>
           </div>
@@ -479,6 +481,7 @@ export function CasesApp() {
               <div className="album-photo-grid" id={`${album.slug}-photos`} hidden={!isOpen}>
                 {isOpen && (
                   <>
+                  <div className="album-inquiry" data-track-area="album_inquiry"><div><strong>也需要{album.title}？</strong><p>帶入這項需求，再補上你的空間與照片。</p></div><InquiryLink service={albumServices[album.slug]} className="button primary">整理這項清潔需求<ArrowRight size={18} aria-hidden="true" /></InquiryLink></div>
                   {album.videos?.map((video) => (
                     <figure className="album-photo-card album-video-card" key={video}>
                       <video
@@ -540,18 +543,16 @@ export function CasesApp() {
                       </figcaption>
                     </figure>
                   ))}
+                  <div className="album-inquiry album-inquiry-end" data-track-area="album_inquiry"><p>看完現場紀錄，接著說說你的需求。</p><InquiryLink service={albumServices[album.slug]}>詢問{album.title}<ArrowRight size={17} aria-hidden="true" /></InquiryLink><a className="context-link" href="#album-finder">回到案例選擇</a></div>
                   </>
                 )}
               </div>
-              {!isOpen && (
-                <p className="album-drawer-hint">點開後才載入照片，節省手機流量。</p>
-              )}
+
             </section>
           )
         })}
 
         <section className="final-cta">
-          <p className="eyebrow">Contact</p>
           <h2>有類似現場狀況，可以先傳照片確認。</h2>
           <p>可先傳照片與所在行政區，確認需求後再安排到府時間。</p>
           <div className="final-actions">
@@ -563,6 +564,7 @@ export function CasesApp() {
         </section>
       </main>
 
+      <ContactDock />
       <footer className="site-footer">
         <span>潔淨坊清潔工作室</span>
         <span>案例相簿</span>

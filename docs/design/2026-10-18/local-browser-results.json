@@ -1,0 +1,55 @@
+{
+  "base": "http://127.0.0.1:38979",
+  "testedAt": "2026-10-18T12:03:15.067Z",
+  "externalRequests": "blocked",
+  "results": [
+    {
+      "browser": "chromium",
+      "version": "153.0.8010.12",
+      "width": 375,
+      "status": "passed",
+      "pageErrors": [],
+      "failedResources": []
+    },
+    {
+      "browser": "chromium",
+      "version": "153.0.8010.12",
+      "width": 768,
+      "status": "passed",
+      "pageErrors": [],
+      "failedResources": []
+    },
+    {
+      "browser": "chromium",
+      "version": "153.0.8010.12",
+      "width": 1440,
+      "status": "passed",
+      "pageErrors": [],
+      "failedResources": []
+    },
+    {
+      "browser": "firefox",
+      "version": "155.0",
+      "width": 375,
+      "status": "passed",
+      "pageErrors": [],
+      "failedResources": []
+    },
+    {
+      "browser": "firefox",
+      "version": "155.0",
+      "width": 768,
+      "status": "passed",
+      "pageErrors": [],
+      "failedResources": []
+    },
+    {
+      "browser": "firefox",
+      "version": "155.0",
+      "width": 1440,
+      "status": "passed",
+      "pageErrors": [],
+      "failedResources": []
+    }
+  ]
+}

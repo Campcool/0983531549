@@ -1,91 +1,44 @@
----
-name: 潔淨坊清潔工作室 Design System
-colors:
-  background: "#FAF8F2"
-  background-soft: "#EEF8F5"
-  surface: "#FFFFFF"
-  foreground: "#23424C"
-  muted-foreground: "#526F76"
-  primary: "#2F8F8F"
-  primary-strong: "#174F5D"
-  primary-soft: "#DFF3EF"
-  accent: "#7CC4E8"
-  mint: "#A7DCC8"
-  line: "#017A35"
-  line-strong: "#006B2E"
-  border: "#D8D1C4"
-  focus: "#174F5D"
-typography:
-  family: "system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Noto Sans TC, sans-serif"
-  display:
-    fontSize: "42-62px mobile / 58-76px desktop / 66-82px wide"
-    fontWeight: 1000
-    lineHeight: 1.05
-  heading:
-    fontSize: "32px mobile / 46px desktop / 50px wide"
-    fontWeight: 900
-    lineHeight: 1.08
-  body:
-    fontSize: "16px"
-    fontWeight: 400
-    lineHeight: 1.78
-rounded:
-  sm: "6px"
-  md: "8px"
-  lg: "18px"
-spacing:
-  page-padding: "clamp(18px, 5vw, 64px)"
-  section-y-mobile: "70px"
-  section-y-desktop: "96px"
-components:
-  button-primary:
-    backgroundColor: "{colors.primary}"
-    textColor: "#FFFFFF"
-    rounded: "{rounded.md}"
-  card:
-    backgroundColor: "{colors.surface}"
-    borderColor: "{colors.border}"
-    rounded: "{rounded.md}"
-motion:
-  button-press: "jelly scale press, 0.44s"
-  card-hover: "lift 4px with soft shadow"
-  hero-detail: "slow floating utility icons and subtle shine"
----
+# 潔淨坊設計規範
 
-## Overview
+更新：2026-10-18（Asia/Taipei）。以下對應 `src/main.jsx`、`src/cases.jsx`、共用元件與 `src/style.css`；維護交接以 `AI-README.md` 為準。
 
-潔淨坊的目前定位為「照片先確認範圍，再安排到府服務」的地區型清潔品牌：專業但不誇張、重視溝通與現場判斷。視覺要以業主提供的實拍照片、可查證案例數字、Google 商家資產與清楚聯絡入口建立信任；避免看起來像廉價的一頁式 AI 模板。
+## 目的與內容
 
-## Colors
+協助林口、龜山及可詢問服務區域的訪客，理解需求、查看實拍，再用 LINE／電話確認範圍、費用與日期。網站提供詢問清單，不是線上付款或自動成立訂單。保留全部 104 張原始照片、12 個相簿與 2 支影片，不新增未確認價格、評論、認證或服務保證。
 
-柔白與淡藍綠負責乾淨明亮的底色，深青綠作為標題與可信賴感，品牌青綠作為主要行動色，清爽藍和柔和綠作為圖示與輔助層次。LINE 綠只用於 LINE 入口，避免與品牌主色混淆。
+## 視覺
 
-## Typography
+- 暖白 `#faf8f2`、白色 `#fff` 為主要底色；淺綠 `#eef3ee`／`#e6efea` 區隔詢問內容。
+- 深青 `#174f5d` 用於主要按鈕與流程段，文字 `#23424c`，次要文字 `#526970`。LINE 綠固定 `#017a35`，hover `#006b2e`。
+- 品牌 Logo、favicon、OG 圖沿用既有品牌檔，不引入新圖示字型或遠端字型。圖示使用 lucide-react／既有品牌 SVG。
+- 系統繁體中文字體：system-ui、Apple／Windows 系統字體、Noto Sans TC fallback。內文 16px／1.85；表單文字至少 16px。h2 28–40px／1.35；主標兩行分別 29–56px、27–48px。
+- 內容最大寬度 1200px；頁邊手機 20px、820px 起至少 32px；段落上下 56px、820px 起 80px。
+- 按鈕圓角 6px、照片 8px、表單／服務卡 12px。情境以縮圖與分隔線構成，減少多層卡片及大面積彩色底。
+- 動態只保留 150–160ms 顏色／箭頭回饋；不做漂浮、果凍或持續裝飾動畫。`prefers-reduced-motion` 停用動畫及平滑捲動。
 
-系統字體搭配 `Noto Sans TC` fallback，減少字體載入成本並維持繁體中文可讀性。首頁大標以價值主張優先，不再把「潔淨坊」做成唯一巨大文字；品牌名放在副標與 Logo 裡，避免首屏只像模板品牌展示。內文用短段落，手機上以自然換行閱讀。
+## 閱讀與詢問順序
 
-## Layout
+首頁：服務主張與 LINE → 實拍及四項既有數字 → 六個需求情境 → 四類清潔項目 → 費用／LINE／案例提示 → 可直接操作的詢問清單 → 四步安排流程 → 現場照片 → 評論 → 清潔細節 → 地區 → FAQ → 聯絡與地圖。
 
-手機優先：首屏保留 Logo、服務主張、LINE 行動與實拍數字錨點，再接詢問前承諾、實際案場紀錄、情境、流程、細節、地區與 FAQ。桌面版轉為左右首屏構圖，Hero 圖片使用實拍案場而非生成居家照；其他段落使用寬版 grid 與 full-width band，不把每個區塊都包成大型卡片。
+情境卡與服務項目是可操作入口，點選後帶入對應服務。詢問清單先選服務／地區，空間、日期與重點收在原生 `details` 選填區；未知值明示待確認，不代客戶預選林口或一般清潔。先複製，再開啟個人 LINE 貼上、附照片、自行傳送；文案不得假稱自動填入、已送出、已付款或已預約。
 
-案例頁使用「服務情境 × 空間部位 × 處理需求」三組複合標籤。每組一次選一項、跨組取交集，讓訪客可以用「退租入住＋廚房」或「商用＋廚房」快速縮小結果。三組使用一致白底，分別以青綠、沉穩藍與暖砂的上緣識別線、標題及選取狀態分組；選項採規整的低圓角分段按鈕，避免大面積粉彩與氣泡感。結果區只顯示「全部案例」、已選標籤與取消全部，不顯示案件、照片或影片數量。
+同頁切換服務只更新服務值，保留已填草稿；跨頁只攜帶白名單服務 slug，不能把地址、日期、備註放進網址、事件或儲存區。重新整理會清空地區與補充內容；URL 指定的服務仍可帶入。複製失敗選取全文供手動複製；複製等待期間若內容改變，需提醒重新複製。
 
-## Components
+## 導覽與響應式
 
-按鈕至少 44px 高，圖示使用 lucide-react 或既有品牌 SVG。LINE CTA 使用高對比深綠，白字必須通過 AA。首頁品牌使用 `public/brand/logo-horizontal-transparent.png`，分頁小圖使用 `public/brand/favicon-transparent.png`，社群預覽使用 `public/og-cleaning-area-services-20260910.jpg`。卡片只用於單一情境、相簿索引或案場照片項目；信任承諾、統計與商家資訊用 full-width band 或自然分隔，不做卡片包卡片。所有可操作元素需有明確 focus-visible 狀態。
+- 1080px 以下：76px 固定 header、六項展開選單，底部固定「整理需求／電話／LINE」。首頁與案例頁共用，保留 safe area；頁面底部留白避免遮住最後內容。
+- 1080px 起：88px header、水平導覽及 LINE／電話／Facebook 三個聯絡入口，隱藏 dock。
+- 可點擊控制至少 44px，主要按鈕 50px；具可見鍵盤焦點，深色段使用白色外框。錨點須留 header + 24px 空間。
+- 600px 起情境／服務兩欄；1080px 起情境三欄。820px 起首屏與詢問清單左右排列。不得用 `overflow-x:hidden` 掩蓋版面問題。
 
-案例索引卡以實拍縮圖為主，文字置中並使用固定版面節奏。服務分類（例如「裝潢細清」「特殊清潔」）用深青綠方角色章，複合標籤用淺色圓膠囊；膠囊固定 32px 高、每列三等分，換行後仍維持相同尺寸並置中。所有標籤完整顯示。新增相簿時在資料項目補 `tags` 即可進入速查，不另建硬編碼分類清單或張數。
+## 案例
 
-## Motion
+三組複合篩選（情境、空間、需求）保留交集邏輯及青綠／藍／暖砂分組。索引使用實拍縮圖，分類與文字置中；標籤每列三等分、32px 高膠囊，完整顯示所有文字。案例頁不新增照片／相簿數量。
 
-互動要像居家服務的柔和回饋，不像遊戲或科技展示。按鈕使用短暫果凍按壓，情境卡片 hover 時輕浮起，Hero 只保留低強度的工具圖示漂浮與光感。所有動畫必須支援 `prefers-reduced-motion`。
+關閉的相簿以緊湊標題列呈現，展開後保留標籤、說明、原始媒體和前後對照。每個展開相簿前後均提供對應需求入口。拼貼圖完整呈現並預留比例，避免 lazy 圖片零高度；原始前後照片配對不得重排。影片維持點開相簿才掛載、metadata、原生控制、playsInline。
 
-## Do's and Don'ts
+## 證據與限制
 
-2026-10-06 實作補充：共用 header 在 1080px 以下使用六項可展開選單／底部全寬聯絡 dock，1080px 起為完整水平導覽與三顆聯絡鈕。首屏以暖白、深青、既有實拍為主，減少浮動裝飾；按鈕至少 44px，輸入 16px。詢問清單有複製失敗文字備援，網站不儲存或自動送出需求。首頁／案例由同一 React 元件預先輸出內容，無 JS 仍可讀相簿卡，篩選／相簿展開需 JS。六張照片使用衍生 WebP，來源與既有照片不變。
+首頁／案例仍使用同一 React 元件預先輸出可讀 HTML；無 JS 有直接 LINE 備援，篩選、相簿展開與互動表單需要 JS。評論 4.5／31 及兩則摘錄標示 2026-09-11 快照，附 Google 最新評論入口，不新增 Review／AggregateRating schema。
 
-- Do: 以照片、區域、需求範圍引導詢問。
-- Do: 未確認內容用保守文字說明。
-- Do: Logo、Favicon、OG 圖與色票需依品牌板維持一致。
-- Don't: 虛構價格、案例、評論、年資、認證或人物資料。
-- Don't: 使用未授權客戶圖片、未確認的前後對比或未確認的官方品牌素材。
+本次設計取捨與量測見 `docs/design/2026-10-18-review.md`。裝置模擬不能宣稱實體手機／LINE webview 已驗，頁面縮短也不能宣稱成交率提升。

@@ -1,4 +1,5 @@
 import { run, assert } from './browser-harness.mjs'
+import { checkInquiry } from './inquiry-check.mjs'
 
 await run(async (page, base, width, output, browser) => {
   await page.goto(base + '/')
@@ -36,11 +37,10 @@ await run(async (page, base, width, output, browser) => {
   assert.equal(await page.locator('#general-home-cleaning .album-drawer-trigger').getAttribute('aria-expanded'), 'true')
   await page.screenshot({ path:`${output}/${browser}-${width}-album.png` })
   await page.goto(base + '/')
-  await page.locator('.inquiry-checklist summary').click()
-  await page.locator('.checklist-fields select').first().selectOption('裝潢清潔')
+  await page.locator('.checklist-fields select').first().selectOption('renovation')
   await page.getByRole('button', { name:'複製詢問清單' }).click()
   assert.match(await page.locator('.inquiry-checklist [role="status"]').innerText(), /無法自動複製/)
-  assert.match(await page.locator('.inquiry-checklist textarea').inputValue(), /裝潢清潔/)
+  assert.match(await page.locator('.inquiry-message').inputValue(), /裝潢清潔/)
   await page.getByRole('link', { name:'開啟 LINE 貼上' }).click()
   assert.equal((await page.evaluate(() => window.__trackLog)).filter(x => x.action === 'contact_click').length, 1)
   assert.equal(await page.locator('script[src*="googletagmanager"]').count(), 0)
@@ -50,6 +50,8 @@ await run(async (page, base, width, output, browser) => {
   await raw.goto(base + '/')
   assert.match(await raw.locator('body').innerText(), /把清潔交給我們/)
   assert.equal(await raw.locator('.assurance-strip a').count(), 3)
+  assert.equal(await raw.locator('.inquiry-fallback a').count(), 1)
+  assert.equal(await raw.locator('.inquiry-form').count(), 0)
   await raw.locator('.assurance-strip').getByRole('link', { name:'查看清潔案例' }).click()
   await raw.waitForURL('**/cases/')
   assert.equal(await raw.locator('.album-index-card').count(), 12)
@@ -106,4 +108,5 @@ await run(async (page, base, width, output, browser) => {
   await page.goto(base + '/')
   await page.locator('.assurance-strip').scrollIntoViewIfNeeded()
   await page.screenshot({ path:`${output}/${browser}-${width}-context-links.png` })
+  await checkInquiry(page, base, width)
 }, ['/', '/cases/'], 'dist')

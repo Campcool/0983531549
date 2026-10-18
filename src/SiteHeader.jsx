@@ -10,7 +10,7 @@ const navItems = [
   { id: 'needs', className: 'nav-needs', label: '需求情境' },
   { id: 'services', className: 'nav-services', label: '清潔項目' },
   { id: 'cases', className: 'nav-cases', label: '案例相簿' },
-  { id: 'process', className: 'nav-process', label: '服務流程' },
+  { id: 'inquiry-checklist', className: 'nav-process', label: '詢價預約' },
   { id: 'details', className: 'nav-details', label: '清潔細節' },
   { id: 'areas', className: 'nav-areas', label: '服務地區' },
 ]
