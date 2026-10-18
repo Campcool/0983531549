@@ -8,5 +8,5 @@
 三件最容易踩的事，先看一眼：
 
 1. **不要自行放寬內容邊界**（不寫死價格、不放未確認評論／年資／認證）— 那是業主的刻意決定，見 AI-README 第 2 節。
-2. **`DESIGN.md` 已與實作漂移** — 照它指定的檔名做會改到死檔，見 AI-README 陷阱 3。
+2. **`DESIGN.md` 與實作須同步** — 2026-10-18 已校正；實際入口為 `src/main.jsx`、`src/cases.jsx` 與 `src/style.css`。歷史死檔陷阱仍見 AI-README 陷阱 3。
 3. **`codex/excel-handoff` 分支落後 main 27 個 commit、領先 0** — 沒有未完成的工作在那裡。

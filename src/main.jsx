@@ -5,35 +5,24 @@ import {
   Bath,
   BedDouble,
   BrushCleaning,
-  Building2,
-  Camera,
-  ClipboardCheck,
   ClipboardList,
   CookingPot,
-  CopyCheck,
   Droplets,
-  Flame,
   Hammer,
   KeyRound,
   MapPin,
-  PaintRoller,
-  Phone,
-  PhoneCall,
-  Search,
-  ShieldCheck,
   ShieldAlert,
+  ShieldCheck,
   Sofa,
   Sparkles,
-  SprayCan,
-  Trash2,
-  Truck,
-  WashingMachine,
-  Warehouse,
 } from 'lucide-react'
 import './style.css'
 import { useClickTracking } from './analytics.js'
 import { SiteHeader } from './SiteHeader.jsx'
 import { InquiryChecklist } from './InquiryChecklist.jsx'
+import { InquiryLink } from './InquiryLink.jsx'
+import { ContactDock } from './ContactDock.jsx'
+import { inquiryServices } from './inquiry.js'
 
 const assetPath = (path) => `${import.meta.env.BASE_URL}${path.replace(/^\/+/, '')}`
 
@@ -106,11 +95,11 @@ const inquirySteps = [
     copy: '拍整體空間、櫃體或髒污近照，讓清潔範圍先清楚。',
   },
   {
-    title: '確認條件',
-    copy: '對齊行政區、坪數、材質、髒污狀況與可施工時間。',
+    title: '確認範圍與費用',
+    copy: '依坪數、材質、髒污與地區評估，先說明清潔範圍與費用。',
   },
   {
-    title: '安排到府',
+    title: '確認日期再安排',
     copy: '確認日期、地址與工具需求後，再排定現場服務。',
   },
   {
@@ -122,6 +111,7 @@ const inquirySteps = [
 const scenarios = [
   {
     title: '日常居家整理',
+    service: 'home',
     copy: '客廳、臥室、廚房、浴室等常用區域，先依現況確認清潔範圍。',
     icon: Sofa,
     tag: '常用空間',
@@ -130,6 +120,7 @@ const scenarios = [
   },
   {
     title: '退租入住',
+    service: 'move-in',
     copy: '退租點交前的牆面、地面、衛浴與廚房，或入住前的全室重整，先用照片對齊要清到什麼程度。',
     icon: KeyRound,
     tag: '點交前後',
@@ -138,6 +129,7 @@ const scenarios = [
   },
   {
     title: '搬入搬出前後',
+    service: 'moving',
     copy: '家具搬動、空屋清空與搬遷前後的粉塵，先確認物品量與可進出的動線。',
     icon: BedDouble,
     tag: '搬家整理',
@@ -146,6 +138,7 @@ const scenarios = [
   },
   {
     title: '年節或大掃除',
+    service: 'deep',
     copy: '需要較完整清潔時，先把優先順序排清楚，避免現場才臨時追加。',
     icon: Sparkles,
     tag: '完整清潔',
@@ -154,7 +147,8 @@ const scenarios = [
   },
   {
     title: '廚房浴室重點',
-    copy: '油垢、水垢、排水口、檯面與縫隙，建議先拍近照確認可處理程度。',
+    service: 'local',
+    copy: '油垢、水垢、檯面與縫隙，先拍近照確認可處理程度。',
     icon: CookingPot,
     tag: '油垢水垢',
     tone: 'kitchen',
@@ -162,29 +156,12 @@ const scenarios = [
   },
   {
     title: '局部加強需求',
+    service: 'local',
     copy: '單一房間、陽台、窗框、櫃內等小範圍，也可先用清單確認是否適合安排。',
     icon: Bath,
     tag: '局部處理',
     tone: 'detail',
     image: assetPath('cases/general-home-cleaning/general-home-cleaning-11.jpg'),
-  },
-]
-
-const servicePrinciples = [
-  {
-    title: '價格先確認',
-    copy: '傳照片說明需求，清潔範圍與費用一起確認。',
-    icon: ShieldCheck,
-  },
-  {
-    title: '使用實拍案場',
-    copy: '參考實際清潔現場，再確認您的需求。',
-    icon: Camera,
-  },
-  {
-    title: '需求再安排',
-    copy: '先確認區域、時間、材質與工具，再約到府。',
-    icon: ClipboardCheck,
   },
 ]
 
@@ -235,24 +212,6 @@ const details = [
   {
     text: '費用與工時依清潔需求評估',
     icon: ShieldCheck,
-  },
-]
-
-const contactActions = [
-  {
-    label: '加入 LINE 詢問',
-    value: 'ID chenli0775｜搜尋 0983531549',
-    brand: 'line',
-    href: lineUrl,
-    external: true,
-    type: 'line',
-  },
-  {
-    label: '直接撥打電話',
-    value: '0983531549',
-    icon: PhoneCall,
-    href: phoneUrl,
-    type: 'phone',
   },
 ]
 
@@ -338,12 +297,14 @@ const faqs = [
   },
   {
     question: '可以直接在網站上看固定價格嗎？',
-    answer: '提供空間照片與清潔需求後，我們會依坪數、髒污程度、材質、交通與可安排時間評估，再向您說明費用。',
+    answer:
+      '提供空間照片與清潔需求後，我們會依坪數、髒污程度、材質、交通與可安排時間評估，再向您說明費用。',
     links: [{ href: lineUrl, label: '用 LINE 詢問費用', external: true }],
   },
   {
     question: '有真實案例或評論嗎？',
-    answer: '您可以到案例頁查看不同空間的清潔紀錄，也可以透過 Google 商家連結閱讀客戶評論，作為詢問服務前的參考。',
+    answer:
+      '您可以到案例頁查看不同空間的清潔紀錄，也可以透過 Google 商家連結閱讀客戶評論，作為詢問服務前的參考。',
     links: [
       { href: `${import.meta.env.BASE_URL}cases/`, label: '查看清潔案例' },
       { href: business.mapsUrl, label: '查看 Google 評論', external: true },
@@ -351,166 +312,161 @@ const faqs = [
   },
   {
     question: '服務地區是哪裡？',
-    answer: '工作室在新北市林口區，林口與龜山是最常到府的範圍；台北、新北、桃園與基隆也可詢問。實際可到府地點仍以地址、日期與路程確認為準。',
+    answer:
+      '工作室在新北市林口區，林口與龜山是最常到府的範圍；台北、新北、桃園與基隆也可詢問。實際可到府地點仍以地址、日期與路程確認為準。',
     links: [{ href: '#areas', label: '查看服務地區' }],
   },
 ]
 
-function SectionIntro({ eyebrow, title, children }) {
+function SectionIntro({ title, children }) {
   return (
     <div className="section-intro">
-      <p className="eyebrow">{eyebrow}</p>
       <h2>{title}</h2>
       {children && <p>{children}</p>}
     </div>
   )
 }
 
-export function App() {
-  // 一個事件委派接管全站 <a> 的點擊追蹤（LINE／電話／粉專／站內導覽）
-  useClickTracking()
+const itemService = (item) =>
+  ({ 一般清潔: 'home', 裝潢細清: 'renovation', 清運: 'clearance', 垃圾屋: 'clearance' })[item] ||
+  inquiryServices.find(([, label]) => label === item)?.[0] ||
+  ''
+const photoAlbums = [
+  'general-cleaning',
+  'general-cleaning',
+  'general-cleaning',
+  'general-cleaning',
+  'commercial-kitchen',
+  'floor-adhesive-removal',
+]
 
+export function App() {
+  useClickTracking()
   return (
     <div className="site-shell">
-      <a className="skip-link" href="#main-content">跳到主要內容</a>
-
+      <a className="skip-link" href="#main-content">
+        跳到主要內容
+      </a>
       <SiteHeader />
-
       <main id="main-content" tabIndex={-1}>
         <section className="hero" id="top" aria-labelledby="hero-title">
           <div className="hero-copy">
-            <p className="eyebrow">林口・龜山到府清潔</p>
+            <p className="hero-location">
+              <MapPin size={16} aria-hidden="true" />
+              林口・龜山到府清潔
+            </p>
             <h1 id="hero-title" className="hero-title">
               <span className="hero-brand-name">把清潔交給我們</span>
-              <span className="hero-brand-service">從一張現場照片開始</span>
+              <span className="hero-brand-service">把時間留給生活。</span>
             </h1>
-            <p className="brand-slogan">潔淨坊清潔工作室｜專業・細心・值得信賴</p>
             <div className="hero-lede">
-              <p><strong>家裡需要重整</strong>，不必先整理成完整清單。</p>
-              <p>直接用 <strong>LINE 傳照片</strong>，我們再一起確認區域、時間與現場條件。</p>
+              <p>
+                居家、退租入住、裝潢與重點清潔。
+                <br />
+                從現場照片開始，先確認範圍與費用，再安排到府。
+              </p>
             </div>
             <div className="hero-actions" data-track-area="hero">
               <a className="button line-primary" href={lineUrl} target="_blank" rel="noreferrer">
                 <SocialBrandIcon type="line" size={21} />
-                加入 LINE 詢問
+                LINE 傳照片詢問
+                <ArrowRight size={18} aria-hidden="true" />
               </a>
-              <a className="button secondary" href={phoneUrl}>
-                <Phone size={19} aria-hidden="true" />
-                撥打電話
-              </a>
-            </div>
-            <div className="line-hint" data-track-area="hero_line_hint">
-              <a href={lineUrl} target="_blank" rel="noreferrer">
-                <Search size={15} aria-hidden="true" />
-                LINE 搜尋 0983531549
-              </a>
-              <a href={lineUrl} target="_blank" rel="noreferrer">
-                <CopyCheck size={15} aria-hidden="true" />
-                ID chenli0775
+              <a className="button secondary" href="#needs">
+                先找適合的清潔
               </a>
             </div>
-            <dl className="hero-proof-list" aria-label="潔淨坊網站重點數字">
-              {proofMetrics.map((metric) => (
-                <div key={metric.label}>
-                  <dt>{metric.value}</dt>
-                  <dd>{metric.label}</dd>
-                </div>
-              ))}
-            </dl>
+            <p className="hero-reassurance">
+              還不確定怎麼說？<InquiryLink>幫我整理詢問清單</InquiryLink>
+            </p>
           </div>
           <figure className="hero-visual">
             <img
-              src={heroImage} srcSet={responsiveSrcSet(heroImage)} sizes="(min-width: 820px) 45vw, 100vw"
-              alt="潔淨坊清潔工作室實際案場清潔照片"
+              src={heroImage}
+              srcSet={responsiveSrcSet(heroImage)}
+              sizes="(min-width: 820px) 45vw, 100vw"
+              alt="潔淨坊工作人員在案場清潔木作櫃體"
               width="1108"
               height="1477"
               fetchPriority="high"
             />
-            <div className="floating-tools" aria-hidden="true">
-              <span><SprayCan size={20} /></span>
-              <span><BrushCleaning size={20} /></span>
-              <span><WashingMachine size={20} /></span>
-            </div>
             <figcaption className="hero-visual-caption">
-              <strong>實拍案場</strong>
-              <span>櫃體、木作、粉塵與局部細節先用照片對齊。</span>
+              <strong>櫃內與縫隙，也仔細整理。</strong>
+              <span>潔淨坊木作櫃體清潔實拍</span>
             </figcaption>
           </figure>
+          <dl className="hero-proof-list" aria-label="潔淨坊網站重點數字">
+            {proofMetrics.map((metric) => (
+              <div key={metric.label}>
+                <dt>{metric.value}</dt>
+                <dd>{metric.label}</dd>
+              </div>
+            ))}
+          </dl>
+          <p className="proof-source">
+            評論數為 2026-09-11 摘錄；
+            <a href={business.mapsUrl} target="_blank" rel="noreferrer">
+              查看 Google 最新評論
+            </a>
+          </p>
         </section>
 
-        <section className="trust-band" aria-label="服務原則">
-          {servicePrinciples.map((principle) => {
-            const Icon = principle.icon
-            return (
-              <article key={principle.title}>
-                <Icon aria-hidden="true" />
-                <div>
-                  <strong>{principle.title}</strong>
-                  <small>{principle.copy}</small>
-                </div>
-              </article>
-            )
-          })}
-        </section>
-
-        <section className="assurance-strip" aria-label="詢問前先講清楚" data-track-area="assurance">
-          {assuranceNotes.map((note) => (
-            <article key={note.title}>
-              <strong>{note.title}</strong>
-              <p>{note.copy}</p>
-              <a className="context-link" href={note.href} target={note.external ? '_blank' : undefined} rel={note.external ? 'noreferrer' : undefined}>
-                {note.action}<ArrowRight size={17} aria-hidden="true" />
-              </a>
-            </article>
-          ))}
-        </section>
-
-        <section className="section" id="needs">
-          <SectionIntro eyebrow="Needs" title="先從你遇到的狀況說起">
-            清潔需求通常不是一句「幫我打掃」就能說清楚。先把情境分清楚，再進入 LINE 聯絡確認。
+        <section className="section needs-section" id="needs" data-track-area="needs">
+          <SectionIntro title="今天，想把哪裡整理好？">
+            選最接近的情境，幫你帶入詢問清單。不確定細節也可以先聊。
           </SectionIntro>
           <div className="scenario-grid">
-            {scenarios.map((item, index) => {
+            {scenarios.map((item) => {
               const Icon = item.icon
               return (
-                <article className={`scenario-card scenario-${item.tone}`} key={item.title}>
-                  <span className="scenario-photo" aria-hidden="true">
-                    <img src={item.image} srcSet={responsiveSrcSet(item.image)} sizes="(min-width: 820px) 33vw, 100vw" alt="" loading="lazy" decoding="async" />
-                  </span>
-                  <Icon className="scenario-watermark" size={138} aria-hidden="true" />
-                  <div className="card-topline">
-                    <span>{String(index + 1).padStart(2, '0')}</span>
-                    <span>{item.tag}</span>
+                <InquiryLink className="scenario-card" service={item.service} key={item.title}>
+                  <img
+                    className="scenario-thumb"
+                    src={item.image}
+                    srcSet={responsiveSrcSet(item.image)}
+                    sizes="96px"
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <div>
+                    <span className="scenario-tag">
+                      <Icon size={15} aria-hidden="true" />
+                      {item.tag}
+                    </span>
+                    <h3>{item.title}</h3>
+                    <p>{item.copy}</p>
+                    <span className="scenario-action">
+                      整理這項需求 <ArrowRight size={16} aria-hidden="true" />
+                    </span>
                   </div>
-                  <h3>{item.title}</h3>
-                  <p>{item.copy}</p>
-                </article>
+                </InquiryLink>
               )
             })}
           </div>
         </section>
 
-        <section className="section service-section" id="services">
-          <SectionIntro eyebrow="Services" title="主打清潔內容">
-            依一般、裝潢、重點與特殊清潔整理需求，先判斷現場條件，再回覆可安排方式。
+        <section className="section service-section" id="services" data-track-area="services">
+          <SectionIntro title="從日常打掃，到需要專門處理的地方。">
+            依現場材質、髒污與施工條件評估。點選清潔項目，就能接著詢問。
           </SectionIntro>
           <div className="service-category-grid">
             {serviceGroups.map((group) => {
               const Icon = group.icon
               return (
-                <article className={`service-category-card service-${group.tone}`} key={group.title}>
-                  <div className="service-motion-icon" aria-hidden="true">
-                    <Icon size={34} />
-                  </div>
-                  <div>
+                <article className="service-category-card" key={group.title}>
+                  <div className="service-heading">
+                    <Icon size={26} aria-hidden="true" />
                     <h3>{group.title}</h3>
-                    <p>{group.copy}</p>
                   </div>
+                  <p>{group.copy}</p>
                   <ul>
                     {group.items.map((item) => (
                       <li key={item}>
-                        <CheckIconForService item={item} />
-                        <span>{item}</span>
+                        <InquiryLink service={itemService(item)} className="service-choice">
+                          {item}
+                          <ArrowRight size={15} aria-hidden="true" />
+                        </InquiryLink>
                       </li>
                     ))}
                   </ul>
@@ -520,105 +476,128 @@ export function App() {
           </div>
         </section>
 
-        <section className="case-section" id="cases">
-          <SectionIntro eyebrow="Works" title="實際案場清潔紀錄">
-            從櫃體與木作除塵，到裝修後整理與局部清潔，看看不同空間的現場清潔紀錄。
+        <section
+          className="assurance-strip"
+          aria-label="詢問前先講清楚"
+          data-track-area="assurance"
+        >
+          {assuranceNotes.map((note) => (
+            <article key={note.title}>
+              <strong>{note.title}</strong>
+              <p>{note.copy}</p>
+              <a
+                className="context-link"
+                href={note.href}
+                target={note.external ? '_blank' : undefined}
+                rel={note.external ? 'noreferrer' : undefined}
+              >
+                {note.action}
+                <ArrowRight size={17} aria-hidden="true" />
+              </a>
+            </article>
+          ))}
+        </section>
+
+        <section
+          className="section checklist-section"
+          id="inquiry-checklist"
+          aria-label="詢問需求清單"
+        >
+          <InquiryChecklist />
+        </section>
+
+        <section className="section process-section" id="process">
+          <SectionIntro title="先說清楚，再放心安排。">
+            從詢問到到府，每一步都有需要一起確認的事。
           </SectionIntro>
-          <div className="section-actions">
-            <a className="button secondary" href={`${import.meta.env.BASE_URL}cases/`}>
-              <Camera size={19} aria-hidden="true" />
-              前往完整案例相簿
+          <ol className="step-list">
+            {inquirySteps.map((step, index) => (
+              <li key={step.title}>
+                <span className="step-number">{String(index + 1).padStart(2, '0')}</span>
+                <div>
+                  <strong>{step.title}</strong>
+                  <p>{step.copy}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <section className="section case-section" id="cases" data-track-area="works">
+          <div className="section-heading-row">
+            <SectionIntro title="看看我們在現場做的事。">
+              櫃體、木作、廚房與地板，從實際紀錄了解不同清潔需求。
+            </SectionIntro>
+            <a className="context-link" href={`${import.meta.env.BASE_URL}cases/`}>
+              完整案例相簿
+              <ArrowRight size={18} aria-hidden="true" />
             </a>
           </div>
-          <div className="case-grid">
-            <article className="case-feature">
-              <img
-                src={assetPath('cases/panel-wipe-cleaning.jpg')}
-                alt="工作人員擦拭大型板面與牆面"
-                width="1108"
-                height="1477"
-                loading="lazy"
-              />
-              <div>
-                <p className="eyebrow">On Site</p>
-                <h3>從照片先判斷範圍，再安排工具與時間</h3>
-                <p>案場清潔會受材質、高度、粉塵量與物品狀態影響，適合先用 LINE 傳照片確認。</p>
-              </div>
-            </article>
-            <div className="case-photo-grid">
-              {casePhotos.map((photo) => (
-                <article className="case-photo-card" key={photo.title}>
-                  <img src={photo.src} alt={photo.alt} width={photo.w} height={photo.h} loading="lazy" />
-                  <div>
-                    <h3>{photo.title}</h3>
-                    <p>{photo.copy}</p>
-                  </div>
-                </article>
-              ))}
-            </div>
+          <div className="case-photo-grid">
+            {casePhotos.map((photo, index) => (
+              <a
+                className="case-photo-card"
+                href={`${import.meta.env.BASE_URL}cases/#${photoAlbums[index]}`}
+                key={photo.title}
+              >
+                <img
+                  src={photo.src}
+                  alt={photo.alt}
+                  width={photo.w}
+                  height={photo.h}
+                  loading="lazy"
+                />
+                <div>
+                  <h3>{photo.title}</h3>
+                  <p>{photo.copy}</p>
+                  <span className="context-link">
+                    看現場紀錄
+                    <ArrowRight size={16} aria-hidden="true" />
+                  </span>
+                </div>
+              </a>
+            ))}
           </div>
         </section>
 
-        <section className="split-section" id="process">
-          <div className="process-panel">
-            <SectionIntro eyebrow="Process" title="詢問到到府的流程">
-              建議照這個順序傳資訊，先把照片、範圍與時間對齊，再安排現場服務。
+        <section
+          className="section reviews-section"
+          aria-label="Google 評論"
+          data-track-area="reviews"
+        >
+          <div className="section-heading-row">
+            <SectionIntro title="把細心，留在每一次清潔。">
+              客戶在 Google 留下的真實回饋。
             </SectionIntro>
-            <ol className="step-list">
-              {inquirySteps.map((step, index) => (
-                <li key={step.title}>
-                  <span className="step-number">{String(index + 1).padStart(2, '0')}</span>
-                  <span>
-                    <strong>{step.title}</strong>
-                    <small>{step.copy}</small>
-                  </span>
-                </li>
-              ))}
-            </ol>
-            <div className="process-quick-actions" data-track-area="process">
-              <a className="button line-primary" href={lineUrl} target="_blank" rel="noreferrer">
-                <SocialBrandIcon type="line" size={21} />
-                LINE 傳照片詢問
-              </a>
-              <a className="button dark-secondary" href={phoneUrl}>
-                <PhoneCall size={19} aria-hidden="true" />
-                直接撥打 0983531549
-              </a>
-            </div>
+            <a className="context-link" href={business.mapsUrl} target="_blank" rel="noreferrer">
+              查看 Google 評論
+              <ArrowRight size={17} aria-hidden="true" />
+            </a>
           </div>
-          <div className="note-panel" id="inquiry" data-track-area="inquiry">
-            <Sparkles size={26} aria-hidden="true" />
-            <h2>LINE 詢問資料</h2>
-            <p>
-              先傳空間照片、行政區、預計清潔區域與希望日期。特別在意的角落，也可以另外拍近照。
-            </p>
-            <div className="contact-action-grid" role="group" aria-label="LINE 與電話資訊">
-              {contactActions.map((method) => {
-                const Icon = method.icon
-                return (
-                  <a
-                    className={`contact-action-card ${method.type === 'line' ? 'line-contact-card' : 'phone-contact-card'}`}
-                    href={method.href}
-                    target={method.external ? '_blank' : undefined}
-                    rel={method.external ? 'noreferrer' : undefined}
-                    key={method.label}
-                  >
-                    {method.brand ? <SocialBrandIcon type={method.brand} size={22} /> : <Icon size={18} aria-hidden="true" />}
-                    <span>
-                      <strong>{method.label}</strong>
-                      <small>{method.value}</small>
-                    </span>
-                    <ArrowRight size={17} aria-hidden="true" />
-                  </a>
-                )
-              })}
-            </div>
+          <div className="review-summary">
+            <strong>{business.rating}</strong>
+            <span>
+              Google 評分 · {business.reviewCount} 則評論
+              <br />
+              <small>2026-09-11 摘錄，最新資訊以 Google 商家為準</small>
+            </span>
+          </div>
+          <div className="review-list">
+            {googleReviews.map((review) => (
+              <blockquote className="review-card" key={review.author}>
+                <p>「{review.text}」</p>
+                <footer>
+                  <strong>{review.author}</strong>
+                  <small>{review.meta} · 2026-09-11 摘錄</small>
+                </footer>
+              </blockquote>
+            ))}
           </div>
         </section>
 
         <section className="section detail-section" id="details">
-          <SectionIntro eyebrow="Details" title="清潔前先講清楚的細節">
-            這些不是包裝話術，而是到府清潔前最容易影響工時、費用與成果期待的資訊。
+          <SectionIntro title="清潔前，一起確認這幾件事。">
+            事先說明材質與現場條件，讓費用、工時與期待更清楚。
           </SectionIntro>
           <div className="detail-list">
             {details.map((detail) => {
@@ -633,9 +612,9 @@ export function App() {
           </div>
         </section>
 
-        <section className="area-section" id="areas">
-          <SectionIntro eyebrow="Areas" title="主要詢問區域">
-            工作室位於<strong>林口</strong>，<strong>林口、龜山</strong>是最常到府的區域；台北、新北、桃園與基隆也可詢問。實際是否可安排仍以地址、日期與路程確認。
+        <section className="section area-section" id="areas">
+          <SectionIntro title="從林口出發，為你的空間整理。">
+            林口、龜山是最常到府的區域；台北、新北、桃園與基隆也可詢問。是否可安排，依地址、日期與路程確認。
           </SectionIntro>
           <div className="area-grid" role="group" aria-label="服務地區">
             {serviceAreas.map((area) => (
@@ -651,37 +630,8 @@ export function App() {
           </div>
         </section>
 
-        <section className="section reviews-section" aria-label="Google 評論" data-track-area="reviews">
-          <SectionIntro eyebrow="Reviews" title="客戶在 Google 留下的評價">
-            以下逐字摘自 Google 商家的公開評論，可直接點開商家頁面查看全部內容。
-          </SectionIntro>
-          <div className="review-summary">
-            <strong>{business.rating}</strong>
-            <span>
-              Google 評分 · {business.reviewCount} 則評論
-            </span>
-            <a href={business.mapsUrl} target="_blank" rel="noreferrer">
-              在 Google 查看全部
-              <ArrowRight size={16} aria-hidden="true" />
-            </a>
-          </div>
-          <div className="review-list">
-            {googleReviews.map((review) => (
-              <blockquote className="review-card" key={review.author}>
-                <p>{review.text}</p>
-                <footer>
-                  <strong>{review.author}</strong>
-                  <small>{review.meta} · {review.when}</small>
-                </footer>
-              </blockquote>
-            ))}
-          </div>
-        </section>
-
         <section className="section faq-section" aria-label="常見詢問" data-track-area="faq">
-          <SectionIntro eyebrow="FAQ" title="常見詢問">
-            以下先回答聯絡前最常需要確認的資訊，避免用不完整資料做承諾。
-          </SectionIntro>
+          <SectionIntro title="詢問前，你可能想知道。" />
           <div className="faq-list">
             {faqs.map((faq) => (
               <details key={faq.question}>
@@ -689,8 +639,15 @@ export function App() {
                 <p>{faq.answer}</p>
                 <div className="context-links">
                   {faq.links.map((link) => (
-                    <a className="context-link" key={link.href} href={link.href} target={link.external ? '_blank' : undefined} rel={link.external ? 'noreferrer' : undefined}>
-                      {link.label}<ArrowRight size={17} aria-hidden="true" />
+                    <a
+                      className="context-link"
+                      key={link.href}
+                      href={link.href}
+                      target={link.external ? '_blank' : undefined}
+                      rel={link.external ? 'noreferrer' : undefined}
+                    >
+                      {link.label}
+                      <ArrowRight size={17} aria-hidden="true" />
                     </a>
                   ))}
                 </div>
@@ -699,55 +656,62 @@ export function App() {
           </div>
         </section>
 
-        <section className="section checklist-section" id="inquiry-checklist" aria-label="詢問需求清單"><InquiryChecklist /></section>
-        <section className="final-cta" aria-labelledby="contact-title">
-          <p className="eyebrow">Contact</p>
-          <h2 id="contact-title">先把家裡的狀況說清楚，再安排清潔。</h2>
-          <p>可先傳現場照片、地址行政區與希望清潔日期，潔淨坊清潔工作室再依實際需求確認安排方式。</p>
+        <section className="final-cta" id="inquiry" aria-labelledby="contact-title">
+          <h2 id="contact-title">從一張照片，開始整理生活。</h2>
+          <p>用 LINE 傳現場照片與所在行政區，一起確認清潔範圍、費用與日期。</p>
           <div className="final-actions">
             <a className="button line-primary" href={lineUrl} target="_blank" rel="noreferrer">
               <SocialBrandIcon type="line" size={21} />
-              LINE 詢問 chenli0775
+              LINE 傳照片詢問
             </a>
-            <a className="button dark-secondary" href={`${import.meta.env.BASE_URL}cases/`}>
-              <Camera size={19} aria-hidden="true" />
-              查看案例相簿
-            </a>
-            <a className="button dark-secondary" href={phoneUrl}>
-              <Phone size={19} aria-hidden="true" />
-              撥打 0983531549
-            </a>
+            <InquiryLink className="button dark-secondary">先整理詢問清單</InquiryLink>
           </div>
         </section>
 
-        <section className="section business-section" aria-label="商家資料與位置" data-track-area="business">
-          <SectionIntro eyebrow="Location" title="工作室位置">
-            工作室在林口，林口與龜山是最常到府的範圍。到府服務仍以實際地址與路程確認。
-          </SectionIntro>
+        <section
+          className="section business-section"
+          aria-label="商家資料與位置"
+          data-track-area="business"
+        >
           <div className="business-grid">
             <div className="business-info">
+              <h2>潔淨坊清潔工作室</h2>
+              <p>林口・龜山・基隆・雙北・桃園</p>
               <dl>
-                <div>
-                  <dt>商家名稱</dt>
-                  <dd>潔淨坊清潔工作室</dd>
-                </div>
                 <div>
                   <dt>地址</dt>
                   <dd>{business.address}</dd>
                 </div>
                 <div>
                   <dt>電話</dt>
-                  <dd><a href={phoneUrl}>0983-531-549</a></dd>
+                  <dd>
+                    <a href={phoneUrl}>0983-531-549</a>
+                  </dd>
                 </div>
                 <div>
                   <dt>LINE</dt>
-                  <dd><a href={lineUrl} target="_blank" rel="noreferrer">ID chenli0775</a></dd>
+                  <dd>
+                    <a href={lineUrl} target="_blank" rel="noreferrer">
+                      ID chenli0775
+                    </a>
+                  </dd>
                 </div>
               </dl>
-              <a className="button secondary" href={business.mapsUrl} target="_blank" rel="noreferrer">
-                <MapPin size={19} aria-hidden="true" />
-                在 Google 地圖開啟
-              </a>
+              <div className="context-links">
+                <a
+                  className="context-link"
+                  href={business.mapsUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  在 Google 地圖開啟
+                  <ArrowRight size={17} aria-hidden="true" />
+                </a>
+                <a className="context-link" href={facebookPageUrl} target="_blank" rel="noreferrer">
+                  Facebook 粉專
+                  <ArrowRight size={17} aria-hidden="true" />
+                </a>
+              </div>
             </div>
             <div className="business-map">
               <iframe
@@ -760,33 +724,12 @@ export function App() {
           </div>
         </section>
       </main>
-
-      <MobileContactDock />
-
+      <ContactDock />
       <footer className="site-footer">
         <span>潔淨坊清潔工作室</span>
-        <span>台北・新北・桃園・基隆詢問</span>
+        <span>實際服務內容、費用與時間，以事前確認為準。</span>
       </footer>
     </div>
-  )
-}
-
-function MobileContactDock() {
-  return (
-    <nav className="mobile-contact-dock" aria-label="快速聯絡" data-track-area="dock">
-      <a className="dock-line" href={lineUrl} target="_blank" rel="noreferrer">
-        <SocialBrandIcon type="line" size={20} />
-        <span>LINE</span>
-      </a>
-      <a className="dock-phone" href={phoneUrl}>
-        <Phone size={18} aria-hidden="true" />
-        <span>電話</span>
-      </a>
-      <a className="dock-facebook" href={facebookPageUrl} target="_blank" rel="noreferrer">
-        <SocialBrandIcon type="facebook" size={20} />
-        <span>粉專</span>
-      </a>
-    </nav>
   )
 }
 
@@ -805,21 +748,9 @@ function SocialBrandIcon({ type, size = 20 }) {
   )
 }
 
-function CheckIconForService({ item }) {
-  if (item.includes('清運')) return <Truck size={17} aria-hidden="true" />
-  if (item.includes('裝潢')) return <Building2 size={17} aria-hidden="true" />
-  if (item.includes('油漆')) return <PaintRoller size={17} aria-hidden="true" />
-  if (item.includes('垃圾') || item.includes('火燒') || item.includes('燒炭')) return <Flame size={17} aria-hidden="true" />
-  if (item.includes('商業')) return <Warehouse size={17} aria-hidden="true" />
-  if (item.includes('特殊') || item.includes('除霉') || item.includes('除膠')) return <ShieldAlert size={17} aria-hidden="true" />
-  if (item.includes('水垢')) return <Droplets size={17} aria-hidden="true" />
-  if (item.includes('雨棚') || item.includes('地板') || item.includes('洗地') || item.includes('打蠟')) return <BrushCleaning size={17} aria-hidden="true" />
-  if (item.includes('退租') || item.includes('大掃除')) return <Trash2 size={17} aria-hidden="true" />
-  return <Sparkles size={17} aria-hidden="true" />
-}
-
-if (typeof document !== 'undefined') createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-)
+if (typeof document !== 'undefined')
+  createRoot(document.getElementById('root')).render(
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>,
+  )

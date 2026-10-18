@@ -1,0 +1,334 @@
+{
+  "measuredAt": "2026-10-18T12:00:25.689Z",
+  "scope": "Cold local browser, 900px viewport, networkidle, images only, external requests blocked; not live LCP or conversion.",
+  "measurements": [
+    {
+      "version": "before",
+      "width": 375,
+      "encodedImageBytes": 171122,
+      "resources": [
+        {
+          "path": "/responsive/room-after-work-cleaning-480.webp",
+          "bytes": 22322
+        },
+        {
+          "path": "/responsive/general-cleaning-01-480.webp",
+          "bytes": 23012
+        },
+        {
+          "path": "/responsive/garbage-clearance-01-480.webp",
+          "bytes": 73614
+        },
+        {
+          "path": "/responsive/grease-kitchen-01-480.webp",
+          "bytes": 21570
+        },
+        {
+          "path": "/responsive/general-home-cleaning-11-480.webp",
+          "bytes": 30604
+        }
+      ]
+    },
+    {
+      "version": "before",
+      "width": 768,
+      "encodedImageBytes": 439844,
+      "resources": [
+        {
+          "path": "/responsive/room-after-work-cleaning-960.webp",
+          "bytes": 62224
+        },
+        {
+          "path": "/responsive/general-cleaning-01-960.webp",
+          "bytes": 62552
+        },
+        {
+          "path": "/responsive/garbage-clearance-01-960.webp",
+          "bytes": 210522
+        },
+        {
+          "path": "/responsive/grease-kitchen-01-960.webp",
+          "bytes": 49810
+        },
+        {
+          "path": "/responsive/general-home-cleaning-11-960.webp",
+          "bytes": 54736
+        }
+      ]
+    },
+    {
+      "version": "before",
+      "width": 1440,
+      "encodedImageBytes": 2056808,
+      "resources": [
+        {
+          "path": "/responsive/room-after-work-cleaning-480.webp",
+          "bytes": 22322
+        },
+        {
+          "path": "/responsive/general-cleaning-01-480.webp",
+          "bytes": 23012
+        },
+        {
+          "path": "/responsive/garbage-clearance-01-480.webp",
+          "bytes": 73614
+        },
+        {
+          "path": "/responsive/site-cleaning-hero-480.webp",
+          "bytes": 38206
+        },
+        {
+          "path": "/responsive/grease-kitchen-01-480.webp",
+          "bytes": 21570
+        },
+        {
+          "path": "/responsive/general-home-cleaning-11-480.webp",
+          "bytes": 30604
+        },
+        {
+          "path": "/cases/panel-wipe-cleaning.jpg",
+          "bytes": 180837
+        },
+        {
+          "path": "/cases/room-after-work-cleaning.jpg",
+          "bytes": 187595
+        },
+        {
+          "path": "/cases/cabinet-detail-cleaning.jpg",
+          "bytes": 200787
+        },
+        {
+          "path": "/cases/high-cabinet-cleaning.jpg",
+          "bytes": 196311
+        },
+        {
+          "path": "/cases/vacuum-dust-cleaning.jpg",
+          "bytes": 290740
+        },
+        {
+          "path": "/cases/commercial-kitchen/commercial-kitchen-01.jpg",
+          "bytes": 471995
+        },
+        {
+          "path": "/cases/floor-adhesive-removal/floor-adhesive-removal-01.jpg",
+          "bytes": 319215
+        }
+      ]
+    },
+    {
+      "version": "after",
+      "width": 375,
+      "encodedImageBytes": 171122,
+      "resources": [
+        {
+          "path": "/responsive/room-after-work-cleaning-480.webp",
+          "bytes": 22322
+        },
+        {
+          "path": "/responsive/general-cleaning-01-480.webp",
+          "bytes": 23012
+        },
+        {
+          "path": "/responsive/garbage-clearance-01-480.webp",
+          "bytes": 73614
+        },
+        {
+          "path": "/responsive/grease-kitchen-01-480.webp",
+          "bytes": 21570
+        },
+        {
+          "path": "/responsive/general-home-cleaning-11-480.webp",
+          "bytes": 30604
+        }
+      ]
+    },
+    {
+      "version": "after",
+      "width": 768,
+      "encodedImageBytes": 209328,
+      "resources": [
+        {
+          "path": "/responsive/room-after-work-cleaning-480.webp",
+          "bytes": 22322
+        },
+        {
+          "path": "/responsive/general-cleaning-01-480.webp",
+          "bytes": 23012
+        },
+        {
+          "path": "/responsive/site-cleaning-hero-480.webp",
+          "bytes": 38206
+        },
+        {
+          "path": "/responsive/garbage-clearance-01-480.webp",
+          "bytes": 73614
+        },
+        {
+          "path": "/responsive/grease-kitchen-01-480.webp",
+          "bytes": 21570
+        },
+        {
+          "path": "/responsive/general-home-cleaning-11-480.webp",
+          "bytes": 30604
+        }
+      ]
+    },
+    {
+      "version": "after",
+      "width": 1440,
+      "encodedImageBytes": 794021,
+      "resources": [
+        {
+          "path": "/responsive/room-after-work-cleaning-480.webp",
+          "bytes": 22322
+        },
+        {
+          "path": "/responsive/general-cleaning-01-480.webp",
+          "bytes": 23012
+        },
+        {
+          "path": "/responsive/garbage-clearance-01-480.webp",
+          "bytes": 73614
+        },
+        {
+          "path": "/responsive/site-cleaning-hero-480.webp",
+          "bytes": 38206
+        },
+        {
+          "path": "/responsive/grease-kitchen-01-480.webp",
+          "bytes": 21570
+        },
+        {
+          "path": "/responsive/general-home-cleaning-11-480.webp",
+          "bytes": 30604
+        },
+        {
+          "path": "/cases/high-cabinet-cleaning.jpg",
+          "bytes": 196311
+        },
+        {
+          "path": "/cases/cabinet-detail-cleaning.jpg",
+          "bytes": 200787
+        },
+        {
+          "path": "/cases/room-after-work-cleaning.jpg",
+          "bytes": 187595
+        }
+      ]
+    }
+  ],
+  "layouts": [
+    {
+      "width": 320,
+      "path": "/",
+      "overflow": false,
+      "anchors": "passed",
+      "menu": "passed"
+    },
+    {
+      "width": 320,
+      "path": "/cases/",
+      "overflow": false,
+      "anchors": "passed",
+      "menu": "passed"
+    },
+    {
+      "width": 390,
+      "path": "/",
+      "overflow": false,
+      "anchors": "passed",
+      "menu": "passed"
+    },
+    {
+      "width": 390,
+      "path": "/cases/",
+      "overflow": false,
+      "anchors": "passed",
+      "menu": "passed"
+    },
+    {
+      "width": 600,
+      "path": "/",
+      "overflow": false,
+      "anchors": "passed",
+      "menu": "passed"
+    },
+    {
+      "width": 600,
+      "path": "/cases/",
+      "overflow": false,
+      "anchors": "passed",
+      "menu": "passed"
+    },
+    {
+      "width": 819,
+      "path": "/",
+      "overflow": false,
+      "anchors": "passed",
+      "menu": "passed"
+    },
+    {
+      "width": 819,
+      "path": "/cases/",
+      "overflow": false,
+      "anchors": "passed",
+      "menu": "passed"
+    },
+    {
+      "width": 820,
+      "path": "/",
+      "overflow": false,
+      "anchors": "passed",
+      "menu": "passed"
+    },
+    {
+      "width": 820,
+      "path": "/cases/",
+      "overflow": false,
+      "anchors": "passed",
+      "menu": "passed"
+    },
+    {
+      "width": 1079,
+      "path": "/",
+      "overflow": false,
+      "anchors": "passed",
+      "menu": "passed"
+    },
+    {
+      "width": 1079,
+      "path": "/cases/",
+      "overflow": false,
+      "anchors": "passed",
+      "menu": "passed"
+    },
+    {
+      "width": 1080,
+      "path": "/",
+      "overflow": false,
+      "anchors": "passed",
+      "menu": "passed"
+    },
+    {
+      "width": 1080,
+      "path": "/cases/",
+      "overflow": false,
+      "anchors": "passed",
+      "menu": "passed"
+    },
+    {
+      "width": 1440,
+      "path": "/",
+      "overflow": false,
+      "anchors": "passed",
+      "menu": "passed"
+    },
+    {
+      "width": 1440,
+      "path": "/cases/",
+      "overflow": false,
+      "anchors": "passed",
+      "menu": "passed"
+    }
+  ]
+}
