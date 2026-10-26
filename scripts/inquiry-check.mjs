@@ -152,7 +152,7 @@ async function checkFeedback(page, base, width, output, browser) {
     assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth+1))
     await status.scrollIntoViewIfNeeded()
     await page.screenshot({path:`${output}/${browser}-${size}-p04-manual.png`})
-    if (browser === 'chromium' && size === width && [375,1440].includes(width)) {
+    if (browser === 'chromium' && size === width && [375,768,1440].includes(width)) {
       const encoded = (await page.screenshot({type:'jpeg',quality:40})).toString('base64')
       for (let i=0;i<encoded.length;i+=10000) console.log(`P04_VISUAL_${width}_${i/10000}:${encoded.slice(i,i+10000)}`)
     }

@@ -2,7 +2,7 @@
 
 ## 2026-10-26 P04 接手摘要（Codex）
 
-P03交付後依業主「繼續」只接續P04，沿用原生React元件補強複製狀態與過期失敗焦點保護，不匯入Uiverse、不重做10/18版面。第5節P04待辦及第6節進度為本輪權威；CI、局部目視、部署與未驗範圍以本輪PR／中央P04交付為準，下方舊紀錄保留其日期。
+P03交付後依業主「繼續」只接續P04，沿用原生React元件補強複製狀態與過期失敗焦點保護，不匯入Uiverse、不重做10/18版面。第5節P04待辦及第6節進度為本輪權威；CI、局部目視、部署與未驗範圍以[PR #6](https://github.com/Campcool/0983531549/pull/6)／[中央P04交付](https://github.com/Campcool/AI-skill/blob/main/projects/uiverse-review-2026-10-25/P04-DELIVERY.md)為準，下方舊紀錄保留其日期。
 
 ## 2026-10-18 本輪接手摘要（Codex）
 
@@ -330,7 +330,7 @@ intrinsic size 的 `loading="lazy"` 圖片高度為 0；IntersectionObserver 永
 
 ### 2026-10-26 P04 待辦
 
-- P04 程式與回歸已補入分支：只補強既有詢問清單，不匯入 Uiverse、不重做10/18版面。最終CI、目視、合併／部署與正式檔案核對以本輪PR及中央 `projects/uiverse-review-2026-10-25/P04-DELIVERY.md` 為準；驗證未完成前不標正式交付。
+- P04 首輪CI run 40318681347 已通過完整Linux Chromium／Firefox與macOS WebKit回歸、lint／build／素材門禁；只補強既有詢問清單，不匯入Uiverse、不重做10/18版面。最終head、375／768／1440局部目視、合併／部署與公開產物hash以[PR #6](https://github.com/Campcool/0983531549/pull/6)及[中央P04交付](https://github.com/Campcool/AI-skill/blob/main/projects/uiverse-review-2026-10-25/P04-DELIVERY.md)的實際證據為準；未完成項目不得標已驗。
 - 延續 J3／J4：真機／LINE webview、實際客服收件、商家／GSC、GA4 ID及轉換未驗；GA4 ID仍空白，其他P05～P08未施工，Bot最後。
 
 ### 2026-10-18 本輪待辦

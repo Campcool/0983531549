@@ -1,6 +1,6 @@
 # 潔淨坊設計規範
 
-更新：2026-10-18（Asia/Taipei）。以下對應 `src/main.jsx`、`src/cases.jsx`、共用元件與 `src/style.css`；維護交接以 `AI-README.md` 為準。
+更新：2026-10-26（Asia/Taipei；10/18視覺保留，P04局部回饋補強）。以下對應 `src/main.jsx`、`src/cases.jsx`、共用元件與 `src/style.css`；維護交接以 `AI-README.md` 為準。
 
 ## 目的與內容
 
