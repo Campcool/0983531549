@@ -1,5 +1,9 @@
 # AI-README｜潔淨坊清潔工作室（0983531549）AI 協作交接文件
 
+## 2026-10-26 P04 接手摘要（Codex）
+
+P03交付後依業主「繼續」只接續P04，沿用原生React元件補強複製狀態與過期失敗焦點保護，不匯入Uiverse、不重做10/18版面。第5節P04待辦及第6節進度為本輪權威；CI、局部目視、部署與未驗範圍以[PR #6](https://github.com/Campcool/0983531549/pull/6)／[中央P04交付](https://github.com/Campcool/AI-skill/blob/main/projects/uiverse-review-2026-10-25/P04-DELIVERY.md)為準，下方舊紀錄保留其日期。
+
 ## 2026-10-18 本輪接手摘要（Codex）
 
 本輪依業主要求先完整讀取網站、交接與最新 AI-skill，再優化潔淨坊視覺及詢問節奏。實作、驗證、限制見第 6 節；目前待辦見第 5 節 J 系列。歷史描述若與本輪衝突，以此批及同步更新的 DESIGN.md 為準。維持既有 GitHub Pages 發布方式與真實內容邊界。
@@ -49,7 +53,7 @@
 > 4. **所有時間戳一律台灣時間（Asia/Taipei, UTC+8）**。
 > 5. **不要把「已完成」寫在沒有實測的項目上**。未驗的事項寫進「本輪明確未驗」。
 
-最後更新：2026-10-18（Codex）— 視覺與詢問節奏改版；詳見第 6 節。
+最後更新：2026-10-26（Codex）— P04 複製回饋與過期失敗焦點保護；詳見第 6 節。
 （前一筆 2026-10-05 Codex）— 依業主指示把兩批 Google Ads 素材整理進 GitHub：新增兩份完整 ZIP 與下載／預覽說明，供跨電腦取得素材。
 （前一筆 2026-10-05 Codex）— 依業主新授權新增獨立的 Google Ads AI 生成情境素材批次：5 種服務 × 橫／方／直三比例，共 15 張；與 2026-10-03 的實拍素材完全分開保存並標記來源。
 （前一筆 2026-10-03 Codex）— 新增 Google Ads 實拍圖片素材產生器與 14 個可上傳素材；全程只做裁切、調色與一處臉部模糊，未使用生成式影像、疊字或拼貼。
@@ -324,6 +328,11 @@ intrinsic size 的 `loading="lazy"` 圖片高度為 0；IntersectionObserver 永
 
 ## 5. 待辦清單（2026-09-10 稽核產出，依施工順序排列）
 
+### 2026-10-26 P04 待辦
+
+- P04 首輪CI run 40318681347 已通過完整Linux Chromium／Firefox與macOS WebKit回歸、lint／build／素材門禁；只補強既有詢問清單，不匯入Uiverse、不重做10/18版面。最終head、375／768／1440局部目視、合併／部署與公開產物hash以[PR #6](https://github.com/Campcool/0983531549/pull/6)及[中央P04交付](https://github.com/Campcool/AI-skill/blob/main/projects/uiverse-review-2026-10-25/P04-DELIVERY.md)的實際證據為準；未完成項目不得標已驗。
+- 延續 J3／J4：真機／LINE webview、實際客服收件、商家／GSC、GA4 ID及轉換未驗；GA4 ID仍空白，其他P05～P08未施工，Bot最後。
+
 ### 2026-10-18 本輪待辦
 
 | # | 項目 | 狀態／下一步 |
@@ -467,6 +476,17 @@ Measurement ID 會出現在前端原始碼裡，這是 GA4 的正常設計，**�
 ---
 
 ## 6. 進度紀錄（倒序）
+
+### 2026-10-26 Codex P04 詢問清單小幅補強
+
+- P03交付後依業主「繼續」只接續P04；基準main `7c51dffe99f81444039ea4375d501a95b805fd40`。完整閱讀AGENTS與本交接，沿用DESIGN及既有React元件。現有元件足夠，未匯入Uiverse或新增套件／框架。
+- 既有成功回應有版本比對，但catch會無條件聚焦／選取預覽；本輪補上失敗的版本保護，避免等待時修改欄位或選另一服務後，晚到失敗搶走焦點。成功與失敗的過期結果都提醒重新複製。
+- 用同步pending ref防同次等待重啟；每次新複製先清除舊Check／已複製標籤，避免重試失敗仍顯示過去成功。只有真實剪貼簿等待時呈現pending／aria-busy。提示以現有品牌底色、文字及左側標記區分ready／pending／copied／manual／changed，失敗與修改後提供明確重試／重新複製標籤，disabled文字保持不透明。沿用既有3px鍵盤焦點，不加動畫或表單步驟。
+- `inquiry_checklist_copy`仍每次完成一次、只含method／outcome／area。過期結果新增 `changed_during_copy` outcome，不能再誤稱已選取手動備援；其他事件、GA4空值、網址與儲存邊界保留。個人LINE仍需客戶貼上、附照片並自行傳送，不宣稱預填、已收件或成立預約。
+- 價格政策、服務／相簿slug、104張實拍／12相簿／2影片、評論快照、兩頁dock／導覽、noindex與素材不改。CI保留Linux Chromium／Firefox及macOS-15 WebKit完整影片回歸，不用Linux WebKit替代既有媒體門禁。
+- 沿用P03已驗證的runner復原：PR依ref排程、正式部署獨立序列不取消；Linux使用Ubuntu官方HTTPS套件鏡像及30秒下載／2次重試，瀏覽器安裝最長5分鐘，原15分鐘job、所有門禁與macOS WebKit保留。只改CI準備，不改正式站。
+- 驗證以本輪PR／中央P04交付為準：新測試涵蓋真實等待、過期成功／失敗、修改與服務切換焦點、正常失敗選取與重試、ARIA／文字對比／長字串／鍵盤／狀態及事件隱私。未驗事項見第5節；不把CI或外觀當成交證據，未有獨立他方AI審查時不宣稱已由Claude覆審。
+
 
 ### 2026-10-18 Codex 視覺與詢問節奏改版
 

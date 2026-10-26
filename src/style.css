@@ -151,7 +151,11 @@ p strong { color: var(--color-ink-deep); }
 .inquiry-extra summary span { color: var(--color-muted); font-size: 13px; font-weight: 400; }
 .inquiry-form .inquiry-message { background: #f8faf8; min-height: 230px; }
 .checklist-actions { display: grid; gap: 10px; margin-top: 18px; }
-.inquiry-status { min-height: 3.5em; margin: 16px 0 0; font-size: 14px; }
+.inquiry-status { min-height: 3.5em; margin: 16px 0 0; padding: 12px 14px; border-inline-start: 3px solid var(--color-border); border-radius: 0 6px 6px 0; background: var(--color-bg-soft); color: var(--color-ink); font-size: 14px; overflow-wrap: anywhere; }
+.inquiry-status[data-state="pending"] { border-inline-start-color: var(--color-primary-strong); }
+.inquiry-status[data-state="copied"] { border-inline-start-color: var(--color-line); }
+.inquiry-status:is([data-state="manual"], [data-state="changed"]) { border-inline-start-color: #8a4c20; }
+.inquiry-form .button:disabled { opacity: 1; }
 .process-section { background: var(--color-primary-strong); color: white; }
 .process-section h2 { color: white; }
 .process-section p { color: #e0eeeb; }

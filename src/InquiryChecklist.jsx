@@ -11,6 +11,8 @@ export function InquiryChecklist() {
   const [date, setDate] = React.useState('')
   const [note, setNote] = React.useState('')
   const [status, setStatus] = React.useState('')
+  const [feedback, setFeedback] = React.useState('ready')
+  const copyPending = React.useRef(false)
   const [copying, setCopying] = React.useState(false)
   const [copied, setCopied] = React.useState(false)
   const box = React.useRef(null)
@@ -31,7 +33,10 @@ export function InquiryChecklist() {
       if (event.detail) setService(validService(event.detail))
       version.current++
       setCopied(false)
-      setStatus(event.detail ? `已選擇${serviceLabel(event.detail)}，其他已填內容保留。` : '')
+      setFeedback(copyPending.current ? 'changed' : 'ready')
+      setStatus(copyPending.current
+        ? '內容已修改，請等本次複製結束後，重新複製最新清單。'
+        : event.detail ? `已選擇${serviceLabel(event.detail)}，其他已填內容保留。` : '')
       focusStart()
     }
     window.addEventListener('inquiry:choose', choose)
@@ -44,12 +49,17 @@ export function InquiryChecklist() {
     setter(event.target.value)
     version.current++
     setCopied(false)
-    setStatus('')
+    setFeedback(copyPending.current ? 'changed' : 'ready')
+    setStatus(copyPending.current ? '內容已修改，請等本次複製結束後，重新複製最新清單。' : '')
   }
   const message = `您好，我想詢問${serviceLabel(service)}。\n地區：${area || '待確認'}\n坪數／空間：${space.trim() || '待補充'}\n希望日期：${date.trim() || '可再討論'}\n需要加強的位置：${note.trim() || '將附照片說明'}\n我會附上空間全景與髒污近照，請協助確認清潔範圍、費用與可安排時間。`
   async function copy() {
-    if (copying) return
+    if (copyPending.current) return
+    copyPending.current = true
     setCopying(true)
+    setCopied(false)
+    setFeedback('pending')
+    setStatus('正在複製詢問清單，尚未送出需求。')
     const revision = version.current
     let outcome = 'selected_fallback'
     try {
@@ -57,13 +67,28 @@ export function InquiryChecklist() {
       outcome = 'copied'
       if (revision === version.current) {
         setCopied(true)
+        setFeedback('copied')
         setStatus('清單已複製。下一步：開啟 LINE 貼上，附照片後自行傳送。')
-      } else setStatus('內容已修改，請重新複製最新清單。')
+      } else {
+        outcome = 'changed_during_copy'
+        setFeedback('changed')
+        setStatus('內容已修改，請重新複製最新清單。')
+      }
     } catch {
-      box.current?.focus()
-      box.current?.select()
-      setStatus('無法自動複製，已選取文字。請長按或手動複製，再到 LINE 貼上。')
+      if (revision === version.current) {
+        box.current?.focus()
+        box.current?.select()
+        setFeedback('manual')
+        setStatus('無法自動複製，已選取文字。請長按或手動複製，再到 LINE 貼上。需求尚未送出。')
+      } else {
+        // A late rejection belongs to the old draft: do not select new text or
+        // take focus from the field / service entry the customer is using.
+        outcome = 'changed_during_copy'
+        setFeedback('changed')
+        setStatus('內容已修改，請重新複製最新清單。')
+      }
     } finally {
+      copyPending.current = false
       setCopying(false)
     }
     track('inquiry_checklist_copy', { method: 'clipboard', outcome, area: 'checklist' })
@@ -153,13 +178,13 @@ export function InquiryChecklist() {
             <textarea className="inquiry-message" ref={box} value={message} readOnly rows={7} />
           </label>
           <div className="checklist-actions">
-            <button className="button primary" type="button" onClick={copy} disabled={copying}>
+            <button className="button primary" type="button" onClick={copy} disabled={copying} aria-busy={copying}>
               {copied ? (
                 <Check size={18} aria-hidden="true" />
               ) : (
                 <Copy size={18} aria-hidden="true" />
               )}
-              {copying ? '複製中…' : copied ? '已複製，可再次複製' : '複製詢問清單'}
+              {copying ? '複製中…' : copied ? '已複製，可再次複製' : feedback === 'manual' ? '重試複製清單' : feedback === 'changed' ? '重新複製最新清單' : '複製詢問清單'}
             </button>
             <a
               className="button line-primary"
@@ -170,7 +195,7 @@ export function InquiryChecklist() {
               開啟 LINE 貼上 <ArrowRight size={18} aria-hidden="true" />
             </a>
           </div>
-          <p className="inquiry-status" role="status">
+          <p className="inquiry-status" role="status" aria-atomic="true" data-state={feedback}>
             {status || '整理與複製都不會送出需求。請到 LINE 貼上、附照片並按傳送。'}
           </p>
         </form>

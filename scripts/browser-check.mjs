@@ -108,5 +108,5 @@ await run(async (page, base, width, output, browser) => {
   await page.goto(base + '/')
   await page.locator('.assurance-strip').scrollIntoViewIfNeeded()
   await page.screenshot({ path:`${output}/${browser}-${width}-context-links.png` })
-  await checkInquiry(page, base, width)
+  await checkInquiry(page, base, width, output, browser)
 }, ['/', '/cases/'], 'dist')
