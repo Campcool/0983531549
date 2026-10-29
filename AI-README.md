@@ -328,6 +328,12 @@ intrinsic size 的 `loading="lazy"` 圖片高度為 0；IntersectionObserver 永
 
 ## 5. 待辦清單（2026-09-10 稽核產出，依施工順序排列）
 
+### 2026-10-29 洗地打蠟照片待辦
+
+- 已確認業主手動上傳 06–10 共 5 張照片；新增照片 JPEG q82 最長邊 1600px，3,392,926 → 2,003,147 bytes（-41.0%）。相簿設定 5→10，首頁／JSON-LD／素材門禁總數 104→109。
+- 待確認本批 GitHub Actions 三引擎、Pages 部署與正式站；真機／LINE webview 未驗。
+
+
 ### 2026-10-26 P04 待辦
 
 - P04 首輪CI run 40318681347 已通過完整Linux Chromium／Firefox與macOS WebKit回歸、lint／build／素材門禁；只補強既有詢問清單，不匯入Uiverse、不重做10/18版面。最終head、375／768／1440局部目視、合併／部署與公開產物hash以[PR #6](https://github.com/Campcool/0983531549/pull/6)及[中央P04交付](https://github.com/Campcool/AI-skill/blob/main/projects/uiverse-review-2026-10-25/P04-DELIVERY.md)的實際證據為準；未完成項目不得標已驗。
@@ -476,6 +482,13 @@ Measurement ID 會出現在前端原始碼裡，這是 GA4 的正常設計，**�
 ---
 
 ## 6. 進度紀錄（倒序）
+
+### 2026-10-29 Codex 加入業主上傳的磨石子洗地打蠟照片
+
+- 業主由手機上傳 floor-waxing-06.jpg 至 -10.jpg，保留既有 01–05 與縮圖。新增 5 張採 EXIF 方向校正、最長邊 1600px、JPEG q82 progressive／optimize，未生成或美化現場。原上傳版本可由 Git 歷史取回。
+- 洗地打蠟 5→10；首頁實拍總數與案例 JSON-LD 104→109，同步素材門禁與 DESIGN.md。維持 12 相簿及既有載入方式，不自行標示前後對比。
+- 驗證結果與未驗：本機 ESLint、Vite build＋prerender、109 張素材與影片 hash 門禁、JSON-LD 解析及 git diff --check 全部通過；GitHub Actions／正式部署依本批提交的 run 結果為準，不把提交視為部署成功。未做真機／LINE webview、Rich Results Test 或其他 AI 獨立覆審。
+
 
 ### 2026-10-26 Codex P04 詢問清單小幅補強
 

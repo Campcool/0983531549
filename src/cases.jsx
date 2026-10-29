@@ -167,7 +167,7 @@ const albums = [
     icon: BrushCleaning,
     copy: '停車位、磁磚與地面清洗打蠟需求，先確認材質、面積、設備動線與可施工時間。',
     tags: ['居家', '商用', '地板', '洗地打蠟'],
-    photos: generatedPhotos('floor-waxing', 'floor-waxing', 5),
+    photos: generatedPhotos('floor-waxing', 'floor-waxing', 10),
   },
   {
     // 2026-09-28 業主提供 11 張居家清潔前後對比照（LINE 匯出拼圖），

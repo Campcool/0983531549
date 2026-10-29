@@ -239,9 +239,9 @@ const business = {
 }
 
 // 首頁與案例頁是不同入口，無法共用 cases.jsx 的 albums 自動計算；
-// 相簿或照片增減時，這兩個數字要跟 cases.jsx（目前 12 相簿／104 張）一起改。
+// 相簿或照片增減時，這兩個數字要跟 cases.jsx（目前 12 相簿／109 張）一起改。
 const proofMetrics = [
-  { value: '104', label: '張實拍照片' },
+  { value: '109', label: '張實拍照片' },
   { value: '12', label: '個案場相簿' },
   { value: '4', label: '大類清潔需求' },
   { value: '31', label: 'Google評論' },

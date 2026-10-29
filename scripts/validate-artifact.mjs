@@ -14,7 +14,7 @@ for (const match of source.matchAll(/generatedPhotos\('([^']+)', '([^']+)', (\d+
   await access(`dist/cases/${folder}/${prefix}-01-thumb.jpg`)
 }
 assert.equal(albums, 12)
-assert.equal(images, 104)
+assert.equal(images, 109)
 assert.equal((await readFile('dist/CNAME', 'utf8')).trim(), 'jjf.tw')
 for (const file of ['dist/index.html', 'dist/cases/index.html']) {
   const html = await readFile(file, 'utf8')
