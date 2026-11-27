@@ -5,6 +5,9 @@ await run(async (page, base, width, output, browser) => {
   for (const [slug, service] of [['home-cleaning', 'home'], ['post-renovation', 'renovation'], ['move-in-out', 'move-in']]) {
     await page.goto(`${base}/services/${slug}/`)
     assert.equal(await page.locator('.service-detail-page h1').count(), 1)
+    const breadcrumb = await page.locator('.service-breadcrumb').boundingBox()
+    const header = await page.locator('.site-header').boundingBox()
+    assert(breadcrumb.y >= header.height, 'Service breadcrumb must clear the fixed header')
     const detail = page.locator('.service-detail-page details').first()
     await detail.locator('summary').focus(); await page.keyboard.press('Enter')
     assert.equal(await detail.getAttribute('open'), '')

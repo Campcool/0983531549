@@ -28,3 +28,5 @@ npm run build、npm run lint、validate-artifact通過（12相簿109圖、2影�
 - https://developers.google.com/search/docs/appearance/ai-features — 可索引、可摘要、文字可讀及站內連結；無必要AI專用檔或特殊schema。
 - https://developers.openai.com/api/docs/bots — OAI-SearchBot、GPTBot與ChatGPT-User用途分開；訓練允許不等於搜尋引用保證。本輪保留既有robots政策。
 - https://developers.google.com/search/docs/appearance/structured-data/review-snippet — 自家LocalBusiness評論不符合評論摘要資格；不影響展示原有可查證評論。
+
+2026-11-27 遠端第一輪CI（b829b7a）三引擎通過後，下載375／1440截圖覆核，發現新服務頁缺site-shell頂部預留，麵包屑被固定頁首遮住。已補共用site-shell／skip link及真實位置斷言；裝潢費用文字改為現況評估說法。最終head須重跑原門禁，截圖及最終狀態以新CI與中央交付為準。

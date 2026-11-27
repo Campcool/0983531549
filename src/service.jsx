@@ -12,9 +12,10 @@ export function ServiceApp({ slug }) {
   useClickTracking()
   const service = servicePages.find(item => item.slug === slug)
   if (!service) throw new Error('Unknown service page')
-  return <div id="top">
+  return <div id="top" className="site-shell">
+    <a className="skip-link" href="#main-content">跳到主要內容</a>
     <SiteHeader currentPage="service" />
-    <main className="service-detail-page">
+    <main id="main-content" className="service-detail-page">
       <nav className="service-breadcrumb" aria-label="麵包屑"><a href="/">潔淨坊</a><span>／</span><span aria-current="page">{service.name}</span></nav>
       <header className="service-detail-hero">
         <p>林口・龜山為主要服務區</p>
