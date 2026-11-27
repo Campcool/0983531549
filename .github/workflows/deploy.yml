@@ -47,7 +47,9 @@ jobs:
       - name: Build
         run: pnpm build
       - name: Verify albums and public artifact
-        run: node scripts/validate-artifact.mjs
+        run: |
+          node scripts/validate-artifact.mjs
+          node scripts/check-search.mjs dist
 
       - name: Use official Ubuntu mirror with bounded package downloads
         run: |
@@ -97,7 +99,7 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - name: Build and validate public artifact
-        run: pnpm build && node scripts/validate-artifact.mjs
+        run: pnpm build && node scripts/validate-artifact.mjs && node scripts/check-search.mjs dist
       - name: Install fixed native WebKit engine
         timeout-minutes: 5
         run: pnpm exec playwright install webkit

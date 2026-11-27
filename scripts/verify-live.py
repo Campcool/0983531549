@@ -23,6 +23,8 @@ class Assets(HTMLParser):
 
 
 expected = {'/': root / 'index.html', '/cases/': root / 'cases/index.html'}
+for page in (root / 'services').glob('*/index.html'):
+    expected['/' + str(page.relative_to(root).parent) + '/'] = page
 for page in list(expected.values()):
     parser = Assets()
     parser.feed(page.read_text())

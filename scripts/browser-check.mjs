@@ -2,6 +2,19 @@ import { run, assert } from './browser-harness.mjs'
 import { checkInquiry } from './inquiry-check.mjs'
 
 await run(async (page, base, width, output, browser) => {
+  for (const [slug, service] of [['home-cleaning', 'home'], ['post-renovation', 'renovation'], ['move-in-out', 'move-in']]) {
+    await page.goto(`${base}/services/${slug}/`)
+    assert.equal(await page.locator('.service-detail-page h1').count(), 1)
+    const breadcrumb = await page.locator('.service-breadcrumb').boundingBox()
+    const header = await page.locator('.site-header').boundingBox()
+    assert(breadcrumb.y >= header.height, 'Service breadcrumb must clear the fixed header')
+    const detail = page.locator('.service-detail-page details').first()
+    await detail.locator('summary').focus(); await page.keyboard.press('Enter')
+    assert.equal(await detail.getAttribute('open'), '')
+    await page.getByRole('link', { name:'整理這項清潔需求', exact:true }).click()
+    await page.waitForURL(`**/?service=${service}#inquiry-checklist`)
+    await page.waitForFunction(value => document.querySelector('.checklist-fields select')?.value === value, service)
+  }
   await page.goto(base + '/')
   await page.locator('.hero-title').waitFor()
   if (width < 1080) {
@@ -109,4 +122,4 @@ await run(async (page, base, width, output, browser) => {
   await page.locator('.assurance-strip').scrollIntoViewIfNeeded()
   await page.screenshot({ path:`${output}/${browser}-${width}-context-links.png` })
   await checkInquiry(page, base, width, output, browser)
-}, ['/', '/cases/'], 'dist')
+}, ['/', '/cases/', '/services/home-cleaning/', '/services/post-renovation/', '/services/move-in-out/'], 'dist')
