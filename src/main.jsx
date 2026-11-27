@@ -23,6 +23,7 @@ import { InquiryChecklist } from './InquiryChecklist.jsx'
 import { InquiryLink } from './InquiryLink.jsx'
 import { ContactDock } from './ContactDock.jsx'
 import { inquiryServices } from './inquiry.js'
+import { servicePages } from './service-content.js'
 
 const assetPath = (path) => `${import.meta.env.BASE_URL}${path.replace(/^\/+/, '')}`
 
@@ -450,6 +451,9 @@ export function App() {
           <SectionIntro title="從日常打掃，到需要專門處理的地方。">
             依現場材質、髒污與施工條件評估。點選清潔項目，就能接著詢問。
           </SectionIntro>
+          <nav className="service-topic-links" aria-label="清潔服務詳細說明">
+            {servicePages.map(service => <a className="context-link" key={service.slug} href={`/services/${service.slug}/`}>{service.name}範圍與費用評估</a>)}
+          </nav>
           <div className="service-category-grid">
             {serviceGroups.map((group) => {
               const Icon = group.icon

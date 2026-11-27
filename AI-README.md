@@ -1,5 +1,12 @@
 # AI-README｜潔淨坊清潔工作室（0983531549）AI 協作交接文件
 
+## 2026-11-27 搜尋曝光優化（本輪）
+
+可預先輸出正文的獨立服務入口。新增居家、裝潢細清、退租入住3頁，Vite多入口與同一React元件預先輸出正文。首頁原生內連、各頁canonical／OG／Service／Breadcrumb與sitemap同步；頁首段落返回首頁，詢問仍帶公開服務代碼至既有清單，保留個人LINE、價格依需求與原相簿。發布後verify-live涵蓋3個新頁及其資產。
+
+基準 `4e6918e1847869409b6abef2737fdbdbfc205692`。npm run build、npm run lint、validate-artifact通過（12相簿109圖、2影片原件雜湊／faststart）；搜尋門禁5個HTML、5個sitemap項目。 修改、回退、CI／正式驗證界線及成效待辦見 [本輪交付](docs/search-exposure-2026-11-27.md)。待辦：核對本輪CI／正式新頁，並以GSC及實際營運樣本追蹤。新增正式產物搜尋門禁；未驗排名、AI引用、正式LINE收件或營收。既有歷史待辦按日期保留，本輪授權優先。
+
+
 ## 2026-10-26 P04 接手摘要（Codex）
 
 P03交付後依業主「繼續」只接續P04，沿用原生React元件補強複製狀態與過期失敗焦點保護，不匯入Uiverse、不重做10/18版面。第5節P04待辦及第6節進度為本輪權威；CI、局部目視、部署與未驗範圍以[PR #6](https://github.com/Campcool/0983531549/pull/6)／[中央P04交付](https://github.com/Campcool/AI-skill/blob/main/projects/uiverse-review-2026-10-25/P04-DELIVERY.md)為準，下方舊紀錄保留其日期。

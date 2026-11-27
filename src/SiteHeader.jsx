@@ -29,13 +29,14 @@ const SocialBrandIcon = ({ type, size }) => (
 export function SiteHeader({ currentPage = 'home' }) {
   const [menuOpen, setMenuOpen] = React.useState(false)
   const isCasesPage = currentPage === 'cases'
-  const sectionHref = (id) => (isCasesPage ? `${import.meta.env.BASE_URL}#${id}` : `#${id}`)
+  const isSubpage = currentPage !== 'home'
+  const sectionHref = (id) => (isSubpage ? `${import.meta.env.BASE_URL}#${id}` : `#${id}`)
 
   return (
     <header className="site-header" aria-label="主選單">
       <a
         className="brand"
-        href={isCasesPage ? import.meta.env.BASE_URL : '#top'}
+        href={isSubpage ? import.meta.env.BASE_URL : '#top'}
         aria-label="潔淨坊清潔工作室首頁"
       >
         <img
